@@ -1,6 +1,6 @@
 {
   "name": "hootsuite-rest",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "hootsuite rest client",
   "repository": {
     "type": "git",
@@ -14,6 +14,7 @@
     "testRecord": "set REPLAY=record&& mocha -t 10000 test/*test.js"
   },
   "files": [
+    "index.js",
     "lib"
   ],
   "dependencies": {
