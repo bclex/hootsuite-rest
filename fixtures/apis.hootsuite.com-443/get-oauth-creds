@@ -1,0 +1,22 @@
+POST /auth/oauth/v2/token
+accept: */*
+host: apis.hootsuite.com
+accept-encoding: gzip, deflate
+content-type: application/x-www-form-urlencoded
+body: grant_type=password&client_id=someId&client_secret=someSecret&username=someUsername&password=somePassword
+
+HTTP/1.1 200 OK
+server: nginx/1.8.0
+date: Fri, 08 Dec 2017 21:52:43 GMT
+content-type: application/json;charset=UTF-8
+content-length: 158
+connection: close
+pragma: no-cache
+cache-control: no-store
+
+{
+  "access_token":"foobar",
+  "token_type":"Bearer",
+  "expires_in":2592000,
+  "refresh_token":"foobar",
+  "scope":"oob"}

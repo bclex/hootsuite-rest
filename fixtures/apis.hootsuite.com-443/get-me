@@ -1,0 +1,16 @@
+GET /v1/me
+accept: */*
+host: apis.hootsuite.com
+accept-encoding: gzip, deflate
+
+HTTP/1.1 200 OK
+server: nginx/1.8.0
+date: Fri, 08 Dec 2017 21:52:44 GMT
+content-type: application/json;charset=UTF-8
+content-length: 207
+connection: close
+x-account-quota: 100000 per day
+x-account-quota-used: 19
+x-account-rate-limit-requests-remaining: 14
+
+{"data":{"id":"16494879","email":"SMorey@DEGdigital.com","isActive":true,"createdDate":"2017-06-05T17:02:12Z","modifiedDate":"2017-06-05T20:16:09Z","fullName":"Sky Morey","companyName":"","bio":"","defaultTimezone":"America/New_York","language":"en"}}
