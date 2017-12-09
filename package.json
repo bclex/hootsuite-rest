@@ -1,20 +1,21 @@
 {
   "name": "hootsuite-rest",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "hootsuite rest client",
   "repository": {
     "type": "git",
     "url": "https://github.com/BclEx/hootsuite-rest"
   },
+  "main": "lib/hootsuite.js",
   "engines": {
-    "node": ">=0.10.29"
+    "node": ">=0.10.0"
   },
   "scripts": {
     "test": "mocha test/*test.js",
     "testRecord": "set REPLAY=record&& mocha -t 10000 test/*test.js"
   },
   "files": [
-    "index.js",
+    "config",
     "lib"
   ],
   "dependencies": {
@@ -28,5 +29,8 @@
   "devDependencies": {
     "mocha": "2.0.x",
     "replay": "^2.1.4"
-  }
+  },
+  "keywords": [
+    "hootsuite"
+  ]
 }
