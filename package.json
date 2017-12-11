@@ -19,6 +19,7 @@
     "lib"
   ],
   "dependencies": {
+    "qs": "1.2.0",
     "backoff": "^2.5.0",
     "bluebird": "^3.5.1",
     "bunyan": "^1.8.12",

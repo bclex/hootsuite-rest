@@ -2,9 +2,9 @@ var assert = require('assert'),
   _ = require('lodash'),
   hootsuite = require('./helper/connection');
 
-describe('Me', function () {
+describe('Current User', function () {
   describe('#get', function () {
-    it('returns the current user information', function (done) {
+    it('Retrieves authenticated member.', function (done) {
       hootsuite.me.get().then(function (response) {
         console.log('1', response);
         // assert.equal(response.result.length, 1);
@@ -16,7 +16,7 @@ describe('Me', function () {
     });
   });
   describe('#getOrganizations', function () {
-    it('returns the current users organizations', function (done) {
+    it('Retrieves the organizations that the authenticated member is in.', function (done) {
       hootsuite.me.getOrganizations().then(function (response) {
         console.log('2', response);
         // assert.equal(response.result.length, 1);
@@ -28,7 +28,7 @@ describe('Me', function () {
     });
   });
   describe('#getSocialProfiles', function () {
-    it('returns the current users social profiles', function (done) {
+    it('Retrieves the social media profiles that the authenticated user has BASIC_USAGE permissions on.', function (done) {
       hootsuite.me.getSocialProfiles().then(function (response) {
         console.log('3', response);
         // assert.equal(response.result.length, 1);
