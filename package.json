@@ -19,15 +19,15 @@
     "lib"
   ],
   "dependencies": {
-    "backoff": "2.4.x",
-    "bluebird": "2.3.x",
-    "bunyan": "1.0.x",
-    "lodash": "2.4.x",
-    "moment": "2.5.x",
-    "restler": "3.4.x"
+    "backoff": "^2.5.0",
+    "bluebird": "^3.5.1",
+    "bunyan": "^1.8.12",
+    "lodash": "^4.17.4",
+    "moment": "^2.19.4",
+    "restler": "^3.4.0"
   },
   "devDependencies": {
-    "mocha": "2.0.x",
+    "mocha": "^4.0.1",
     "replay": "^2.1.4"
   },
   "keywords": [
