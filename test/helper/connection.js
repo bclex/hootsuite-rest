@@ -5,6 +5,7 @@ var _ = require('lodash'),
 
 // Remove authorization from the header comparison
 Replay.headers = _.filter(Replay.headers, function(header) {
+  console.log(header);
   return !(header.toString() === '/^authorization/');
 });
 

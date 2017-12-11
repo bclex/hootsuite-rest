@@ -2,12 +2,10 @@ var _ = require('lodash'),
   env = process.env,
   defaults = {
     url: 'https://apis.hootsuite.com',
-    // clientId: 'someId',
-    // clientSecret: 'someSecret'
-    clientId: 'l7xx90af3507c77c43dab3c9a2178782b7da',
-    clientSecret: 'dea66393dda148b0addca63a25f061af',
-    username: 'smorey@degdigital.com',
-    password: 'Deg@dminZ1a'
+    clientId: 'someId',
+    clientSecret: 'someSecret',
+    username: 'someUsername',
+    password: 'somePassword'
   },
   credentials;
 
