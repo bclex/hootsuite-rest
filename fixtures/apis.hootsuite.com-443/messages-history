@@ -1,0 +1,16 @@
+GET /v1/messages/4950332802/history
+accept: */*
+host: apis.hootsuite.com
+accept-encoding: gzip, deflate
+
+HTTP/1.1 400 Bad Request
+server: nginx/1.8.0
+date: Tue, 12 Dec 2017 17:29:30 GMT
+content-type: application/json;charset=UTF-8
+content-length: 127
+connection: close
+x-account-quota: 100000 per day
+x-account-quota-used: 28
+x-account-rate-limit-requests-remaining: 14
+
+{"errors":[{"code":4000,"message":"Message is not awaiting approval","id":"0000015d62ac376d-10b918","resource":null}]}

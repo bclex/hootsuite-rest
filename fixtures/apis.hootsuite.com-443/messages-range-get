@@ -1,0 +1,16 @@
+GET /v1/messages?startTime=2017-12-01T06%3A00%3A00.000Z&endTime=2017-12-15T06%3A00%3A00.000Z
+accept: */*
+host: apis.hootsuite.com
+accept-encoding: gzip, deflate
+
+HTTP/1.1 200 OK
+server: nginx/1.8.0
+date: Tue, 12 Dec 2017 16:32:22 GMT
+content-type: application/json;charset=UTF-8
+content-length: 302
+connection: close
+x-account-quota: 100000 per day
+x-account-quota-used: 16
+x-account-rate-limit-requests-remaining: 14
+
+{"data":[{"id":"4950332802","state":"SENT","text":"sample","scheduledSendTime":"2017-12-12T16:26:20Z","socialProfile":{"id":"120732387"},"mediaUrls":null,"media":null,"webhookUrls":null,"tags":null,"targeting":null,"privacy":null,"location":null,"emailNotification":false,"postUrl":null,"postId":"940618833391472640","reviewers":null,"createdByMember":{"id":"16494879"},"lastUpdatedByMember":{"id":"16494879"},"sequenceNumber":null}],"metadata":{"cursor":{"next":null,"previous":null}}}

@@ -47,11 +47,10 @@ TestServer.prototype = {
     // simulates error codes
     if (_.has(req.headers, 'hootsuite-error-code')) {
       data = {
-        success: false,
         errors: [
           {
-            message: 'Error message',
-            code: req.headers['hootsuite-error-code']
+            code: req.headers['hootsuite-error-code'],
+            message: 'Error message'
           }
         ]
       };

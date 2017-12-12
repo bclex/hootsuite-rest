@@ -1,0 +1,16 @@
+GET /v1/members/16494879
+accept: */*
+host: apis.hootsuite.com
+accept-encoding: gzip, deflate
+
+HTTP/1.1 403 Forbidden
+server: nginx/1.8.0
+date: Mon, 11 Dec 2017 22:54:30 GMT
+content-type: application/json;charset=UTF-8
+content-length: 125
+connection: close
+x-account-quota: 100000 per day
+x-account-quota-used: 140
+x-account-rate-limit-requests-remaining: 14
+
+{"errors":[{"code":1202,"message":"Not authorized to view member","id":"00000157a0255d60-373848","resource":null}]}

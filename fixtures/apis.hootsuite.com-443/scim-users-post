@@ -1,0 +1,18 @@
+POST /scim/v2/Users
+accept: */*
+host: apis.hootsuite.com
+accept-encoding: gzip, deflate
+content-type: application/json
+body: {\"schemas\":[],\"userName\":\"testUser\",\"name\":\"testUser\",\"emails\":\"testUser\",\"active\":true,\"urn:ietf:params:scim:schemas:extension:Hootsuite:2.0:User\":{\"organizationIds\":[],\"teamIds\":[]}}
+
+HTTP/1.1 400 Bad Request
+server: nginx/1.8.0
+date: Tue, 12 Dec 2017 19:23:50 GMT
+content-type: application/json;charset=UTF-8
+content-length: 183
+connection: close
+x-account-quota: 100000 per day
+x-account-quota-used: 45
+x-account-rate-limit-requests-remaining: 14
+
+{"schemas":["urn:ietf:params:scim:api:messages:2.0:Error"],"status":"400","detail":"A required value was missing, or the value specified was not compatible with the operation or attribute type.","scimType":"invalidValue"}

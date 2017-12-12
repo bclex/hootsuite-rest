@@ -1,0 +1,16 @@
+GET /v1/members/16494879/organizations
+accept: */*
+host: apis.hootsuite.com
+accept-encoding: gzip, deflate
+
+HTTP/1.1 200 OK
+server: nginx/1.8.0
+date: Mon, 11 Dec 2017 22:58:37 GMT
+content-type: application/json;charset=UTF-8
+content-length: 46
+connection: close
+x-account-quota: 100000 per day
+x-account-quota-used: 142
+x-account-rate-limit-requests-remaining: 14
+
+{"data":[{"id":"814984"}]}

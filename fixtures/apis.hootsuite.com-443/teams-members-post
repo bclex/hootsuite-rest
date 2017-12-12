@@ -1,0 +1,16 @@
+POST /v1/organizations/814984/teams/1234/members/16494879
+accept: */*
+host: apis.hootsuite.com
+accept-encoding: gzip, deflate
+
+HTTP/1.1 401 Unauthorized
+server: nginx/1.8.0
+date: Tue, 12 Dec 2017 19:43:09 GMT
+content-type: application/json;charset=UTF-8
+content-length: 134
+connection: close
+x-account-quota: 100000 per day
+x-account-quota-used: 53
+x-account-rate-limit-requests-remaining: 14
+
+{"errors":[{"code":1201,"message":"Not authorized to make changes to organization","id":"00000157a0255d60-374cfa","resource":null}]}

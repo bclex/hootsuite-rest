@@ -1,9 +1,9 @@
-set TO_HOST=apis.hootsuite.com
-set TO_HOST_DIR=%TO_HOST%-443
-set TO_CLIENT_ID=someId
-set TO_CLIENT_SECRET=someSecret
-set TO_USERNAME=someUsername
-set TO_PASSWORD=somePassword
+TO_HOST=apis.hootsuite.com
+TO_HOST_DIR=%TO_HOST%-443
+TO_CLIENT_ID=someId
+TO_CLIENT_SECRET=someSecret
+TO_USERNAME=someUsername
+TO_PASSWORD=somePassword
 
 cd fixtures
 mkdir -p $TO_HOST_DIR

@@ -1,0 +1,16 @@
+GET /scim/v2/Users
+accept: */*
+host: apis.hootsuite.com
+accept-encoding: gzip, deflate
+
+HTTP/1.1 200 OK
+server: nginx/1.8.0
+date: Tue, 12 Dec 2017 19:13:41 GMT
+content-type: application/json;charset=UTF-8
+content-length: 409
+connection: close
+x-account-quota: 100000 per day
+x-account-quota-used: 36
+x-account-rate-limit-requests-remaining: 14
+
+{"Resources":[{"schemas":["urn:ietf:params:scim:schemas:core:2.0:User","urn:ietf:params:scim:schemas:extension:Hootsuite:2.0:User"],"id":"16494879","meta":{"resourceType":"User","created":"2017-06-05T17:02:12.000Z","lastModified":"2017-06-05T20:16:09.000Z"},"userName":"SMorey@DEGdigital.com","name":{"givenName":"Sky","familyName":"Morey"},"emails":[{"primary":true,"value":"SMorey@DEGdigital.com","type":"work"}],"displayName":"Sky Morey","timezone":"America/New_York","preferredLanguage":"en","groups":[],"active":true,"urn:ietf:params:scim:schemas:extension:Hootsuite:2.0:User":{"organizationIds":[814984],"teamIds":[]}}],"totalResults":1,"startIndex":1,"itemsPerPage":1,"schemas":["urn:ietf:params:scim:api:messages:2.0:ListResponse"]}

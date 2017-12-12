@@ -1,0 +1,18 @@
+PATCH /scim/v2/Users/1234
+accept: */*
+host: apis.hootsuite.com
+accept-encoding: gzip, deflate
+content-type: application/json
+body: {}
+
+HTTP/1.1 400 Bad Request
+server: nginx/1.8.0
+date: Tue, 12 Dec 2017 19:13:42 GMT
+content-type: application/json;charset=UTF-8
+content-length: 157
+connection: close
+x-account-quota: 100000 per day
+x-account-quota-used: 37
+x-account-rate-limit-requests-remaining: 14
+
+{"schemas":["urn:ietf:params:scim:api:messages:2.0:Error"],"status":"400","detail":"structure was invalid or did not conform to the request schema.","scimType":"invalidSyntax"}

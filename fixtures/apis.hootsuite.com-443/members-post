@@ -1,0 +1,18 @@
+POST /v1/members
+accept: */*
+host: apis.hootsuite.com
+accept-encoding: gzip, deflate
+content-type: application/json
+body: {\"organizationIds\":[\"814984\"],\"email\":\"test@test.com\",\"fullName\":\"test full\"}
+
+HTTP/1.1 401 Unauthorized
+server: nginx/1.8.0
+date: Tue, 12 Dec 2017 16:19:07 GMT
+content-type: application/json;charset=UTF-8
+content-length: 133
+connection: close
+x-account-quota: 100000 per day
+x-account-quota-used: 3
+x-account-rate-limit-requests-remaining: 14
+
+{"errors":[{"code":1201,"message":"Not authorized to make changes to organization","id":"00000157a0255d60-374710","resource":null}]}

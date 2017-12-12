@@ -1,0 +1,16 @@
+GET /scim/v2/ResourceTypes
+accept: */*
+host: apis.hootsuite.com
+accept-encoding: gzip, deflate
+
+HTTP/1.1 200 OK
+server: nginx/1.8.0
+date: Tue, 12 Dec 2017 19:13:42 GMT
+content-type: application/json;charset=UTF-8
+content-length: 249
+connection: close
+x-account-quota: 100000 per day
+x-account-quota-used: 40
+x-account-rate-limit-requests-remaining: 14
+
+{"schemas":["urn:ietf:params:scim:api:messages:2.0:ListResponse"],"Resources":[{"name":"User","schemaExtensions":[{"schema":"urn:ietf:params:scim:schemas:extension:Hootsuite:2.0:User","required":true}],"description":"User Account","id":"User","meta":{"resourceType":"ResourceType","location":"/scim/v2/ResourceTypes/User"},"schema":"urn:ietf:params:scim:schemas:core:2.0:User","endpoint":"/scim/v2/Users","schemas":["urn:ietf:params:scim:schemas:core:2.0:ResourceType"]}],"totalResults":1}

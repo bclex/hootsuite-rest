@@ -7,16 +7,16 @@ body: grant_type=password&client_id=someId&client_secret=someSecret&username=som
 
 HTTP/1.1 200 OK
 server: nginx/1.8.0
-date: Fri, 08 Dec 2017 21:52:43 GMT
+date: Tue, 12 Dec 2017 16:19:07 GMT
 content-type: application/json;charset=UTF-8
-content-length: 158
+content-length: 157
 connection: close
 pragma: no-cache
 cache-control: no-store
 
 {
-  "access_token":"foobar",
+  "access_token":"20d0b6ba-4eca-4c6b-b603-3bf35b050a4c",
   "token_type":"Bearer",
   "expires_in":2592000,
-  "refresh_token":"foobar",
+  "refresh_token":"5f80d896-2fb4-4ef2-8d04-dfa1ac28b0b8",
   "scope":"oob"}

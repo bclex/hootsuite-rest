@@ -1,0 +1,18 @@
+POST /v1/media
+accept: */*
+host: apis.hootsuite.com
+accept-encoding: gzip, deflate
+content-type: application/json
+body: {\"sizeBytes\":50000,\"mimeType\":\"video/mp4\"}
+
+HTTP/1.1 200 OK
+server: nginx/1.8.0
+date: Mon, 11 Dec 2017 22:52:37 GMT
+content-type: application/json;charset=UTF-8
+content-length: 356
+connection: close
+x-account-quota: 100000 per day
+x-account-quota-used: 138
+x-account-rate-limit-requests-remaining: 14
+
+{"data":{"uploadUrl":"https://hootsuite-video.s3.amazonaws.com/production/16494879_250e1843-13ab-49b7-97ab-b45800f54adc.mp4?AWSAccessKeyId=AKIAIM7ASX2JTE3ZFAAA&Expires=1513034557&Signature=V042bH27c15ZOTFnRBtMRaw%2BACo%3D","uploadUrlDurationSeconds":1799,"id":"aHR0cHM6Ly9ob290c3VpdGUtdmlkZW8uczMuYW1hem9uYXdzLmNvbS9wcm9kdWN0aW9uLzE2NDk0ODc5XzI1MGUxODQzLTEzYWItNDliNy05N2FiLWI0NTgwMGY1NGFkYy5tcDQ="}}

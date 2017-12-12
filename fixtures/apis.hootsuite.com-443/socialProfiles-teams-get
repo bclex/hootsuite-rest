@@ -1,16 +1,16 @@
-GET /v1/me/socialProfiles
+GET /v1/socialProfiles/120732387/teams
 accept: */*
 host: apis.hootsuite.com
 accept-encoding: gzip, deflate
 
 HTTP/1.1 200 OK
 server: nginx/1.8.0
-date: Fri, 08 Dec 2017 21:52:44 GMT
+date: Tue, 12 Dec 2017 19:30:25 GMT
 content-type: application/json;charset=UTF-8
 content-length: 31
 connection: close
 x-account-quota: 100000 per day
-x-account-quota-used: 20
+x-account-quota-used: 47
 x-account-rate-limit-requests-remaining: 14
 
 {"data":[]}

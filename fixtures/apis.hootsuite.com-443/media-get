@@ -1,0 +1,16 @@
+GET /v1/media/aHR0cHM6Ly9ob290c3VpdGUtdmlkZW8uczMuYW1hem9uYXdzLmNvbS9wcm9kdWN0aW9uLzE2NDk0ODc5X2E2Yzg4YzY0LTIwYmEtNGE0My05NDlmLTI5N2EzMmM2MDlmMi5tcDQ=
+accept: */*
+host: apis.hootsuite.com
+accept-encoding: gzip, deflate
+
+HTTP/1.1 200 OK
+server: nginx/1.8.0
+date: Mon, 11 Dec 2017 22:52:38 GMT
+content-type: application/json;charset=UTF-8
+content-length: 206
+connection: close
+x-account-quota: 100000 per day
+x-account-quota-used: 139
+x-account-rate-limit-requests-remaining: 14
+
+{"data":{"id":"aHR0cHM6Ly9ob290c3VpdGUtdmlkZW8uczMuYW1hem9uYXdzLmNvbS9wcm9kdWN0aW9uLzE2NDk0ODc5X2E2Yzg4YzY0LTIwYmEtNGE0My05NDlmLTI5N2EzMmM2MDlmMi5tcDQ=","downloadUrl":null,"downloadUrlDurationSeconds":null,"state":"QUEUED"}}
