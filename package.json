@@ -1,6 +1,6 @@
 {
   "name": "hootsuite-rest",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "hootsuite rest client",
   "repository": {
     "type": "git",
@@ -19,12 +19,12 @@
     "lib"
   ],
   "dependencies": {
-    "qs": "1.2.0",
     "backoff": "^2.5.0",
     "bluebird": "^3.5.1",
     "bunyan": "^1.8.12",
     "lodash": "^4.17.4",
-    "moment": "^2.19.4",
+    "moment": "^2.20.0",
+    "qs": "1.2.0",
     "restler": "^3.4.0"
   },
   "devDependencies": {
