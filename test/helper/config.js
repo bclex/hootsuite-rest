@@ -7,9 +7,9 @@ var _ = require('lodash'),
     username: 'someUsername',
     password: 'somePassword'
   },
-  credentials;
+  computed;
 
-credentials = {
+computed = {
   url: env.HOOTSUITE_URL || defaults.url,
   clientId: env.HOOTSUITE_CLIENTID || defaults.clientId,
   clientSecret: env.HOOTSUITE_CLIENTSECRET || defaults.clientSecret,
@@ -17,9 +17,17 @@ credentials = {
   password: env.HOOTSUITE_PASSWORD || defaults.password
 };
 
+frameComputed = {
+  url: env.HOOTSUITE_URL || defaults.url,
+  frameCtx: { uid: '16494879' },
+  clientId: env.HOOTSUITE_CLIENTID || defaults.clientId,
+  clientSecret: env.HOOTSUITE_CLIENTSECRET || defaults.clientSecret,
+};
+
 module.exports = {
   creds: {
     defaults: defaults,
-    computed: credentials
+    computed: computed,
+    frameComputed: frameComputed,
   }
 };
