@@ -1,12 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json.Linq;
 
-namespace ClassLibrary1
+namespace Hootsuite.Rest.Api
 {
-    public class Class1
+    public class Me
     {
+        Hootsuite _hootsuite;
+        Connection _connection;
+
+        public Me(Hootsuite hootsuite, Connection connection)
+        {
+            _hootsuite = hootsuite;
+            _connection = connection;
+        }
+
+        public JToken get()
+        {
+            var path = util.createPath("me");
+            return _connection.get(path);
+        }
+
+        public JToken getOrganizations()
+        {
+            var path = util.createPath("me", "organizations");
+            return _connection.get(path);
+        }
+
+        public JToken getSocialProfiles()
+        {
+            var path = util.createPath("me", "socialProfiles");
+            return _connection.get(path);
+        }
     }
 }

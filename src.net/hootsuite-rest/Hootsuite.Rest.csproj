@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,23 +43,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Api\Owly.cs" />
-    <None Include="Api\Scim.cs" />
-    <None Include="Api\SocialProfiles.cs" />
-    <None Include="Api\Teams.cs" />
-    <None Include="ConnectionOwly.cs" />
-    <None Include="Errors.cs" />
-    <None Include="Hootsuite.cs" />
-    <None Include="Retry.cs" />
-    <None Include="Stream.cs" />
-    <None Include="Util.cs" />
-    <None Include="Api\Me.cs" />
-    <None Include="Api\Media.cs" />
-    <None Include="Api\Members.cs" />
-    <None Include="Api\Messages.cs" />
-    <None Include="Api\Organizations.cs" />
-    <None Include="Connection.cs" />
+    <Compile Include="Api\Messages.cs" />
+    <Compile Include="Api\Organizations.cs" />
+    <Compile Include="Api\Owly.cs" />
+    <Compile Include="Api\Scim.cs" />
+    <Compile Include="Api\SocialProfiles.cs" />
+    <Compile Include="Api\Teams.cs" />
+    <Compile Include="Require\config.cs" />
+    <Compile Include="Require\Restler.cs" />
+    <Compile Include="ConnectionOwly.cs" />
+    <Compile Include="Errors.cs" />
+    <Compile Include="Hootsuite.cs" />
+    <Compile Include="Retry.cs" />
+    <Compile Include="util.cs" />
+    <Compile Include="Api\Me.cs" />
+    <Compile Include="Api\Media.cs" />
+    <Compile Include="Api\Members.cs" />
+    <Compile Include="Connection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
