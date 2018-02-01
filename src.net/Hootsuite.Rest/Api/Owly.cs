@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Hootsuite.Rest.Api
 {
@@ -15,37 +16,37 @@ namespace Hootsuite.Rest.Api
             _connection = connection;
         }
 
-        public JToken shortenUrl(string longUrl)
+        public Task<JObject> shortenUrl(string longUrl)
         {
             var path = util.createOwlyPath("url", "shorten");
             return _connection.get(path, new { longUrl });
         }
 
-        public JToken expandUrl(string shortUrl)
+        public Task<JObject> expandUrl(string shortUrl)
         {
             var path = util.createPath("url", "expand");
             return _connection.get(path, new { shortUrl });
         }
 
-        public JToken getInfo(string shortUrl)
+        public Task<JObject> getInfo(string shortUrl)
         {
             var path = util.createPath("url", "info");
             return _connection.get(path, new { shortUrl });
         }
 
-        public JToken getClickStats(string shortUrl, DateTime? from, DateTime? to)
+        public Task<JObject> getClickStats(string shortUrl, DateTime? from, DateTime? to)
         {
             var path = util.createPath("url", "clickStats");
             return _connection.get(path, new { shortUrl, from, to });
         }
 
-        public JToken uploadPhoto(string fileName, Stream uploaded_file)
+        public Task<JObject> uploadPhoto(string fileName, Stream uploaded_file)
         {
             var path = util.createPath("photo", "upload");
             return _connection.post(path, new { fileName, uploaded_file });
         }
 
-        public JToken uploadDoc(string fileName, Stream uploaded_file)
+        public Task<JObject> uploadDoc(string fileName, Stream uploaded_file)
         {
             var path = util.createPath("doc", "upload");
             return _connection.post(path, new { fileName, uploaded_file });

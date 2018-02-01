@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{E59028F5-252A-4113-927D-63B78A891C48}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Hootsuite</RootNamespace>
     <AssemblyName>hootsuite-rest</AssemblyName>
@@ -28,6 +28,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -55,6 +58,8 @@
     <Compile Include="Errors.cs" />
     <Compile Include="Hootsuite.cs" />
     <Compile Include="Retry.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="dyn.cs" />
     <Compile Include="util.cs" />
     <Compile Include="Api\Me.cs" />
     <Compile Include="Api\Media.cs" />

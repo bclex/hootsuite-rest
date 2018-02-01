@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
 
 namespace Hootsuite.Rest.Api
 {
@@ -13,19 +14,19 @@ namespace Hootsuite.Rest.Api
             _connection = connection;
         }
 
-        public JToken find()
+        public Task<JObject> find()
         {
             var path = util.createPath("socialProfiles");
             return _connection.get(path);
         }
 
-        public JToken findById(string socialProfileId)
+        public Task<JObject> findById(string socialProfileId)
         {
             var path = util.createPath("socialProfiles", socialProfileId);
             return this._connection.get(path);
         }
 
-        public JToken findByIdTeams(string socialProfileId)
+        public Task<JObject> findByIdTeams(string socialProfileId)
         {
             var path = util.createPath("socialProfiles", socialProfileId, "teams");
             return _connection.get(path);

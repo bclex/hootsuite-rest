@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
 
 namespace Hootsuite.Rest.Api
 {
@@ -13,7 +14,7 @@ namespace Hootsuite.Rest.Api
             _connection = connection;
         }
 
-        public JToken createUrl(int sizeBytes, string mimeType)
+        public Task<JObject> createUrl(int sizeBytes, string mimeType)
         {
             var path = util.createPath("media");
             var data = new
@@ -24,7 +25,7 @@ namespace Hootsuite.Rest.Api
             return _connection.postJson(path, data);
         }
 
-        public JToken statusById(string mediaId)
+        public Task<JObject> statusById(string mediaId)
         {
             var path = util.createPath("media", mediaId);
             return _connection.get(path);

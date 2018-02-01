@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Hootsuite.Rest.Api
 {
@@ -16,36 +17,36 @@ namespace Hootsuite.Rest.Api
             _connection = connection;
         }
 
-        public JToken schedule(dynamic msg)
+        public Task<JObject> schedule(dynamic msg)
         {
             var path = util.createPath("messages");
             var data = new
             {
-                text = msg.text ?? null,
-                socialProfileIds = msg.socialProfileIds ?? null,
-                scheduledSendTime = msg.scheduledSendTime != null ? ((DateTime)msg.scheduledSendTime).ToString("o") : null,
-                webhookUrls = msg.webhookUrls ?? null,
-                tags = msg.tags ?? null,
-                targeting = msg.targeting ?? null,
-                privacy = msg.privacy ?? null,
-                location = msg.location ?? null,
-                emailNotification = msg.emailNotification ?? null,
-                mediaUrls = msg.mediaUrls ?? null,
-                media = msg.media ?? null,
+                text = dyn.getProp(msg, "text", (string)null),
+                socialProfileIds = dyn.getProp(msg, "socialProfileIds", (string)null),
+                scheduledSendTime = dyn.hasProp(msg, "scheduledSendTime") ? ((DateTime)msg.scheduledSendTime).ToString("o") : null,
+                webhookUrls = dyn.getProp(msg, "msg.webhookUrls", (string)null),
+                tags = dyn.getProp(msg, "tags", (string)null),
+                targeting = dyn.getProp(msg, "targeting", (string)null),
+                privacy = dyn.getProp(msg, "privacy", (string)null),
+                location = dyn.getProp(msg, "location", (string)null),
+                emailNotification = dyn.getProp(msg, "emailNotification", (string)null),
+                mediaUrls = dyn.getProp(msg, "mediaUrls", (string)null),
+                media = dyn.getProp(msg, "media", (string)null),
             };
             return _connection.postJson(path, data);
         }
 
-        public JToken find(DateTime startTime, DateTime endTime, string[] socialProfileIds, dynamic opts)
+        public Task<JObject> find(DateTime startTime, DateTime endTime, string[] socialProfileIds, dynamic opts)
         {
             var path = util.createPath("messages");
             var query = Restler.GetQuery(null, new
             {
                 startTime = startTime.ToString("o"),
                 endTime = endTime.ToString("o"),
-                state = opts.state ?? null,
-                limit = opts.limit ?? null,
-                cursor = opts.cursor ?? null,
+                state = dyn.getProp(opts, "state", (string)null),
+                limit = dyn.getProp(opts, "limit", (string)null),
+                cursor = dyn.getProp(opts, "cursor", (string)null),
             });
             if (socialProfileIds != null)
                 query += string.Join(string.Empty, socialProfileIds.Select(x => $"&socialProfileIds=${Uri.EscapeDataString(x)}").ToArray());
@@ -56,19 +57,19 @@ namespace Hootsuite.Rest.Api
             return _connection.get(path, options);
         }
 
-        public JToken findById(string messageId)
+        public Task<JObject> findById(string messageId)
         {
             var path = util.createPath("messages", messageId);
             return _connection.get(path);
         }
 
-        public JToken deleteById(string messageId)
+        public Task<JObject> deleteById(string messageId)
         {
             var path = util.createPath("messages", messageId);
             return _connection.del(path);
         }
 
-        public JToken approveById(string messageId, int sequenceNumber = 0, string reviewerType = null)
+        public Task<JObject> approveById(string messageId, int sequenceNumber = 0, string reviewerType = null)
         {
             var path = util.createPath("messages", messageId, "approve");
             var data = new
@@ -79,7 +80,7 @@ namespace Hootsuite.Rest.Api
             return _connection.postJson(path, data);
         }
 
-        public JToken rejectById(string messageId, string reason = null, int sequenceNumber = 0, string reviewerType = null)
+        public Task<JObject> rejectById(string messageId, string reason = null, int sequenceNumber = 0, string reviewerType = null)
         {
             var path = util.createPath("messages", messageId, "reject");
             var data = new
@@ -91,7 +92,7 @@ namespace Hootsuite.Rest.Api
             return _connection.postJson(path, data);
         }
 
-        public JToken findByIdHistory(string messageId)
+        public Task<JObject> findByIdHistory(string messageId)
         {
             var path = util.createPath("messages", messageId, "history");
             return _connection.get(path);

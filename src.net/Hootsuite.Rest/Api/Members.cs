@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
 
 namespace Hootsuite.Rest.Api
 {
@@ -13,29 +14,29 @@ namespace Hootsuite.Rest.Api
             _connection = connection;
         }
 
-        public JToken findById(string memberId)
+        public Task<JObject> findById(string memberId)
         {
             var path = util.createPath("members", memberId);
             return _connection.get(path);
         }
 
-        public JToken create(dynamic msg)
+        public Task<JObject> create(dynamic msg)
         {
             var path = util.createPath("members");
             var data = new
             {
-                organizationIds = msg.organizationIds ?? new string[0],
-                email = msg.email ?? null,
-                fullName = msg.fullName ?? null,
-                companyName = msg.companyName ?? null,
-                bio = msg.bio ?? null,
-                timezone = msg.timezone ?? null,
-                language = msg.language ?? null,
+                organizationIds = dyn.getProp(msg, "organizationIds", new string[0]),
+                email = dyn.getProp(msg, "email", (string)null),
+                fullName = dyn.getProp(msg,"fullName", (string)null),
+                companyName = dyn.getProp(msg, "companyName", (string)null),
+                bio = dyn.getProp(msg, "bio", (string)null),
+                timezone = dyn.getProp(msg, "timezone", (string)null),
+                language = dyn.getProp(msg, "language", (string)null),
             };
             return _connection.postJson(path, data);
         }
 
-        public JToken findByIdOrgs(string memberId)
+        public Task<JObject> findByIdOrgs(string memberId)
         {
             var path = util.createPath("members", memberId, "organizations");
             return _connection.get(path);

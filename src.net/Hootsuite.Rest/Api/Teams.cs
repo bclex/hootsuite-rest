@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
 
 namespace Hootsuite.Rest.Api
 {
@@ -13,7 +14,7 @@ namespace Hootsuite.Rest.Api
             _connection = connection;
         }
 
-        public JToken createTeam(string organizationId, string teamName)
+        public Task<JObject> createTeam(string organizationId, string teamName)
         {
             var path = util.createPath("organizations", organizationId, "teams");
             var data = new
@@ -23,25 +24,25 @@ namespace Hootsuite.Rest.Api
             return _connection.postJson(path, data);
         }
 
-        public JToken appendMemberById(string organizationId, string teamId, string memberId)
+        public Task<JObject> appendMemberById(string organizationId, string teamId, string memberId)
         {
             var path = util.createPath("organizations", organizationId, "teams", teamId, "members", memberId);
             return _connection.post(path);
         }
 
-        public JToken findByIdMembers(string organizationId, string teamId)
+        public Task<JObject> findByIdMembers(string organizationId, string teamId)
         {
             var path = util.createPath("organizations", organizationId, "teams", teamId, "members");
             return _connection.get(path);
         }
 
-        public JToken findMemberByIdPermissions(string organizationId, string teamId, string memberId)
+        public Task<JObject> findMemberByIdPermissions(string organizationId, string teamId, string memberId)
         {
             var path = util.createPath("organizations", organizationId, "teams", teamId, "members", memberId, "permissions");
             return _connection.get(path);
         }
 
-        public JToken findByIdSocialProfiles(string organizationId, string teamId)
+        public Task<JObject> findByIdSocialProfiles(string organizationId, string teamId)
         {
             var path = util.createPath("organizations", organizationId, "teams", teamId, "socialProfiles");
             return _connection.get(path);
