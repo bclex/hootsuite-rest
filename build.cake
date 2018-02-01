@@ -5,13 +5,13 @@
 var configuration = Argument("configuration", "Release");
 var target = Argument("target", "Default");
 
-var mainProject = File("./Hootsuite.Rest/Hootsuite.Rest.Netcore.csproj");
-var testProject = File("./Hootsuite.Rest.Tests/Hootsuite.Rest.Tests.NetCore.csproj");
+var mainProject = File("./src.net/Hootsuite.Rest/Hootsuite.Rest.Netcore.csproj");
+var testProject = File("./src.net/Hootsuite.Rest.Tests/Hootsuite.Rest.Tests.NetCore.csproj");
 var projects = new[] { mainProject, testProject };
-var artifactsDirectory = Directory("./artifacts");
+var artifactsDirectory = Directory("./_artifacts");
 var revision = AppVeyor.IsRunningOnAppVeyor ? AppVeyor.Environment.Build.Number : 0;
 var version = AppVeyor.IsRunningOnAppVeyor ? new Version(AppVeyor.Environment.Build.Version.Split('-')[0]).ToString(3) : "1.0.0";
-var globalAssemblyInfo = File("./GlobalAssemblyVersion.cs");
+var globalAssemblyInfo = File("./src.net/GlobalAssemblyVersion.cs");
 
 var generatedVersion = "";
 var generatedSuffix = "";
@@ -127,7 +127,7 @@ Task("Test")
 
         if (AppVeyor.IsRunningOnAppVeyor)
         {
-            var testResult = File("./Hootsuite.Rest.Tests/TestResults/result_" + framework + ".trx");
+            var testResult = File("./src.net/Hootsuite.Rest.Tests/TestResults/result_" + framework + ".trx");
 
             ReplaceRegexInFiles(
                 testResult,
