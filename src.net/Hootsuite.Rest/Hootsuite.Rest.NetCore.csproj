@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <ApplicationIcon />
+    <OutputType>Exe</OutputType>
+    <StartupObject />
+    <AssemblyName>Hootsuite.Rest</AssemblyName>
+    <RootNamespace>Hootsuite.Rest</RootNamespace>
+    <PackageId>Hootsuite.Rest</PackageId>
+    <Authors>BclEx</Authors>
+    <Company>BclEx</Company>
+    <Product>Hootsuite.Rest</Product>
+    <Description>A Hootsuite wrapper for direct interaction with their APIs.</Description>
+    <Copyright>Copyright © 2017</Copyright>
+    <PackageLicenseUrl>http://choosealicense.com/licenses/mit/</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/BclEx/hootsuite-rest</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/BclEx/hootsuite-rest</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <NeutralLanguage>en-US</NeutralLanguage>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+  </ItemGroup>
+
+</Project>
