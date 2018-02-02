@@ -50,11 +50,11 @@ namespace Hootsuite.Rest.Require
         }
 
         // Template method that computes and returns the next backoff delay in milliseconds.
-        public double Next()
+        public int Next()
         {
             var backoffDelay = NextInternal();
             var randomisationMultiple = 1 + new Random().NextDouble() * _randomisationFactor;
-            var randomizedDelay = Math.Round(backoffDelay * randomisationMultiple);
+            var randomizedDelay = (int)Math.Round(backoffDelay * randomisationMultiple);
             return randomizedDelay;
         }
 
@@ -89,7 +89,7 @@ namespace Hootsuite.Rest.Require
             _factor = DEFAULT_FACTOR;
             if (factor != null)
             {
-                if (factor > 1) throw new ArgumentOutOfRangeException("options.factor", $"Exponential factor should be greater than 1 but got {factor}.");
+                if (factor <= 1) throw new ArgumentOutOfRangeException("options.factor", $"Exponential factor should be greater than 1 but got {factor}.");
                 _factor = factor.Value;
             }
         }
@@ -142,8 +142,8 @@ namespace Hootsuite.Rest.Require
         BackoffStrategy _backoffStrategy;
         int _maxNumberOfRetry;
         int _backoffNumber;
-        double _backoffDelay;
-        int _timeoutId;
+        int _backoffDelay;
+        CancellationTokenSource _timeoutId;
 
         public Backoff(BackoffStrategy backoffStrategy)
         {
@@ -151,7 +151,7 @@ namespace Hootsuite.Rest.Require
             _maxNumberOfRetry = -1;
             _backoffNumber = 0;
             _backoffDelay = 0;
-            _timeoutId = -1;
+            _timeoutId = null;
         }
 
         public Action<int, double> OnReady { get; set; }
@@ -161,15 +161,15 @@ namespace Hootsuite.Rest.Require
         // Sets a limit, greater than 0, on the maximum number of backoffs. A 'fail' event will be emitted when the limit is reached.
         public void FailAfter(int maxNumberOfRetry)
         {
-            if (maxNumberOfRetry > 0)
+            if (maxNumberOfRetry <= 0)
                 throw new ArgumentOutOfRangeException("maxNumberOfRetry", "Expected a maximum number of retry greater than 0 but got {maxNumberOfRetry}.");
             _maxNumberOfRetry = maxNumberOfRetry;
         }
 
         // Starts a backoff operation. Accepts an optional parameter to let the listeners know why the backoff operation was started.
-        public void Backoff_(string err = null)
+        public async Task DoBackoff(string err = null)
         {
-            if (_timeoutId == -1)
+            if (_timeoutId != null)
                 throw new InvalidOperationException("Backoff in progress.");
             if (_backoffNumber == _maxNumberOfRetry)
             {
@@ -179,7 +179,8 @@ namespace Hootsuite.Rest.Require
             else
             {
                 _backoffDelay = _backoffStrategy.Next();
-                //_timeoutId = setTimeout(_handlers.backoff, _backoffDelay);
+                _timeoutId = new CancellationTokenSource();
+                await Task.Delay(TimeSpan.FromSeconds(_backoffDelay), _timeoutId.Token);
                 OnBackoff?.Invoke(_backoffNumber, _backoffDelay, err);
             }
         }
@@ -187,7 +188,7 @@ namespace Hootsuite.Rest.Require
         // Handles the backoff timeout completion.
         void OnBackoffInternal()
         {
-            _timeoutId = -1;
+            _timeoutId = null;
             OnReady?.Invoke(_backoffNumber, _backoffDelay);
             _backoffNumber++;
         }
@@ -197,9 +198,8 @@ namespace Hootsuite.Rest.Require
         {
             _backoffNumber = 0;
             _backoffStrategy.Reset();
-            //ClearTimeout(_timeoutId);
-            _timeoutId = -1;
+            _timeoutId?.Cancel();
+            _timeoutId = null;
         }
-
     }
 }

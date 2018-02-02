@@ -14,6 +14,7 @@ _artifacts/
 [Oo]bj/
 packages/
 FakesAssemblies/
+TestResults/
 *.suo
 *.user
 _ReSharper.*/

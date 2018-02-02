@@ -30,46 +30,35 @@ namespace Hootsuite.Rest
             var promise = new TaskCompletionSource<JObject>();
             var forceOAuth = false;
             executeFn();
-            _newBackoff.OnReady = (number, delay) =>
+            _newBackoff.OnReady = (number, delay) => { _log($"Requesting for url {{ number: {number}, delay: {delay} }}"); executeFn(); };
+            _newBackoff.OnFail = (err) => throw _lastError;
+            async void executeFn()
             {
-                _log($"Requesting for url {{ number: {number}, delay: {delay} }}");
-                executeFn();
-            };
-            _newBackoff.OnFail = (err) =>
-            {
-                promise.SetException(_lastError);
-            };
-            void executeFn()
-            {
-                fetchFn(forceOAuth).ContinueWith(x =>
+                try
                 {
-                    if (!x.IsFaulted)
+                    var result = await fetchFn(forceOAuth);
+                    promise.SetResult(result);
+                }
+                catch (Exception err)
+                {
+                    _lastError = err;
+                    if (RetryableError(err))
                     {
-                        var result = x.Result;
-                        promise.SetResult(result);
-                    }
-                    else
-                    {
-                        var err = x.Exception;
-                        _lastError = err;
-                        if (RetryableError(err))
+                        if (errors.isRateLimited(err))
                         {
-                            if (errors.isRateLimited(err))
-                            {
-                                var task = Task.Run(() => { });
-                                if (task.Wait(TimeSpan.FromSeconds(MaxDelay)))
-                                    _newBackoff.Backoff_();
-                            }
-                            else
-                            {
-                                if (errors.isExpiredToken(err))
-                                    forceOAuth = true;
-                                _newBackoff.Backoff_();
-                            }
+                            await Task.Delay(TimeSpan.FromSeconds(MaxDelay));
+                            await _newBackoff.DoBackoff();
                         }
-                        else promise.SetException(err);
+                        else
+                        {
+                            if (errors.isExpiredToken(err))
+                                forceOAuth = true;
+                            await _newBackoff.DoBackoff();
+                        }
                     }
-                });
+                    promise.SetException(err);
+                    throw err;
+                }
             }
             return promise.Task;
         }

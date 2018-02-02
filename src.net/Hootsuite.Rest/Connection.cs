@@ -1,11 +1,14 @@
 ﻿using Hootsuite.Rest.Require;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 //https://stackoverflow.com/questions/38996593/promise-equivalent-in-c-sharp
 //https://docs.microsoft.com/en-us/dotnet/csharp/tutorials/console-webapiclient
+//https://dotnetcodr.com/2014/03/25/continuation-tasks-in-net-tpl-exception-handling-in-task-chains/
 namespace Hootsuite.Rest
 {
     public class Connection
@@ -54,44 +57,40 @@ namespace Hootsuite.Rest
                 url = baseUrl + url;
             }
             _log($"Request: {url}");
-            Func<bool, Task<JObject>> requestFn = (forceOAuth) => GetOAuthToken(forceOAuth).ContinueWith(x =>
+            Func<Task<JObject>, Task<JObject>> requestFn0 = async (x) =>
             {
-                var promise = new TaskCompletionSource<JObject>();
                 if (!x.IsFaulted)
                 {
                     var token = x.Result;
                     options.headers = dyn.getObj(options, "headers");
                     options.headers.Authorization = $"Bearer {token["access_token"]}";
-                    _rest.request(url, options, method).ContinueWith((Action<Task<object>>)(y =>
+                    try
                     {
-                        if (!y.IsFaulted)
+                        var y = await _rest.request(url, options, method);
+                        var d = (JObject)y;
+                        if ((string)d["success"] == "false" && d["errors"] != null)
                         {
-                            var d = (JObject)y.Result;
-                            if ((string)d["success"] == "false" && d["errors"] != null)
-                            {
-                                _log($"Request failed: {d}");
-                                promise.SetException(new InvalidOperationException(d["errors"].ToString()));
-                                return;
-                            }
-                            promise.SetResult(d);
+                            _log($"Request failed: {d}");
+                            throw new InvalidOperationException(d["errors"].ToString());
+                        }
+                        return d;
+                    }
+                    catch (RestlerOperationException res)
+                    {
+                        var err = (JObject)res.Content;
+                        if (err["errors"] != null)
+                        {
+                            _log($"Request failed: {err}");
+                            throw;
                         }
                         else
                         {
-                            var res = y.Exception.InnerExceptions[0] as RestlerOperationException;
-                            if (res == null) { promise.SetException(y.Exception.InnerExceptions[0]); return; }
-                            var err = (JObject)res.Content;
-                            if (err["errors"] != null)
-                            {
-                                _log($"Request failed: {err}");
-                                promise.SetException(res);
-                                return;
-                            }
                             var statusCode = Math.Floor((int)res.StatusCode / 100M);
-                            if (statusCode == 5) promise.SetException(res);
-                            else if (statusCode == 4) promise.SetException(res);
-                            else promise.SetException(res);
+                            if (statusCode == 5) throw res;
+                            else if (statusCode == 4) throw res;
+                            else throw res;
                         }
-                    }));
+                    }
                 }
                 else
                 {
@@ -99,9 +98,12 @@ namespace Hootsuite.Rest
                     //    //throw new InvalidOperationException($"Authentication ({firstError.code}): {firstError.message}");
                     var res = x.Exception;
                     _log("ERROR");
-                    promise.SetException(res);
+                    throw res;
                 }
-                return promise.Task.Result;
+            };
+            Func<bool, Task<JObject>> requestFn = async (forceOAuth) => await GetOAuthToken(forceOAuth).ContinueWith(x =>
+            {
+                return requestFn0(x).Result;
             });
             return await _retry.start(requestFn, this);
         }
@@ -110,7 +112,12 @@ namespace Hootsuite.Rest
         {
             var secret = dyn.getProp<string>(_options, "secret");
             var frameCtx = dyn.getProp<dynamic>(_options, "frameCtx");
-            return "SHA512"; // sha512(frameCtx.uid + frameCtx.ts + (url ?? string.Empty) + secret);
+            using (var hmac = new HMACSHA512(secret))
+            {
+                var bytes = Encoding.UTF8.GetBytes(frameCtx.uid + frameCtx.ts + (url ?? string.Empty));
+                var hash = hmac.ComputeHash(bytes);
+                return Convert.ToBase64String(hash);
+            }
         }
 
         private async Task<JObject> GetOAuthToken(bool force = false)
@@ -118,9 +125,8 @@ namespace Hootsuite.Rest
             if (force || _tokenData == null)
             {
                 var frameCtx = dyn.getProp<dynamic>(_options, "frameCtx");
-                Func<bool, Task<JObject>> requestFn = (forceOAuth) =>
+                Func<bool, Task<JObject>> requestFn = async (forceOAuth) =>
                 {
-                    var promise = new TaskCompletionSource<JObject>();
                     var options = new
                     {
                         data = new
@@ -135,45 +141,24 @@ namespace Hootsuite.Rest
                         timeout = dyn.getProp(_options, "timeout", 20000),
                     };
                     var baseUrl = dyn.getProp(_options, "url", config.api_url);
-                    _rest.post($"{baseUrl}/auth/oauth/v2/token", options).ContinueWith((Action<Task<object>>)(async x =>
+                    try
                     {
-                        if (!x.IsFaulted)
+                        var x = await _rest.post($"{baseUrl}/auth/oauth/v2/token", options);
+                        var data = (JObject)x;
+                        if (frameCtx != null)
                         {
-                            var data = (JObject)x.Result;
-                            if (frameCtx != null)
-                            {
-                                _log($"Got pre-token: {data}");
-                                await GetOnBehalfAuthToken(data).ContinueWith(y =>
-                                {
-                                    if (!y.IsFaulted)
-                                    {
-                                        var token = (JObject)y.Result;
-                                        promise.SetResult(token);
-                                    }
-                                    else
-                                    {
-                                        var err = y.Exception;
-                                        _log("ERROR");
-                                        promise.SetException(err);
-                                    }
-                                });
-                            }
-                            else
-                            {
-                                _log($"Got token: {data}");
-                                _tokenData = data;
-                                promise.SetResult(data);
-                            }
+                            _log($"Got pre-token: {data}");
+                            try { return await GetOnBehalfAuthToken(data); }
+                            catch (Exception err) { _log("ERROR"); throw err; }
                         }
                         else
                         {
-                            var err = x.Exception;
-                            _log("ERROR");
-                            promise.SetException(err);
-                            return;
+                            _log($"Got token: {data}");
+                            _tokenData = data;
+                            return data;
                         }
-                    }));
-                    return promise.Task;
+                    }
+                    catch (Exception err) { _log("ERROR"); throw err; }
                 };
                 return await _retry.start(requestFn, this);
             }
@@ -186,9 +171,8 @@ namespace Hootsuite.Rest
 
         private async Task<JObject> GetOnBehalfAuthToken(dynamic tokenData)
         {
-            var promise = new TaskCompletionSource<JObject>();
             var frameCtx = dyn.getProp(_options, "frameCtx", new { uid = string.Empty });
-            Func<bool, Task<JObject>> requestFn = (forceOAuth) =>
+            Func<bool, Task<JObject>> requestFn = async (forceOAuth) =>
             {
                 var options = new
                 {
@@ -197,23 +181,15 @@ namespace Hootsuite.Rest
                     timeout = dyn.getProp(_options, "timeout", 20000),
                 };
                 var baseUrl = dyn.getProp(_options, "url", config.api_url);
-                _rest.postJson($"{baseUrl}/v1/tokens", options.data, options).ContinueWith(x =>
+                try
                 {
-                    if (!x.IsFaulted)
-                    {
-                        var data = (JObject)x.Result;
-                        _log($"Got token: {data}");
-                        _tokenData = data;
-                        promise.SetResult(data);
-                    }
-                    else
-                    {
-                        var err = x.Exception;
-                        _log("ERROR");
-                        promise.SetException(err);
-                    }
-                });
-                return promise.Task;
+                    var x = await _rest.postJson($"{baseUrl}/v1/tokens", options.data, options);
+                    var data = (JObject)x;
+                    _log($"Got token: {data}");
+                    _tokenData = data;
+                    return data;
+                }
+                catch (Exception err) { _log("ERROR"); throw err; }
             };
             return await _retry.start(requestFn, this);
         }

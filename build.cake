@@ -10,7 +10,7 @@ var testProject = File("./src.net/Hootsuite.Rest.Tests/Hootsuite.Rest.Tests.NetC
 var projects = new[] { mainProject, testProject };
 var artifactsDirectory = Directory("./_artifacts");
 var revision = AppVeyor.IsRunningOnAppVeyor ? AppVeyor.Environment.Build.Number : 0;
-var version = AppVeyor.IsRunningOnAppVeyor ? new Version(AppVeyor.Environment.Build.Version.Split('-')[0]).ToString(3) : "1.0.0";
+var version = AppVeyor.IsRunningOnAppVeyor ? new Version(AppVeyor.Environment.Build.Version.Split('-')[0]).ToString(3) : "0.0.2";
 var globalAssemblyInfo = File("./src.net/GlobalAssemblyVersion.cs");
 
 var generatedVersion = "";
@@ -41,7 +41,7 @@ Task("Generate-Versionning")
     Information("Generated version '{0}'", generatedVersion);
 
     var branch = (AppVeyor.IsRunningOnAppVeyor ? AppVeyor.Environment.Repository.Branch : GitBranchCurrent(".").FriendlyName).Replace('/', '-');
-    generatedSuffix = (branch == "master" && revision > 0) ? "" : branch.Substring(0, Math.Min(10, branch.Length)) + "-" + revision;
+    generatedSuffix = (branch == "master" && revision >= 0) ? "" : branch.Substring(0, Math.Min(10, branch.Length)) + "-" + revision;
     Information("Generated suffix '{0}'", generatedSuffix);
 });
 
@@ -110,7 +110,7 @@ Task("Test")
     // - replace assembly name in test report
     // - manualy push test result
 
-    foreach (var framework in new[] { "netcoreapp2.0"})
+    foreach (var framework in new[] { "net452", "netcoreapp2.0"})
     {
         DotNetCoreTest(
             testProject,
@@ -157,7 +157,13 @@ Task("Pack")
             ArgumentCustomization = args => args.Append("--include-symbols")
         }
     );
+});
 
+
+Task("Push")
+    .Does(() =>
+{
+    DotNetCoreNuGetPush("./_artifacts/*.nupkg");
 });
 
 

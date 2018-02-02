@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Hootsuite.Rest.Require;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,36 @@ namespace Hootsuite.Rest
 {
     public static class errors
     {
+
+        enum errorCodes
+        {
+            TOKEN_ERROR = 1032,
+            SYSTEM_ERROR = 5000,
+            RATE_LIMIT_REACHED = 1003,
+            ACCESS_DENIED = 5000,
+            QUOTA_REACHED = 5000,
+        };
+
+        static bool hasErrorCode(Exception err, int code)
+        {
+            return isError(err, out JArray errors) &&
+                errors.FirstOrDefault(x => (int)x["code"] == code) != null;
+        }
+
+        static bool isError(Exception err, out JArray errors)
+        {
+            errors = null;
+            JObject res;
+            if (!(err is RestlerOperationException) || (res = ((RestlerOperationException)err).Content as JObject) == null)
+                return false;
+            var val = res["errors"] != null &&
+                res["errors"] is JArray &&
+                ((JArray)res["errors"]).Count > 0;
+            if (val)
+                errors = (JArray)res["errors"];
+            return val;
+        }
+
         public static bool isNetworkError(Exception err)
         {
             return false;
@@ -22,19 +53,17 @@ namespace Hootsuite.Rest
             //return (err is Http5XXError) ||
             //  // hasErrorCode(err, errorCodes.TIMED_OUT) ||
             //  // hasErrorCode(err, errorCodes.API_UNAVAILBLE) ||
-            //  hasErrorCode(err, errorCodes.SYSTEM_ERROR);
+            // hasErrorCode(err, errorCodes.SYSTEM_ERROR);
         }
 
         public static bool isExpiredToken(Exception err)
         {
-            return false;
-            //return hasErrorCode(err, errorCodes.TOKEN_ERROR);
+            return hasErrorCode(err, (int)errorCodes.TOKEN_ERROR);
         }
 
         public static bool isRateLimited(Exception err)
         {
-            return false;
-            //return hasErrorCode(err, errorCodes.RATE_LIMIT_REACHED);
+            return hasErrorCode(err, (int)errorCodes.RATE_LIMIT_REACHED);
         }
     }
 }
