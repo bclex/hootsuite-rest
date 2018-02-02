@@ -1,20 +1,33 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 
-namespace Hootsuite.Rest.Api
+namespace Hootsuite.Api
 {
+    /// <summary>
+    /// Class Scim.
+    /// </summary>
     public class Scim
     {
-        Hootsuite _hootsuite;
+        HootsuiteClient _hootsuite;
         Connection _connection;
 
-        public Scim(Hootsuite hootsuite, Connection connection)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Scim"/> class.
+        /// </summary>
+        /// <param name="hootsuite">The hootsuite.</param>
+        /// <param name="connection">The connection.</param>
+        public Scim(HootsuiteClient hootsuite, Connection connection)
         {
             _hootsuite = hootsuite;
             _connection = connection;
         }
 
-        public Task<JObject> createUser(dynamic msg)
+        /// <summary>
+        /// Creates the user.
+        /// </summary>
+        /// <param name="msg">The MSG.</param>
+        /// <returns>Task&lt;JObject&gt;.</returns>
+        public Task<JObject> CreateUser(dynamic msg)
         {
             var path = util.createScimPath("Users");
             var data = new
@@ -33,7 +46,14 @@ namespace Hootsuite.Rest.Api
             return _connection.postJson(path, data);
         }
 
-        public Task<JObject> findUsers(string filter = null, int count = 0, int startIndex = 0)
+        /// <summary>
+        /// Finds the users.
+        /// </summary>
+        /// <param name="filter">The filter.</param>
+        /// <param name="count">The count.</param>
+        /// <param name="startIndex">The start index.</param>
+        /// <returns>Task&lt;JObject&gt;.</returns>
+        public Task<JObject> FindUsers(string filter = null, int count = 0, int startIndex = 0)
         {
             var path = util.createScimPath("Users");
             var options = new
@@ -48,13 +68,24 @@ namespace Hootsuite.Rest.Api
             return _connection.get(path, options);
         }
 
-        public Task<JObject> findUserById(string memberId)
+        /// <summary>
+        /// Finds the user by identifier.
+        /// </summary>
+        /// <param name="memberId">The member identifier.</param>
+        /// <returns>Task&lt;JObject&gt;.</returns>
+        public Task<JObject> FindUserById(string memberId)
         {
             var path = util.createScimPath("Users", memberId);
             return _connection.get(path);
         }
 
-        public Task<JObject> replaceUserById(string memberId, dynamic msg)
+        /// <summary>
+        /// Replaces the user by identifier.
+        /// </summary>
+        /// <param name="memberId">The member identifier.</param>
+        /// <param name="msg">The MSG.</param>
+        /// <returns>Task&lt;JObject&gt;.</returns>
+        public Task<JObject> ReplaceUserById(string memberId, dynamic msg)
         {
             var path = util.createScimPath("Users", memberId);
             var data = new
@@ -73,7 +104,13 @@ namespace Hootsuite.Rest.Api
             return _connection.putJson(path, data);
         }
 
-        public Task<JObject> modifyUserById(string memberId, dynamic msg)
+        /// <summary>
+        /// Modifies the user by identifier.
+        /// </summary>
+        /// <param name="memberId">The member identifier.</param>
+        /// <param name="msg">The MSG.</param>
+        /// <returns>Task&lt;JObject&gt;.</returns>
+        public Task<JObject> ModifyUserById(string memberId, dynamic msg)
         {
             var path = util.createScimPath("Users", memberId);
             var options = new
@@ -88,7 +125,11 @@ namespace Hootsuite.Rest.Api
             return _connection.patch(path, options);
         }
 
-        public Task<JObject> getResourceTypes()
+        /// <summary>
+        /// Gets the resource types.
+        /// </summary>
+        /// <returns>Task&lt;JObject&gt;.</returns>
+        public Task<JObject> GetResourceTypes()
         {
             var path = util.createScimPath("ResourceTypes");
             return _connection.get(path);

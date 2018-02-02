@@ -7,8 +7,8 @@
     <ProjectGuid>{E59028F5-252A-4113-927D-63B78A891C48}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Hootsuite.Rest</RootNamespace>
-    <AssemblyName>Hootsuite.Rest</AssemblyName>
+    <RootNamespace>Hootsuite</RootNamespace>
+    <AssemblyName>Hootsuite-Rest</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -54,8 +54,8 @@
     <Compile Include="Require\config.cs" />
     <Compile Include="Require\Restler.cs" />
     <Compile Include="ConnectionOwly.cs" />
-    <Compile Include="Errors.cs" />
-    <Compile Include="Hootsuite.cs" />
+    <Compile Include="errors.cs" />
+    <Compile Include="HootsuiteClient.cs" />
     <Compile Include="Require\RestlerOperationException.cs" />
     <Compile Include="Retry.cs" />
     <Compile Include="Program.cs" />

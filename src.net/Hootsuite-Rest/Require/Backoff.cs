@@ -1,16 +1,9 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 //https://github.com/MathieuTurcotte/node-backoff/blob/master/lib/backoff.js
-namespace Hootsuite.Rest.Require
+namespace Hootsuite.Require
 {
     // Abstract class defining the skeleton for the backoff strategies. Accepts an object holding the options for the backoff strategy:
     //  * `randomisationFactor`: The randomisation factor which must be between 0 and 1 where 1 equates to a randomization factor of 100% and 0 to no randomization.
@@ -178,10 +171,11 @@ namespace Hootsuite.Rest.Require
             }
             else
             {
+                OnBackoff?.Invoke(_backoffNumber, _backoffDelay, err);
                 _backoffDelay = _backoffStrategy.Next();
                 _timeoutId = new CancellationTokenSource();
-                await Task.Delay(TimeSpan.FromSeconds(_backoffDelay), _timeoutId.Token);
-                OnBackoff?.Invoke(_backoffNumber, _backoffDelay, err);
+                await Task.Delay(TimeSpan.FromMilliseconds(_backoffDelay), _timeoutId.Token);
+                OnBackoffInternal();
             }
         }
 

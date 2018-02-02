@@ -10,6 +10,8 @@
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+    <RootNamespace>Hootsuite.Tests</RootNamespace>
+    <AssemblyName>Hootsuite-Rest.Tests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Hootsuite.Rest\Hootsuite.Rest.NetCore.csproj" />
+    <ProjectReference Include="..\Hootsuite-Rest\Hootsuite-Rest.NetCore.csproj" />
   </ItemGroup>
 
 </Project>

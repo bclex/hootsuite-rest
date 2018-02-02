@@ -1,11 +1,11 @@
-﻿using Hootsuite.Rest.Require;
+﻿using Hootsuite.Require;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Threading.Tasks;
 
-namespace Hootsuite.Rest
+namespace Hootsuite
 {
-    public class Retry
+    internal class Retry
     {
         const int DefaultRetryCount = 5;
         const int DefaultInitialDelay = 1000; // 1 second
@@ -25,7 +25,7 @@ namespace Hootsuite.Rest
         int MaxDelay { get { return dyn.getProp(_options, "maxDelay", DefaultMaxDelay); } }
 
         Exception _lastError;
-        internal Task<JObject> start(Func<bool, Task<JObject>> fetchFn, Connection connection)
+        internal Task<JObject> start(Func<bool, Task<JObject>> fetchFn)
         {
             var promise = new TaskCompletionSource<JObject>();
             var forceOAuth = false;
@@ -44,17 +44,10 @@ namespace Hootsuite.Rest
                     _lastError = err;
                     if (RetryableError(err))
                     {
-                        if (errors.isRateLimited(err))
-                        {
-                            await Task.Delay(TimeSpan.FromSeconds(MaxDelay));
-                            await _newBackoff.DoBackoff();
-                        }
-                        else
-                        {
-                            if (errors.isExpiredToken(err))
-                                forceOAuth = true;
-                            await _newBackoff.DoBackoff();
-                        }
+                        if (errors.isRateLimited(err)) await Task.Delay(TimeSpan.FromMilliseconds(MaxDelay));
+                        else if (errors.isExpiredToken(err)) forceOAuth = true;
+                        await _newBackoff.DoBackoff();
+                        return;
                     }
                     promise.SetException(err);
                     throw err;

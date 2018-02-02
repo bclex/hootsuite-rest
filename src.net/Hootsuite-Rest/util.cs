@@ -1,7 +1,7 @@
-﻿using Hootsuite.Rest.Require;
+﻿using Hootsuite.Require;
 using System;
 
-namespace Hootsuite.Rest
+namespace Hootsuite
 {
     internal static class util
     {

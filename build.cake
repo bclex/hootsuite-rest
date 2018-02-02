@@ -5,12 +5,12 @@
 var configuration = Argument("configuration", "Release");
 var target = Argument("target", "Default");
 
-var mainProject = File("./src.net/Hootsuite.Rest/Hootsuite.Rest.Netcore.csproj");
-var testProject = File("./src.net/Hootsuite.Rest.Tests/Hootsuite.Rest.Tests.NetCore.csproj");
+var mainProject = File("./src.net/Hootsuite-Rest/Hootsuite-Rest.NetCore.csproj");
+var testProject = File("./src.net/Hootsuite-Rest.Tests/Hootsuite-Rest.Tests.NetCore.csproj");
 var projects = new[] { mainProject, testProject };
 var artifactsDirectory = Directory("./_artifacts");
 var revision = AppVeyor.IsRunningOnAppVeyor ? AppVeyor.Environment.Build.Number : 0;
-var version = AppVeyor.IsRunningOnAppVeyor ? new Version(AppVeyor.Environment.Build.Version.Split('-')[0]).ToString(3) : "0.0.2";
+var version = AppVeyor.IsRunningOnAppVeyor ? new Version(AppVeyor.Environment.Build.Version.Split('-')[0]).ToString(3) : "0.0.1";
 var globalAssemblyInfo = File("./src.net/GlobalAssemblyVersion.cs");
 
 var generatedVersion = "";
@@ -127,12 +127,12 @@ Task("Test")
 
         if (AppVeyor.IsRunningOnAppVeyor)
         {
-            var testResult = File("./src.net/Hootsuite.Rest.Tests/TestResults/result_" + framework + ".trx");
+            var testResult = File("./src.net/Hootsuite-Rest.Tests/TestResults/result_" + framework + ".trx");
 
             ReplaceRegexInFiles(
                 testResult,
                 @"hootsuite\.tests\.dll",
-                "Hootsuite.Rest.Tests." + framework + ".dll",
+                "Hootsuite-Rest.Tests." + framework + ".dll",
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase);
 
            AppVeyor.UploadTestResults(testResult, AppVeyorTestResultsType.MSTest);

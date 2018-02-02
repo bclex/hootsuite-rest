@@ -1,4 +1,4 @@
-﻿namespace Hootsuite.Rest.Require
+﻿namespace Hootsuite.Require
 {
     public static class config
     {

@@ -1,14 +1,13 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
 
-namespace Hootsuite.Rest
+namespace Hootsuite
 {
-    internal static class dyn
+    public static class dyn
     {
         public static bool hasProp(object s, string name)
         {

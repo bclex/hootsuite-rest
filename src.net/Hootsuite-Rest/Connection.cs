@@ -1,4 +1,4 @@
-﻿using Hootsuite.Rest.Require;
+﻿using Hootsuite.Require;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Security.Cryptography;
@@ -6,17 +6,18 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-//https://stackoverflow.com/questions/38996593/promise-equivalent-in-c-sharp
-//https://docs.microsoft.com/en-us/dotnet/csharp/tutorials/console-webapiclient
-//https://dotnetcodr.com/2014/03/25/continuation-tasks-in-net-tpl-exception-handling-in-task-chains/
-namespace Hootsuite.Rest
+namespace Hootsuite
 {
+    /// <summary>
+    /// Class Connection.
+    /// </summary>
     public class Connection
     {
+        internal static readonly Regex HttpTestExp = new Regex(@"^https?://", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+        readonly Action<string> _log = util.logger;
+        readonly Restler _rest = new Restler();
         readonly dynamic _options;
         readonly Retry _retry;
-        readonly Restler _rest = new Restler();
-        readonly Action<string> _log = util.logger;
         JObject _tokenData;
 
         public class FrameContext
@@ -36,6 +37,12 @@ namespace Hootsuite.Rest
             _retry = new Retry(dyn.getProp(_options, "retry", new { }));
         }
 
+        public string AccessToken
+        {
+            get { return (string)_tokenData["access_token"]; }
+            set { _tokenData = dyn.hasProp(_options, "accessToken") ? dyn.ToJObject(new { access_token = value }) : null; }
+        }
+
         public Task<JObject> get(string url, dynamic options = null) => _request(url, null, options, Restler.Method.GET);
         public Task<JObject> post(string url, dynamic options = null) => _request(url, null, options, Restler.Method.POST);
         public Task<JObject> put(string url, dynamic options = null) => _request(url, null, options, Restler.Method.PUT);
@@ -46,8 +53,6 @@ namespace Hootsuite.Rest
         public Task<JObject> postJson(string url, object data, dynamic options = null) => _request(url, data, options, Restler.Method.POST);
         public Task<JObject> putJson(string url, object data, dynamic options = null) => _request(url, data, options, Restler.Method.PUT);
 
-        static readonly Regex HttpTestExp = new Regex(@"^https?://", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
-
         private async Task<JObject> _request(string url, object data, dynamic options, Restler.Method method)
         {
             options = dyn.exp(options, true);
@@ -57,7 +62,7 @@ namespace Hootsuite.Rest
                 url = baseUrl + url;
             }
             _log($"Request: {url}");
-            Func<Task<JObject>, Task<JObject>> requestFn0 = async (x) =>
+            Func<Task<JObject>, Task<JObject>> requestFn = async (x) =>
             {
                 if (!x.IsFaulted)
                 {
@@ -78,11 +83,7 @@ namespace Hootsuite.Rest
                     catch (RestlerOperationException res)
                     {
                         var err = (JObject)res.Content;
-                        if (err["errors"] != null)
-                        {
-                            _log($"Request failed: {err}");
-                            throw;
-                        }
+                        if (err["errors"] != null) { _log($"Request failed: {err}"); throw; }
                         else
                         {
                             var statusCode = Math.Floor((int)res.StatusCode / 100M);
@@ -94,21 +95,15 @@ namespace Hootsuite.Rest
                 }
                 else
                 {
-                    //    //var firstError = "Error"; // e.errors[0];
-                    //    //throw new InvalidOperationException($"Authentication ({firstError.code}): {firstError.message}");
-                    var res = x.Exception;
-                    _log("ERROR");
-                    throw res;
+                    var err = x.Exception;
+                    _log($"_request failed: {err}"); throw err;
                 }
             };
-            Func<bool, Task<JObject>> requestFn = async (forceOAuth) => await GetOAuthToken(forceOAuth).ContinueWith(x =>
-            {
-                return requestFn0(x).Result;
-            });
-            return await _retry.start(requestFn, this);
+            Func<bool, Task<JObject>> requestFn2 = async (forceOAuth) => await requestFn(GetOAuthToken(forceOAuth));
+            return await _retry.start(requestFn2);
         }
 
-        private string GetFrameAuthToken(string url)
+        public string GetFrameAuthToken(string url)
         {
             var secret = dyn.getProp<string>(_options, "secret");
             var frameCtx = dyn.getProp<dynamic>(_options, "frameCtx");
@@ -149,7 +144,7 @@ namespace Hootsuite.Rest
                         {
                             _log($"Got pre-token: {data}");
                             try { return await GetOnBehalfAuthToken(data); }
-                            catch (Exception err) { _log("ERROR"); throw err; }
+                            catch (Exception err) { _log($"GetOAuthToken[pre-token] failed: {err}"); throw err; }
                         }
                         else
                         {
@@ -158,9 +153,9 @@ namespace Hootsuite.Rest
                             return data;
                         }
                     }
-                    catch (Exception err) { _log("ERROR"); throw err; }
+                    catch (Exception err) { _log($"GetOAuthToken failed: {err}"); throw err; }
                 };
-                return await _retry.start(requestFn, this);
+                return await _retry.start(requestFn);
             }
             else
             {
@@ -189,9 +184,9 @@ namespace Hootsuite.Rest
                     _tokenData = data;
                     return data;
                 }
-                catch (Exception err) { _log("ERROR"); throw err; }
+                catch (Exception err) { _log($"GetOnBehalfAuthToken failed: {err}"); throw err; }
             };
-            return await _retry.start(requestFn, this);
+            return await _retry.start(requestFn);
         }
     }
 }

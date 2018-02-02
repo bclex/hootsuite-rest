@@ -4,13 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 //https://github.com/danwrong/restler
-namespace Hootsuite.Rest.Require
+namespace Hootsuite.Require
 {
     public class Restler
     {
@@ -24,13 +23,6 @@ namespace Hootsuite.Rest.Require
             PUT,
             DELETE,
             HEAD,
-        }
-
-        public Restler()
-        {
-            //_client.DefaultRequestHeaders.Accept.Clear();
-            //_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
-            //_client.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
         }
 
         public async Task<object> request(string url, dynamic options, Method method = Method.GET, string contentType = null)
@@ -59,20 +51,6 @@ namespace Hootsuite.Rest.Require
             // make request
             try
             {
-                //HttpResponseMessage res = null;
-                //var cancellationToken = new CancellationTokenSource(timeout).Token;
-                //switch (method)
-                //{
-                //    case Method.GET: res = await _client.GetAsync(uri, cancellationToken); break;
-                //    case Method.POST: res = await _client.PostAsync(uri, content, cancellationToken); break;
-                //    case Method.PUT: res = await _client.PutAsync(uri, content, cancellationToken); break;
-                //    case Method.DELETE: res = await _client.DeleteAsync(uri, cancellationToken); break;
-                //    case Method.PATCH:
-                //    case Method.HEAD:
-                //        var req = new HttpRequestMessage(new HttpMethod(method.ToString()), uri) { Content = content };
-                //        res = await _client.SendAsync(req, cancellationToken);
-                //        break;
-                //}
                 var res = await _client.SendAsync(req, new CancellationTokenSource(timeout).Token);
                 //Console.WriteLine(res);
                 var body = await res.Content.ReadAsStringAsync();
@@ -83,6 +61,7 @@ namespace Hootsuite.Rest.Require
                 return r;
             }
             catch (TaskCanceledException e) { throw new RestlerOperationException(0, null) { E = e, Timedout = true }; }
+            catch (Exception e) { throw new RestlerOperationException(0, null) { E = e }; }
         }
 
         public async Task<object> get(string url, dynamic options) => await request(url, options, Method.GET);
@@ -99,7 +78,6 @@ namespace Hootsuite.Rest.Require
         public async Task<object> postJson(string url, object data, dynamic options) => await json(url, data, options, Method.POST);
         public async Task<object> putJson(string url, object data, dynamic options) => await json(url, data, options, Method.PUT);
         public async Task<object> patchJson(string url, object data, dynamic options) => await json(url, data, options, Method.PATCH);
-
 
         public static string GetQuery(string path, object s)
         {

@@ -1,23 +1,36 @@
-﻿using Hootsuite.Rest.Require;
+﻿using Hootsuite.Require;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Hootsuite.Rest.Api
+namespace Hootsuite.Api
 {
+    /// <summary>
+    /// Class Messages.
+    /// </summary>
     public class Messages
     {
-        Hootsuite _hootsuite;
+        HootsuiteClient _hootsuite;
         Connection _connection;
 
-        public Messages(Hootsuite hootsuite, Connection connection)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Messages"/> class.
+        /// </summary>
+        /// <param name="hootsuite">The hootsuite.</param>
+        /// <param name="connection">The connection.</param>
+        public Messages(HootsuiteClient hootsuite, Connection connection)
         {
             _hootsuite = hootsuite;
             _connection = connection;
         }
 
-        public Task<JObject> schedule(dynamic msg)
+        /// <summary>
+        /// Schedules the specified MSG.
+        /// </summary>
+        /// <param name="msg">The MSG.</param>
+        /// <returns>Task&lt;JObject&gt;.</returns>
+        public Task<JObject> Schedule(dynamic msg)
         {
             var path = util.createPath("messages");
             var data = new
@@ -37,7 +50,15 @@ namespace Hootsuite.Rest.Api
             return _connection.postJson(path, data);
         }
 
-        public Task<JObject> find(DateTime startTime, DateTime endTime, string[] socialProfileIds, dynamic opts)
+        /// <summary>
+        /// Finds the specified start time.
+        /// </summary>
+        /// <param name="startTime">The start time.</param>
+        /// <param name="endTime">The end time.</param>
+        /// <param name="socialProfileIds">The social profile ids.</param>
+        /// <param name="opts">The opts.</param>
+        /// <returns>Task&lt;JObject&gt;.</returns>
+        public Task<JObject> Find(DateTime startTime, DateTime endTime, string[] socialProfileIds, dynamic opts)
         {
             var path = util.createPath("messages");
             var query = Restler.GetQuery(null, new
@@ -57,19 +78,36 @@ namespace Hootsuite.Rest.Api
             return _connection.get(path, options);
         }
 
-        public Task<JObject> findById(string messageId)
+        /// <summary>
+        /// Finds the by identifier.
+        /// </summary>
+        /// <param name="messageId">The message identifier.</param>
+        /// <returns>Task&lt;JObject&gt;.</returns>
+        public Task<JObject> FindById(string messageId)
         {
             var path = util.createPath("messages", messageId);
             return _connection.get(path);
         }
 
-        public Task<JObject> deleteById(string messageId)
+        /// <summary>
+        /// Deletes the by identifier.
+        /// </summary>
+        /// <param name="messageId">The message identifier.</param>
+        /// <returns>Task&lt;JObject&gt;.</returns>
+        public Task<JObject> DeleteById(string messageId)
         {
             var path = util.createPath("messages", messageId);
             return _connection.del(path);
         }
 
-        public Task<JObject> approveById(string messageId, int sequenceNumber = 0, string reviewerType = null)
+        /// <summary>
+        /// Approves the by identifier.
+        /// </summary>
+        /// <param name="messageId">The message identifier.</param>
+        /// <param name="sequenceNumber">The sequence number.</param>
+        /// <param name="reviewerType">Type of the reviewer.</param>
+        /// <returns>Task&lt;JObject&gt;.</returns>
+        public Task<JObject> ApproveById(string messageId, int sequenceNumber = 0, string reviewerType = null)
         {
             var path = util.createPath("messages", messageId, "approve");
             var data = new
@@ -80,7 +118,15 @@ namespace Hootsuite.Rest.Api
             return _connection.postJson(path, data);
         }
 
-        public Task<JObject> rejectById(string messageId, string reason = null, int sequenceNumber = 0, string reviewerType = null)
+        /// <summary>
+        /// Rejects the by identifier.
+        /// </summary>
+        /// <param name="messageId">The message identifier.</param>
+        /// <param name="reason">The reason.</param>
+        /// <param name="sequenceNumber">The sequence number.</param>
+        /// <param name="reviewerType">Type of the reviewer.</param>
+        /// <returns>Task&lt;JObject&gt;.</returns>
+        public Task<JObject> RejectById(string messageId, string reason = null, int sequenceNumber = 0, string reviewerType = null)
         {
             var path = util.createPath("messages", messageId, "reject");
             var data = new
@@ -92,7 +138,12 @@ namespace Hootsuite.Rest.Api
             return _connection.postJson(path, data);
         }
 
-        public Task<JObject> findByIdHistory(string messageId)
+        /// <summary>
+        /// Finds the by identifier history.
+        /// </summary>
+        /// <param name="messageId">The message identifier.</param>
+        /// <returns>Task&lt;JObject&gt;.</returns>
+        public Task<JObject> FindByIdHistory(string messageId)
         {
             var path = util.createPath("messages", messageId, "history");
             return _connection.get(path);

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace Hootsuite.Rest.Require
+namespace Hootsuite.Require
 {
     public class RestlerOperationException : Exception
     {

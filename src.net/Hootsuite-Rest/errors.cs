@@ -1,16 +1,12 @@
-﻿using Hootsuite.Rest.Require;
+﻿using Hootsuite.Require;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Hootsuite.Rest
+namespace Hootsuite
 {
-    public static class errors
+    internal static class errors
     {
-
         enum errorCodes
         {
             TOKEN_ERROR = 1032,
