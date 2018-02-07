@@ -37,15 +37,15 @@ namespace Hootsuite.Api
             {
                 text = dyn.getProp(msg, "text", (string)null),
                 socialProfileIds = dyn.getProp(msg, "socialProfileIds", (string)null),
-                scheduledSendTime = dyn.hasProp(msg, "scheduledSendTime") ? ((DateTime)msg.scheduledSendTime).ToString("o") : null,
-                webhookUrls = dyn.getProp(msg, "msg.webhookUrls", (string)null),
-                tags = dyn.getProp(msg, "tags", (string)null),
-                targeting = dyn.getProp(msg, "targeting", (string)null),
-                privacy = dyn.getProp(msg, "privacy", (string)null),
-                location = dyn.getProp(msg, "location", (string)null),
-                emailNotification = dyn.getProp(msg, "emailNotification", (string)null),
-                mediaUrls = dyn.getProp(msg, "mediaUrls", (string)null),
-                media = dyn.getProp(msg, "media", (string)null),
+                scheduledSendTime = dyn.hasProp(msg, "scheduledSendTime") ? dyn.getProp(msg, "scheduledSendTime", (DateTime)DateTime.UtcNow)?.ToString("o") : null,
+                webhookUrls = dyn.getProp(msg, "webhookUrls", (string[])null),
+                tags = dyn.getProp(msg, "tags", (string[])null),
+                targeting = dyn.getProp(msg, "targeting", (string[])null),
+                privacy = dyn.getProp(msg, "privacy", (string[])null),
+                location = dyn.getProp(msg, "location", (string[])null),
+                emailNotification = dyn.getProp(msg, "emailNotification", (bool)false),
+                mediaUrls = dyn.getProp(msg, "mediaUrls", (string[])null),
+                media = dyn.getProp(msg, "media", (string[])null),
             };
             return _connection.postJson(path, data);
         }
