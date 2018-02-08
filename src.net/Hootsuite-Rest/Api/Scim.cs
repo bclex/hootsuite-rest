@@ -27,7 +27,7 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="msg">The MSG.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> CreateUser(dynamic msg)
+        public Task<dynamic> CreateUser(dynamic msg)
         {
             var path = util.createScimPath("Users");
             var data = new
@@ -53,7 +53,7 @@ namespace Hootsuite.Api
         /// <param name="count">The count.</param>
         /// <param name="startIndex">The start index.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> FindUsers(string filter = null, int count = 0, int startIndex = 0)
+        public Task<dynamic> FindUsers(string filter = null, int count = 0, int startIndex = 0)
         {
             var path = util.createScimPath("Users");
             var options = new
@@ -73,7 +73,7 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="memberId">The member identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> FindUserById(string memberId)
+        public Task<dynamic> FindUserById(string memberId)
         {
             var path = util.createScimPath("Users", memberId);
             return _connection.get(path);
@@ -85,7 +85,7 @@ namespace Hootsuite.Api
         /// <param name="memberId">The member identifier.</param>
         /// <param name="msg">The MSG.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> ReplaceUserById(string memberId, dynamic msg)
+        public Task<dynamic> ReplaceUserById(string memberId, dynamic msg)
         {
             var path = util.createScimPath("Users", memberId);
             var data = new
@@ -110,7 +110,7 @@ namespace Hootsuite.Api
         /// <param name="memberId">The member identifier.</param>
         /// <param name="msg">The MSG.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> ModifyUserById(string memberId, dynamic msg)
+        public Task<dynamic> ModifyUserById(string memberId, dynamic msg)
         {
             var path = util.createScimPath("Users", memberId);
             var options = new
@@ -129,7 +129,7 @@ namespace Hootsuite.Api
         /// Gets the resource types.
         /// </summary>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> GetResourceTypes()
+        public Task<dynamic> GetResourceTypes()
         {
             var path = util.createScimPath("ResourceTypes");
             return _connection.get(path);

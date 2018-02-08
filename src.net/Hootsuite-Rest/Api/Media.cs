@@ -28,7 +28,7 @@ namespace Hootsuite.Api
         /// <param name="sizeBytes">The size bytes.</param>
         /// <param name="mimeType">Type of the MIME.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> CreateUrl(int sizeBytes, string mimeType)
+        public Task<dynamic> CreateUrl(int sizeBytes, string mimeType = "video/mp4")
         {
             var path = util.createPath("media");
             var data = new
@@ -44,7 +44,7 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="mediaId">The media identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> StatusById(string mediaId)
+        public Task<dynamic> StatusById(string mediaId)
         {
             var path = util.createPath("media", mediaId);
             return _connection.get(path);

@@ -29,7 +29,7 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="longUrl">The long URL.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> ShortenUrl(string longUrl)
+        public Task<dynamic> ShortenUrl(string longUrl)
         {
             var path = util.createOwlyPath("url", "shorten");
             return _connection.get(path, new { longUrl });
@@ -40,7 +40,7 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="shortUrl">The short URL.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> ExpandUrl(string shortUrl)
+        public Task<dynamic> ExpandUrl(string shortUrl)
         {
             var path = util.createPath("url", "expand");
             return _connection.get(path, new { shortUrl });
@@ -51,7 +51,7 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="shortUrl">The short URL.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> GetInfo(string shortUrl)
+        public Task<dynamic> GetInfo(string shortUrl)
         {
             var path = util.createPath("url", "info");
             return _connection.get(path, new { shortUrl });
@@ -64,7 +64,7 @@ namespace Hootsuite.Api
         /// <param name="from">From.</param>
         /// <param name="to">To.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> GetClickStats(string shortUrl, DateTime? from, DateTime? to)
+        public Task<dynamic> GetClickStats(string shortUrl, DateTime? from, DateTime? to)
         {
             var path = util.createPath("url", "clickStats");
             return _connection.get(path, new { shortUrl, from, to });
@@ -76,7 +76,7 @@ namespace Hootsuite.Api
         /// <param name="fileName">Name of the file.</param>
         /// <param name="uploaded_file">The uploaded file.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> UploadPhoto(string fileName, Stream uploaded_file)
+        public Task<dynamic> UploadPhoto(string fileName, Stream uploaded_file)
         {
             var path = util.createPath("photo", "upload");
             return _connection.post(path, new { fileName, uploaded_file });
@@ -88,7 +88,7 @@ namespace Hootsuite.Api
         /// <param name="fileName">Name of the file.</param>
         /// <param name="uploaded_file">The uploaded file.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> UploadDoc(string fileName, Stream uploaded_file)
+        public Task<dynamic> UploadDoc(string fileName, Stream uploaded_file)
         {
             var path = util.createPath("doc", "upload");
             return _connection.post(path, new { fileName, uploaded_file });

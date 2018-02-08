@@ -174,7 +174,7 @@ namespace Hootsuite.Require
                 OnBackoff?.Invoke(_backoffNumber, _backoffDelay, err);
                 _backoffDelay = _backoffStrategy.Next();
                 _timeoutId = new CancellationTokenSource();
-                await Task.Delay(TimeSpan.FromMilliseconds(_backoffDelay), _timeoutId.Token);
+                await Task.Delay(_backoffDelay, _timeoutId.Token);
                 OnBackoffInternal();
             }
         }

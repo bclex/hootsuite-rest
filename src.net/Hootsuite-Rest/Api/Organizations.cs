@@ -27,7 +27,7 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="organizationId">The organization identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> FindMembers(string organizationId)
+        public Task<dynamic> FindMembers(string organizationId)
         {
             var path = util.createPath("organizations", organizationId, "members");
             return _connection.get(path);
@@ -39,7 +39,7 @@ namespace Hootsuite.Api
         /// <param name="organizationId">The organization identifier.</param>
         /// <param name="memberId">The member identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> RemoveMemberById(string organizationId, string memberId)
+        public Task<dynamic> RemoveMemberById(string organizationId, string memberId)
         {
             var path = util.createPath("organizations", organizationId, "members", memberId);
             return _connection.del(path);
@@ -51,7 +51,7 @@ namespace Hootsuite.Api
         /// <param name="organizationId">The organization identifier.</param>
         /// <param name="memberId">The member identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> FindMemberByIdPermissions(string organizationId, string memberId)
+        public Task<dynamic> FindMemberByIdPermissions(string organizationId, string memberId)
         {
             var path = util.createPath("organizations", organizationId, "members", memberId, "permissions");
             return _connection.get(path);
@@ -63,7 +63,7 @@ namespace Hootsuite.Api
         /// <param name="organizationId">The organization identifier.</param>
         /// <param name="memberId">The member identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> FindMemberByIdTeams(string organizationId, string memberId)
+        public Task<dynamic> FindMemberByIdTeams(string organizationId, string memberId)
         {
             var path = util.createPath("organizations", organizationId, "members", memberId, "teams");
             return _connection.get(path);
@@ -75,7 +75,7 @@ namespace Hootsuite.Api
         /// <param name="organizationId">The organization identifier.</param>
         /// <param name="memberId">The member identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> FindMemberByIdSocialProfiles(string organizationId, string memberId)
+        public Task<dynamic> FindMemberByIdSocialProfiles(string organizationId, string memberId)
         {
             var path = util.createPath("organizations", organizationId, "members", memberId, "socialProfiles");
             return _connection.get(path);
@@ -88,7 +88,7 @@ namespace Hootsuite.Api
         /// <param name="memberId">The member identifier.</param>
         /// <param name="socialProfileId">The social profile identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> FindSocialProfilesByIdPermissions(string organizationId, string memberId, string socialProfileId)
+        public Task<dynamic> FindSocialProfilesByIdPermissions(string organizationId, string memberId, string socialProfileId)
         {
             var path = util.createPath("organizations", organizationId, "members", memberId, "socialProfiles", socialProfileId, "permissions");
             return _connection.get(path);

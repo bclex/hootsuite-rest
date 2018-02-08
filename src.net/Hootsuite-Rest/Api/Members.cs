@@ -27,7 +27,7 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="memberId">The member identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> FindById(string memberId)
+        public Task<dynamic> FindById(string memberId)
         {
             var path = util.createPath("members", memberId);
             return _connection.get(path);
@@ -38,7 +38,7 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="msg">The MSG.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> Create(dynamic msg)
+        public Task<dynamic> Create(dynamic msg)
         {
             var path = util.createPath("members");
             var data = new
@@ -59,7 +59,7 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="memberId">The member identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> FindByIdOrgs(string memberId)
+        public Task<dynamic> FindByIdOrgs(string memberId)
         {
             var path = util.createPath("members", memberId, "organizations");
             return _connection.get(path);

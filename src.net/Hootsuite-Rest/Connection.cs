@@ -33,27 +33,27 @@ namespace Hootsuite
         public Connection(dynamic options)
         {
             _options = options ?? new { };
-            _tokenData = dyn.hasProp(_options, "accessToken") ? dyn.ToJObject(new { access_token = _options.accessToken }) : null;
+            _tokenData = dyn.hasProp(_options, "accessToken") ? dyn.ToJObject(new { access_token = dyn.getProp<string>(_options, "accessToken") }) : null;
             _retry = new Retry(dyn.getProp(_options, "retry", new { }));
         }
 
         public string AccessToken
         {
-            get { return (string)_tokenData["access_token"]; }
+            get { return _tokenData != null ? (string)_tokenData["access_token"] : null; }
             set { _tokenData = dyn.hasProp(_options, "accessToken") ? dyn.ToJObject(new { access_token = value }) : null; }
         }
 
-        public Task<JObject> get(string url, dynamic options = null) => _request(url, null, options, Restler.Method.GET);
-        public Task<JObject> post(string url, dynamic options = null) => _request(url, null, options, Restler.Method.POST);
-        public Task<JObject> put(string url, dynamic options = null) => _request(url, null, options, Restler.Method.PUT);
-        public Task<JObject> del(string url, dynamic options = null) => _request(url, null, options, Restler.Method.DELETE);
-        public Task<JObject> head(string url, dynamic options = null) => _request(url, null, options, Restler.Method.HEAD);
-        public Task<JObject> patch(string url, dynamic options = null) => _request(url, null, options, Restler.Method.PATCH);
-        public Task<JObject> json(string url, object data, dynamic options = null) => _request(url, data, options, Restler.Method.GET);
-        public Task<JObject> postJson(string url, object data, dynamic options = null) => _request(url, data, options, Restler.Method.POST);
-        public Task<JObject> putJson(string url, object data, dynamic options = null) => _request(url, data, options, Restler.Method.PUT);
+        public Task<dynamic> get(string url, dynamic options = null) => _request(url, null, options, Restler.Method.GET);
+        public Task<dynamic> post(string url, dynamic options = null) => _request(url, null, options, Restler.Method.POST);
+        public Task<dynamic> put(string url, dynamic options = null) => _request(url, null, options, Restler.Method.PUT);
+        public Task<dynamic> del(string url, dynamic options = null) => _request(url, null, options, Restler.Method.DELETE);
+        public Task<dynamic> head(string url, dynamic options = null) => _request(url, null, options, Restler.Method.HEAD);
+        public Task<dynamic> patch(string url, dynamic options = null) => _request(url, null, options, Restler.Method.PATCH);
+        public Task<dynamic> json(string url, object data, dynamic options = null) => _request(url, data, options, Restler.Method.GET);
+        public Task<dynamic> postJson(string url, object data, dynamic options = null) => _request(url, data, options, Restler.Method.POST);
+        public Task<dynamic> putJson(string url, object data, dynamic options = null) => _request(url, data, options, Restler.Method.PUT);
 
-        private async Task<JObject> _request(string url, object data, dynamic options, Restler.Method method)
+        private async Task<dynamic> _request(string url, object data, dynamic options, Restler.Method method)
         {
             options = dyn.exp(options, true);
             if (!HttpTestExp.IsMatch(url))
@@ -71,25 +71,25 @@ namespace Hootsuite
                     options.headers.Authorization = $"Bearer {token["access_token"]}";
                     try
                     {
-                        var y = await _rest.request(url, options, method);
-                        var d = (JObject)y;
-                        if ((string)d["success"] == "false" && d["errors"] != null)
+                        var d = data == null ? (JObject)await _rest.request(url, options, method) : await _rest.json(url, data, options, method);
+                        if (d["errors"] != null)
                         {
                             _log($"Request failed: {d}");
                             throw new InvalidOperationException(d["errors"].ToString());
                         }
-                        return d;
+                        return (dynamic)d;
                     }
                     catch (RestlerOperationException res)
                     {
+                        var e = res.E;
                         var err = (JObject)res.Content;
-                        if (err["errors"] != null) { _log($"Request failed: {err}"); throw; }
+                        if (err != null && err["errors"] != null) { _log($"Request failed: {err}"); throw; }
                         else
                         {
                             var statusCode = Math.Floor((int)res.StatusCode / 100M);
-                            if (statusCode == 5) throw res;
-                            else if (statusCode == 4) throw res;
-                            else throw res;
+                            if (statusCode == 5) throw e;
+                            else if (statusCode == 4) throw e;
+                            else throw e;
                         }
                     }
                 }
@@ -106,7 +106,7 @@ namespace Hootsuite
         public string GetFrameAuthToken(string url)
         {
             var secret = dyn.getProp<string>(_options, "secret");
-            var frameCtx = dyn.getProp<dynamic>(_options, "frameCtx");
+            var frameCtx = dyn.getProp<FrameContext>(_options, "frameCtx");
             using (var hmac = new HMACSHA512(secret))
             {
                 var bytes = Encoding.UTF8.GetBytes(frameCtx.uid + frameCtx.ts + (url ?? string.Empty));
@@ -119,7 +119,7 @@ namespace Hootsuite
         {
             if (force || _tokenData == null)
             {
-                var frameCtx = dyn.getProp<dynamic>(_options, "frameCtx");
+                var frameCtx = dyn.getProp<FrameContext>(_options, "frameCtx");
                 Func<bool, Task<JObject>> requestFn = async (forceOAuth) =>
                 {
                     var options = new
@@ -166,7 +166,7 @@ namespace Hootsuite
 
         private async Task<JObject> GetOnBehalfAuthToken(dynamic tokenData)
         {
-            var frameCtx = dyn.getProp(_options, "frameCtx", new { uid = string.Empty });
+            var frameCtx = dyn.getProp<FrameContext>(_options, "frameCtx");
             Func<bool, Task<JObject>> requestFn = async (forceOAuth) =>
             {
                 var options = new

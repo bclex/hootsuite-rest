@@ -26,7 +26,7 @@ namespace Hootsuite.Api
         /// Finds this instance.
         /// </summary>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> Find()
+        public Task<dynamic> Find()
         {
             var path = util.createPath("socialProfiles");
             return _connection.get(path);
@@ -37,7 +37,7 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="socialProfileId">The social profile identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> FindById(string socialProfileId)
+        public Task<dynamic> FindById(string socialProfileId)
         {
             var path = util.createPath("socialProfiles", socialProfileId);
             return _connection.get(path);
@@ -48,7 +48,7 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="socialProfileId">The social profile identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> FindByIdTeams(string socialProfileId)
+        public Task<dynamic> FindByIdTeams(string socialProfileId)
         {
             var path = util.createPath("socialProfiles", socialProfileId, "teams");
             return _connection.get(path);

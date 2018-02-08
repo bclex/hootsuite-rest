@@ -44,7 +44,7 @@ namespace Hootsuite
                     _lastError = err;
                     if (RetryableError(err))
                     {
-                        if (errors.isRateLimited(err)) await Task.Delay(TimeSpan.FromMilliseconds(MaxDelay));
+                        if (errors.isRateLimited(err)) await Task.Delay(MaxDelay);
                         else if (errors.isExpiredToken(err)) forceOAuth = true;
                         await _newBackoff.DoBackoff();
                         return;
