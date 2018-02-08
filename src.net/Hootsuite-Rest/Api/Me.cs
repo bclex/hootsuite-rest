@@ -26,7 +26,7 @@ namespace Hootsuite.Api
         /// Gets this instance.
         /// </summary>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> Get()
+        public Task<dynamic> Get()
         {
             var path = util.createPath("me");
             return _connection.get(path);
@@ -36,7 +36,7 @@ namespace Hootsuite.Api
         /// Gets the organizations.
         /// </summary>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> GetOrganizations()
+        public Task<dynamic> GetOrganizations()
         {
             var path = util.createPath("me", "organizations");
             return _connection.get(path);
@@ -46,7 +46,7 @@ namespace Hootsuite.Api
         /// Gets the social profiles.
         /// </summary>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> GetSocialProfiles()
+        public Task<dynamic> GetSocialProfiles()
         {
             var path = util.createPath("me", "socialProfiles");
             return _connection.get(path);

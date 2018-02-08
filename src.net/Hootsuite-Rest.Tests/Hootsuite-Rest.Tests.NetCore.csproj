@@ -24,4 +24,8 @@
     <ProjectReference Include="..\Hootsuite-Rest\Hootsuite-Rest.NetCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
 </Project>

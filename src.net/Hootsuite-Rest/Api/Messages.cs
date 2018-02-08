@@ -30,22 +30,22 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="msg">The MSG.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> Schedule(dynamic msg)
+        public Task<dynamic> Schedule(dynamic msg)
         {
             var path = util.createPath("messages");
             var data = new
             {
                 text = dyn.getProp(msg, "text", (string)null),
-                socialProfileIds = dyn.getProp(msg, "socialProfileIds", (string)null),
-                scheduledSendTime = dyn.hasProp(msg, "scheduledSendTime") ? dyn.getProp(msg, "scheduledSendTime", (DateTime)DateTime.UtcNow)?.ToString("o") : null,
-                webhookUrls = dyn.getProp(msg, "webhookUrls", (string[])null),
-                tags = dyn.getProp(msg, "tags", (string[])null),
-                targeting = dyn.getProp(msg, "targeting", (string[])null),
-                privacy = dyn.getProp(msg, "privacy", (string[])null),
-                location = dyn.getProp(msg, "location", (string[])null),
-                emailNotification = dyn.getProp(msg, "emailNotification", (bool)false),
-                mediaUrls = dyn.getProp(msg, "mediaUrls", (string[])null),
-                media = dyn.getProp(msg, "media", (string[])null),
+                socialProfileIds = dyn.getProp(msg, "socialProfileIds", (string[])null),
+                scheduledSendTime = dyn.hasProp(msg, "scheduledSendTime") ? ((DateTime)msg.scheduledSendTime).ToString("o") : null,
+                webhookUrls = dyn.getProp(msg, "msg.webhookUrls", (string)null),
+                tags = dyn.getProp(msg, "tags", (string)null),
+                targeting = dyn.getProp(msg, "targeting", (string)null),
+                privacy = dyn.getProp(msg, "privacy", (string)null),
+                location = dyn.getProp(msg, "location", (string)null),
+                emailNotification = dyn.getProp(msg, "emailNotification", (string)null),
+                mediaUrls = dyn.getProp(msg, "mediaUrls", (string)null),
+                media = dyn.getProp(msg, "media", (string)null),
             };
             return _connection.postJson(path, data);
         }
@@ -58,7 +58,7 @@ namespace Hootsuite.Api
         /// <param name="socialProfileIds">The social profile ids.</param>
         /// <param name="opts">The opts.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> Find(DateTime startTime, DateTime endTime, string[] socialProfileIds, dynamic opts)
+        public Task<dynamic> Find(DateTime startTime, DateTime endTime, string[] socialProfileIds, dynamic opts)
         {
             var path = util.createPath("messages");
             var query = Restler.GetQuery(null, new
@@ -83,7 +83,7 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="messageId">The message identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> FindById(string messageId)
+        public Task<dynamic> FindById(string messageId)
         {
             var path = util.createPath("messages", messageId);
             return _connection.get(path);
@@ -94,7 +94,7 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="messageId">The message identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> DeleteById(string messageId)
+        public Task<dynamic> DeleteById(string messageId)
         {
             var path = util.createPath("messages", messageId);
             return _connection.del(path);
@@ -107,7 +107,7 @@ namespace Hootsuite.Api
         /// <param name="sequenceNumber">The sequence number.</param>
         /// <param name="reviewerType">Type of the reviewer.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> ApproveById(string messageId, int sequenceNumber = 0, string reviewerType = null)
+        public Task<dynamic> ApproveById(string messageId, int sequenceNumber = 0, string reviewerType = null)
         {
             var path = util.createPath("messages", messageId, "approve");
             var data = new
@@ -126,7 +126,7 @@ namespace Hootsuite.Api
         /// <param name="sequenceNumber">The sequence number.</param>
         /// <param name="reviewerType">Type of the reviewer.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> RejectById(string messageId, string reason = null, int sequenceNumber = 0, string reviewerType = null)
+        public Task<dynamic> RejectById(string messageId, string reason = null, int sequenceNumber = 0, string reviewerType = null)
         {
             var path = util.createPath("messages", messageId, "reject");
             var data = new
@@ -143,7 +143,7 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="messageId">The message identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<JObject> FindByIdHistory(string messageId)
+        public Task<dynamic> FindByIdHistory(string messageId)
         {
             var path = util.createPath("messages", messageId, "history");
             return _connection.get(path);

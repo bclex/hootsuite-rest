@@ -21,17 +21,17 @@ namespace Hootsuite
             _retry = new Retry(dyn.getProp(_options, "retry", new { }));
         }
 
-        public Task<JObject> get(string url, dynamic options = null) => _request(url, null, options, Restler.Method.GET);
-        public Task<JObject> post(string url, dynamic options = null) => _request(url, null, options, Restler.Method.POST);
-        public Task<JObject> put(string url, dynamic options = null) => _request(url, null, options, Restler.Method.PUT);
-        public Task<JObject> del(string url, dynamic options = null) => _request(url, null, options, Restler.Method.DELETE);
-        public Task<JObject> head(string url, dynamic options = null) => _request(url, null, options, Restler.Method.HEAD);
-        public Task<JObject> patch(string url, dynamic options = null) => _request(url, null, options, Restler.Method.PATCH);
-        public Task<JObject> json(string url, object data, dynamic options = null) => _request(url, data, options, Restler.Method.GET);
-        public Task<JObject> postJson(string url, object data, dynamic options = null) => _request(url, data, options, Restler.Method.POST);
-        public Task<JObject> putJson(string url, object data, dynamic options = null) => _request(url, data, options, Restler.Method.PUT);
+        public Task<dynamic> get(string url, dynamic options = null) => _request(url, null, options, Restler.Method.GET);
+        public Task<dynamic> post(string url, dynamic options = null) => _request(url, null, options, Restler.Method.POST);
+        public Task<dynamic> put(string url, dynamic options = null) => _request(url, null, options, Restler.Method.PUT);
+        public Task<dynamic> del(string url, dynamic options = null) => _request(url, null, options, Restler.Method.DELETE);
+        public Task<dynamic> head(string url, dynamic options = null) => _request(url, null, options, Restler.Method.HEAD);
+        public Task<dynamic> patch(string url, dynamic options = null) => _request(url, null, options, Restler.Method.PATCH);
+        public Task<dynamic> json(string url, object data, dynamic options = null) => _request(url, data, options, Restler.Method.GET);
+        public Task<dynamic> postJson(string url, object data, dynamic options = null) => _request(url, data, options, Restler.Method.POST);
+        public Task<dynamic> putJson(string url, object data, dynamic options = null) => _request(url, data, options, Restler.Method.PUT);
 
-        private async Task<JObject> _request(string url, object data, dynamic options, Restler.Method method)
+        private async Task<dynamic> _request(string url, object data, dynamic options, Restler.Method method)
         {
             options = dyn.exp(options, true);
             if (!Connection.HttpTestExp.IsMatch(url))
@@ -51,7 +51,7 @@ namespace Hootsuite
                             _log($"Request failed: {d}");
                             throw new InvalidOperationException(d["errors"].ToString());
                         }
-                        return d;
+                        return (dynamic)d;
                     }
                     catch (RestlerOperationException res)
                     {

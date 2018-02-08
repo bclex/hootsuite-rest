@@ -47,7 +47,7 @@ namespace Hootsuite.Require
                 foreach (KeyValuePair<string, string> header in dyn.getData(options.headers))
                     req.Headers.Add(header.Key, header.Value);
             // timeout
-            var timeout = dyn.getProp(options, "timeout", 2000);
+            var timeout = dyn.getProp(options, "timeout", 5000);
             // make request
             try
             {
@@ -60,8 +60,7 @@ namespace Hootsuite.Require
                     throw new RestlerOperationException(res.StatusCode, r);
                 return r;
             }
-            catch (TaskCanceledException e) { throw new RestlerOperationException(0, null) { E = e, Timedout = true }; }
-            catch (Exception e) { throw new RestlerOperationException(0, null) { E = e }; }
+            catch (TaskCanceledException e) { throw new RestlerOperationException(0, null) { Timedout = true }; }
         }
 
         public async Task<object> get(string url, dynamic options) => await request(url, options, Method.GET);
