@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Hootsuite
 {
@@ -28,6 +29,8 @@ namespace Hootsuite
             public string uid { get; set; }
             public string ts { get; set; }
             public string token { get; set; }
+            public string memberId { get; set; }
+            public string organizationId { get; set; }
         }
 
         public Connection(dynamic options)
@@ -117,11 +120,14 @@ namespace Hootsuite
 
         private async Task<JObject> GetOAuthToken(bool force = false)
         {
-            if (force || _tokenData == null)
+            var organizationId = dyn.getProp<string>(_options, "organizationId", (string) null);
+
+            if (force || _tokenData == null | organizationId != null)
             {
-                var frameCtx = dyn.getProp<FrameContext>(_options, "frameCtx");
                 Func<bool, Task<JObject>> requestFn = async (forceOAuth) =>
                 {
+                    var frameCtx = dyn.getProp<FrameContext>(_options, "frameCtx");
+
                     var options = new
                     {
                         data = new
@@ -139,15 +145,18 @@ namespace Hootsuite
                     try
                     {
                         var x = await _rest.post($"{baseUrl}/auth/oauth/v2/token", options);
-                        var data = (JObject)x;
-                        if (frameCtx != null)
-                        {
+                        var data = (JObject) x;
+                        if (frameCtx != null) {
                             _log($"Got pre-token: {data}");
-                            try { return await GetOnBehalfAuthToken(data); }
-                            catch (Exception err) { _log($"GetOAuthToken[pre-token] failed: {err}"); throw err; }
+                            try {
+                                return await GetOnBehalfAuthToken(data);
+                            }
+                            catch (Exception err) {
+                                _log($"GetOAuthToken[pre-token] failed: {err}");
+                                throw err;
+                            }
                         }
-                        else
-                        {
+                        else {
                             _log($"Got token: {data}");
                             _tokenData = data;
                             return data;
@@ -167,11 +176,20 @@ namespace Hootsuite
         private async Task<JObject> GetOnBehalfAuthToken(dynamic tokenData)
         {
             var frameCtx = dyn.getProp<FrameContext>(_options, "frameCtx");
+            dynamic ctx;
+
+            if (frameCtx.organizationId != null) {
+                ctx = new { organizationId = frameCtx.organizationId };
+            }
+            else {
+                ctx = new { memberId = frameCtx.mid };
+            }
+
             Func<bool, Task<JObject>> requestFn = async (forceOAuth) =>
             {
                 var options = new
                 {
-                    data = new { memberId = frameCtx.uid },
+                    data = JsonConvert.SerializeObject(ctx),
                     headers = new { Authorization = $"Bearer {tokenData.access_token}" },
                     timeout = dyn.getProp(_options, "timeout", 20000),
                 };
