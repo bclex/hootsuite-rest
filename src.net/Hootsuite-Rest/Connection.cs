@@ -21,6 +21,12 @@ namespace Hootsuite
         readonly Retry _retry;
         JObject _tokenData;
 
+        public class LoginContext
+        {
+            public string memberId { get; set; }
+            public string organizationId { get; set; }
+        }
+
         public class FrameContext
         {
             public string lang { get; set; }
@@ -29,8 +35,6 @@ namespace Hootsuite
             public string uid { get; set; }
             public string ts { get; set; }
             public string token { get; set; }
-            public string memberId { get; set; }
-            public string organizationId { get; set; }
         }
 
         public Connection(dynamic options)
@@ -120,19 +124,18 @@ namespace Hootsuite
 
         private async Task<JObject> GetOAuthToken(bool force = false)
         {
-            var organizationId = dyn.getProp<string>(_options, "organizationId", (string) null);
-
-            if (force || _tokenData == null | organizationId != null)
+            if (force || _tokenData == null)
             {
                 Func<bool, Task<JObject>> requestFn = async (forceOAuth) =>
                 {
+                    var loginCtx = dyn.getProp<LoginContext>(_options, "loginCtx");
                     var frameCtx = dyn.getProp<FrameContext>(_options, "frameCtx");
 
                     var options = new
                     {
                         data = new
                         {
-                            grant_type = dyn.getProp(_options, "grantType", (frameCtx != null ? "client_credentials" : "password")),
+                            grant_type = dyn.getProp(_options, "grantType", loginCtx != null || frameCtx != null ? "client_credentials" : "password"),
                             client_id = dyn.getProp(_options, "clientId", (string)null),
                             client_secret = dyn.getProp(_options, "clientSecret", (string)null),
                             username = dyn.getProp(_options, "username", (string)null),
@@ -145,18 +148,15 @@ namespace Hootsuite
                     try
                     {
                         var x = await _rest.post($"{baseUrl}/auth/oauth/v2/token", options);
-                        var data = (JObject) x;
-                        if (frameCtx != null) {
+                        var data = (JObject)x;
+                        if (loginCtx != null || frameCtx != null)
+                        {
                             _log($"Got pre-token: {data}");
-                            try {
-                                return await GetOnBehalfAuthToken(data);
-                            }
-                            catch (Exception err) {
-                                _log($"GetOAuthToken[pre-token] failed: {err}");
-                                throw err;
-                            }
+                            try { return await GetOnBehalfAuthToken(data, loginCtx, frameCtx); }
+                            catch (Exception err) { _log($"GetOAuthToken[pre-token] failed: {err}"); throw err; }
                         }
-                        else {
+                        else
+                        {
                             _log($"Got token: {data}");
                             _tokenData = data;
                             return data;
@@ -173,23 +173,20 @@ namespace Hootsuite
             }
         }
 
-        private async Task<JObject> GetOnBehalfAuthToken(dynamic tokenData)
+        private async Task<JObject> GetOnBehalfAuthToken(dynamic tokenData, LoginContext loginCtx, FrameContext frameCtx)
         {
-            var frameCtx = dyn.getProp<FrameContext>(_options, "frameCtx");
             dynamic ctx;
-
-            if (frameCtx.organizationId != null) {
-                ctx = new { organizationId = frameCtx.organizationId };
-            }
-            else {
-                ctx = new { memberId = frameCtx.mid };
-            }
+            if (loginCtx != null)
+                ctx = loginCtx.organizationId != null ? (dynamic)new { loginCtx.organizationId } : new { loginCtx.memberId };
+            else if (frameCtx != null)
+                ctx = new { memberId = frameCtx.uid };
+            else throw new InvalidOperationException();
 
             Func<bool, Task<JObject>> requestFn = async (forceOAuth) =>
             {
                 var options = new
                 {
-                    data = JsonConvert.SerializeObject(ctx),
+                    data = ctx,
                     headers = new { Authorization = $"Bearer {tokenData.access_token}" },
                     timeout = dyn.getProp(_options, "timeout", 20000),
                 };

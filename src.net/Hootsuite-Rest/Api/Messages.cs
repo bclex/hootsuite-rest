@@ -1,5 +1,4 @@
 ﻿using Hootsuite.Require;
-using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,9 +32,10 @@ namespace Hootsuite.Api
         public Task<dynamic> Schedule(dynamic msg)
         {
             var path = util.createPath("messages");
-            var data = new {
-                text = dyn.getProp(msg, "text", (string) null),
-                socialProfileIds = dyn.getProp(msg, "socialProfileIds", (string[]) null),
+            var data = new
+            {
+                text = dyn.getProp(msg, "text", (string)null),
+                socialProfileIds = dyn.getProp(msg, "socialProfileIds", (string[])null),
                 scheduledSendTime = dyn.hasProp(msg, "scheduledSendTime") ? dyn.getProp(msg, "scheduledSendTime", (DateTime)DateTime.UtcNow)?.ToString("o") : null,
                 webhookUrls = dyn.getProp(msg, "webhookUrls", (string[])null),
                 tags = dyn.getProp(msg, "tags", (string[])null),
@@ -46,10 +46,7 @@ namespace Hootsuite.Api
                 mediaUrls = dyn.getProp(msg, "mediaUrls", (string)null),
                 media = dyn.getProp(msg, "media", (string)null),
             };
-
-            var options = new { data = JsonConvert.SerializeObject(data) };
-
-            return _connection.postJson(path, data, options);
+            return _connection.postJson(path, data);
         }
 
         /// <summary>
@@ -117,8 +114,7 @@ namespace Hootsuite.Api
                 sequenceNumber,
                 reviewerType,
             };
-            var options = new { data = JsonConvert.SerializeObject(data) };
-            return _connection.postJson(path, data, options);
+            return _connection.postJson(path, data);
         }
 
         /// <summary>
@@ -138,9 +134,7 @@ namespace Hootsuite.Api
                 sequenceNumber,
                 reviewerType,
             };
-
-            var options = new { data = JsonConvert.SerializeObject(data) };
-            return _connection.postJson(path, data, options);
+            return _connection.postJson(path, data);
         }
 
         /// <summary>

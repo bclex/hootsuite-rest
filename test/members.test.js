@@ -5,12 +5,12 @@ var assert = require('assert'),
 describe('Members', function () {
   describe('#findById', function () {
     it('Retrieves a member', function (done) {
-      hootsuite.members.findById('16494879').then(function (response) {
-        console.log(response);
-        // assert.equal(response.result.length, 1);
-        // assert.equal(response.result[0].id, 1001);
-        // assert(_.has(response.result[0], 'name'));
-        // assert(_.has(response.result[0], 'workspaceName'));
+      hootsuite.members.findById('16494879').then(function (res) {
+        console.log(res);
+        // assert.equal(res.result.length, 1);
+        // assert.equal(res.result[0].id, 1001);
+        // assert(_.has(res.result[0], 'name'));
+        // assert(_.has(res.result[0], 'workspaceName'));
         done();
       }).catch(done);
     });
@@ -21,22 +21,22 @@ describe('Members', function () {
         organizationIds: ['814984'],
         email: 'test@test.com',
         fullName: 'test full'
-      }).then(function (response) {
-        console.log('2', response);
-        // assert.equal(response.result.length, 1);
-        // assert.equal(response.result[0].id, 1001);
-        // assert(_.has(response.result[0], 'name'));
-        // assert(_.has(response.result[0], 'workspaceName'));
+      }).then(function (res) {
+        console.log('2', res);
+        // assert.equal(res.result.length, 1);
+        // assert.equal(res.result[0].id, 1001);
+        // assert(_.has(res.result[0], 'name'));
+        // assert(_.has(res.result[0], 'workspaceName'));
         done();
       }).catch(done);
     });
   });
   describe('#findByIdOrgs', function () {
     it('Retrieves the organizations that the member is in', function (done) {
-      hootsuite.members.findByIdOrgs('16494879').then(function (response) {
-        assert.equal(response.data.length, 1);
-        assert.equal(response.data[0].id, '814984');
-        assert(_.has(response.data[0], 'id'));
+      hootsuite.members.findByIdOrgs('16494879').then(function (res) {
+        assert.equal(res.data.length, 1);
+        assert.equal(res.data[0].id, '814984');
+        assert(_.has(res.data[0], 'id'));
         done();
       }).catch(done);
     });
