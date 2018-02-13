@@ -71,7 +71,7 @@ namespace Hootsuite.Require
         public async Task<object> head(string url, dynamic options) => await request(url, options, Method.HEAD);
         public async Task<object> json(string url, object data, dynamic options, Method method = Method.GET)
         {
-            options.data = JsonConvert.SerializeObject(data);
+            //options.data = JsonConvert.SerializeObject(data);
             return await request(url, options, method, "application/json");
         }
         public async Task<object> postJson(string url, object data, dynamic options) => await json(url, data, options, Method.POST);
