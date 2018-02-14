@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Hootsuite.Api
 {
@@ -11,7 +12,7 @@ namespace Hootsuite.Api
         Connection _connection;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Members"/> class.
+        /// Initializes a new instance of the <see cref="Members" /> class.
         /// </summary>
         /// <param name="hootsuite">The hootsuite.</param>
         /// <param name="connection">The connection.</param>
@@ -26,8 +27,11 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="memberId">The member identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
+        /// <exception cref="ArgumentNullException">memberId</exception>
         public Task<dynamic> FindById(string memberId)
         {
+            if (memberId == null)
+                throw new ArgumentNullException(nameof(memberId));
             var path = util.createPath("members", memberId);
             return _connection.get(path);
         }
@@ -37,18 +41,21 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="msg">The MSG.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
+        /// <exception cref="ArgumentNullException">msg</exception>
         public Task<dynamic> Create(dynamic msg)
         {
+            if (msg == null)
+                throw new ArgumentNullException(nameof(msg));
             var path = util.createPath("members");
             var data = new
             {
-                organizationIds = dyn.getProp(msg, "organizationIds", new string[0]),
-                email = dyn.getProp(msg, "email", (string)null),
-                fullName = dyn.getProp(msg,"fullName", (string)null),
-                companyName = dyn.getProp(msg, "companyName", (string)null),
-                bio = dyn.getProp(msg, "bio", (string)null),
-                timezone = dyn.getProp(msg, "timezone", (string)null),
-                language = dyn.getProp(msg, "language", (string)null),
+                organizationIds = dyn.getProp<string[]>(msg, "organizationIds"),
+                email = dyn.getProp<string>(msg, "email"),
+                fullName = dyn.getProp<string>(msg, "fullName"),
+                companyName = dyn.getProp<string>(msg, "companyName"),
+                bio = dyn.getProp<string>(msg, "bio"),
+                timezone = dyn.getProp<string>(msg, "timezone"),
+                language = dyn.getProp<string>(msg, "language"),
             };
             return _connection.postJson(path, data);
         }
@@ -58,8 +65,11 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="memberId">The member identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
+        /// <exception cref="ArgumentNullException">memberId</exception>
         public Task<dynamic> FindByIdOrgs(string memberId)
         {
+            if (memberId == null)
+                throw new ArgumentNullException(nameof(memberId));
             var path = util.createPath("members", memberId, "organizations");
             return _connection.get(path);
         }

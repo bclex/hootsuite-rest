@@ -5,7 +5,7 @@ namespace Hootsuite.Require
 {
     public class RestlerOperationException : Exception
     {
-        public RestlerOperationException(HttpStatusCode statusCode, object content)
+        internal RestlerOperationException(HttpStatusCode statusCode, object content)
             : base(content != null ? content.ToString() : "Error")
         {
             StatusCode = statusCode;

@@ -13,7 +13,6 @@ describe('Messages', function () {
         assert.equal(res.data[0].id, '4950332802');
         assert.equal(res.data[0].state, 'SENT');
         assert(_.has(res.data[0], 'text'));
-        assert(_.has(res.data[0], 'sequenceNumber'));
         done();
       }).catch(done);
     });
@@ -27,7 +26,6 @@ describe('Messages', function () {
         assert.equal(res.data[0].id, '4950336487');
         assert.equal(res.data[0].state, 'SCHEDULED');
         assert(_.has(res.data[0], 'text'));
-        assert(_.has(res.data[0], 'sequenceNumber'));
         done();
       }).catch(done);
     });
@@ -39,7 +37,6 @@ describe('Messages', function () {
         assert.equal(res.data[0].id, '4950332802');
         assert.equal(res.data[0].state, 'SENT');
         assert(_.has(res.data[0], 'text'));
-        assert(_.has(res.data[0], 'sequenceNumber'));
         done();
       }).catch(done);
     });
@@ -51,7 +48,6 @@ describe('Messages', function () {
         assert.equal(res.data[0].id, '4950332802');
         assert.equal(res.data[0].state, 'SENT');
         assert(_.has(res.data[0], 'text'));
-        assert(_.has(res.data[0], 'sequenceNumber'));
         done();
       }).catch(done);
     });

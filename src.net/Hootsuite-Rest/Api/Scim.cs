@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Threading.Tasks;
 
 namespace Hootsuite.Api
@@ -12,7 +13,7 @@ namespace Hootsuite.Api
         Connection _connection;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Scim"/> class.
+        /// Initializes a new instance of the <see cref="Scim" /> class.
         /// </summary>
         /// <param name="hootsuite">The hootsuite.</param>
         /// <param name="connection">The connection.</param>
@@ -27,21 +28,24 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="msg">The MSG.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
+        /// <exception cref="ArgumentNullException">msg</exception>
         public Task<dynamic> CreateUser(dynamic msg)
         {
+            if (msg == null)
+                throw new ArgumentNullException(nameof(msg));
             var path = util.createScimPath("Users");
             var data = new
             {
-                schemas = dyn.getProp(msg, "schemas", (string)null),
-                userName = dyn.getProp(msg, "userName", (string)null),
-                name = dyn.getProp(msg, "name", (string)null),
-                emails = dyn.getProp(msg, "emails", (string)null),
-                displayName = dyn.getProp(msg, "displayName", (string)null),
-                timezone = dyn.getProp(msg, "timezone", (string)null),
-                preferredLanguage = dyn.getProp(msg, "preferredLanguage", (string)null),
-                groups = dyn.getProp(msg, "groups", (string)null),
-                active = dyn.getProp(msg, "active", true),
-                //"urn:ietf:params:scim:schemas:extension:Hootsuite:2.0:User" = msg['urn:ietf:params:scim:schemas:extension:Hootsuite:2.0:User'] ?? null,
+                schemas = dyn.getProp<string>(msg, "schemas"),
+                userName = dyn.getProp<string>(msg, "userName"),
+                name = dyn.getProp<string>(msg, "name"),
+                emails = dyn.getProp<string>(msg, "emails"),
+                displayName = dyn.getProp<string>(msg, "displayName"),
+                timezone = dyn.getProp<string>(msg, "timezone"),
+                preferredLanguage = dyn.getProp<string>(msg, "preferredLanguage"),
+                groups = dyn.getProp<string>(msg, "groups"),
+                active = dyn.getProp<bool>(msg, "active", true),
+                scim__User = dyn.getProp<string>(msg, "scim__User"),
             };
             return _connection.postJson(path, data);
         }
@@ -73,8 +77,11 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="memberId">The member identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
+        /// <exception cref="ArgumentNullException">memberId</exception>
         public Task<dynamic> FindUserById(string memberId)
         {
+            if (memberId == null)
+                throw new ArgumentNullException(nameof(memberId));
             var path = util.createScimPath("Users", memberId);
             return _connection.get(path);
         }
@@ -85,21 +92,30 @@ namespace Hootsuite.Api
         /// <param name="memberId">The member identifier.</param>
         /// <param name="msg">The MSG.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// memberId
+        /// or
+        /// msg
+        /// </exception>
         public Task<dynamic> ReplaceUserById(string memberId, dynamic msg)
         {
+            if (memberId == null)
+                throw new ArgumentNullException(nameof(memberId));
+            if (msg == null)
+                throw new ArgumentNullException(nameof(msg));
             var path = util.createScimPath("Users", memberId);
             var data = new
             {
-                schemas = dyn.getProp(msg, "schemas", (string)null),
-                userName = dyn.getProp(msg, "userName", (string)null),
-                name = dyn.getProp(msg, "name", (string)null),
-                emails = dyn.getProp(msg, "emails", (string)null),
-                displayName = dyn.getProp(msg, "displayName", (string)null),
-                timezone = dyn.getProp(msg, "timezone", (string)null),
-                preferredLanguage = dyn.getProp(msg, "preferredLanguage", (string)null),
-                groups = dyn.getProp(msg, "groups", (string)null),
-                active = dyn.getProp(msg, "active", true),
-                //'urn:ietf:params:scim:schemas:extension:Hootsuite:2.0:User': msg['urn:ietf:params:scim:schemas:extension:Hootsuite:2.0:User'] || undefined
+                schemas = dyn.getProp<string>(msg, "schemas"),
+                userName = dyn.getProp<string>(msg, "userName"),
+                name = dyn.getProp<string>(msg, "name"),
+                emails = dyn.getProp<string>(msg, "emails"),
+                displayName = dyn.getProp<string>(msg, "displayName"),
+                timezone = dyn.getProp<string>(msg, "timezone"),
+                preferredLanguage = dyn.getProp<string>(msg, "preferredLanguage"),
+                groups = dyn.getProp<string>(msg, "groups"),
+                active = dyn.getProp<bool>(msg, "active", true),
+                scim__User = dyn.getProp<string>(msg, "scim__User"),
             };
             return _connection.putJson(path, data);
         }
@@ -112,14 +128,18 @@ namespace Hootsuite.Api
         /// <returns>Task&lt;JObject&gt;.</returns>
         public Task<dynamic> ModifyUserById(string memberId, dynamic msg)
         {
+            if (memberId == null)
+                throw new ArgumentNullException(nameof(memberId));
+            if (msg == null)
+                throw new ArgumentNullException(nameof(msg));
             var path = util.createScimPath("Users", memberId);
             var options = new
             {
                 //headers = new { "content-type" = "application/json" },
                 data = new
                 {
-                    schemas = dyn.getProp(msg, "schemas", (string)null),
-                    Operations = dyn.getProp(msg, "Operations", (string)null),
+                    schemas = dyn.getProp<string>(msg, "schemas"),
+                    Operations = dyn.getProp<string>(msg, "Operations"),
                 },
             };
             return _connection.patch(path, options);

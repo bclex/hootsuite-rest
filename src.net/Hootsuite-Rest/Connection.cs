@@ -1,11 +1,11 @@
 ﻿using Hootsuite.Require;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace Hootsuite
 {
@@ -78,11 +78,12 @@ namespace Hootsuite
                     options.headers.Authorization = $"Bearer {token["access_token"]}";
                     try
                     {
-                        var d = data == null ? (JObject)await _rest.request(url, options, method) : await _rest.json(url, data, options, method);
+                        Func<string, string> fixup = y => y.Replace("scim__User", "urn:ietf:params:scim:schemas:extension:Hootsuite:2.0:User");
+                        var d = data == null ? (JObject)await _rest.request(url, options, method) : await _rest.json(url, data, options, method, fixup);
                         if (d["errors"] != null)
                         {
                             _log($"Request failed: {d}");
-                            throw new InvalidOperationException(d["errors"].ToString());
+                            throw new HootsuiteException(HttpStatusCode.OK, d["errors"]);
                         }
                         return (dynamic)d;
                     }

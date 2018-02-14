@@ -1,6 +1,7 @@
 ﻿using Hootsuite.Require;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Hootsuite
@@ -49,6 +50,11 @@ namespace Hootsuite
                         await _newBackoff.DoBackoff();
                         return;
                     }
+                    var e = (err as RestlerOperationException);
+                    if (e != null && e.Content != null && e.Content is JObject && ((JObject)e.Content)["errors"] != null)
+                        err = e.StatusCode == HttpStatusCode.Unauthorized || e.StatusCode == HttpStatusCode.Forbidden ?
+                            new HootsuiteSecurityException(e.StatusCode, ((JObject)e.Content)["errors"]) :
+                            new HootsuiteException(e.StatusCode, ((JObject)e.Content)["errors"]);
                     promise.SetException(err);
                     throw err;
                 }

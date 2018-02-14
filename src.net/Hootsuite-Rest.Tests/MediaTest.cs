@@ -14,7 +14,6 @@ namespace Hootsuite.Tests
             HootsuiteClient.Logger = (x) => { Console.WriteLine(x); };
             hootsuite = new HootsuiteClient(new
             {
-                accessToken = "71f08d13-d442-439f-a6b0-fdc20f216f67",
                 clientId = Environment.GetEnvironmentVariable("HOOTSUITE_CLIENTID"),
                 clientSecret = Environment.GetEnvironmentVariable("HOOTSUITE_CLIENTSECRET"),
                 username = Environment.GetEnvironmentVariable("HOOTSUITE_USERNAME"),
@@ -25,7 +24,6 @@ namespace Hootsuite.Tests
         [TestMethod]
         public async Task Media_CreateUrl()
         {
-            var ac = hootsuite.AccessToken;
             // Create media upload url
             var res = await hootsuite.Media.CreateUrl(50000);
             Assert.IsNotNull((string)res.data.id);

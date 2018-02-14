@@ -31,7 +31,7 @@ namespace Hootsuite.Require
             // query
             if (dyn.hasProp(options, "query") && string.IsNullOrEmpty(uri.Query))
             {
-                var query = !options.query is string ? GetQuery(null, options.query) : options.query;
+                var query = options.query is string ? options.query : GetQuery(null, options.query);
                 var b = new UriBuilder(uri); b.Query = query; uri = b.Uri;
             }
             // data
@@ -69,15 +69,18 @@ namespace Hootsuite.Require
         public async Task<object> put(string url, dynamic options) => await request(url, options, Method.PUT);
         public async Task<object> del(string url, dynamic options) => await request(url, options, Method.DELETE);
         public async Task<object> head(string url, dynamic options) => await request(url, options, Method.HEAD);
-        public async Task<object> json(string url, object data, dynamic options, Method method = Method.GET)
+        public async Task<object> json(string url, object data, dynamic options, Method method = Method.GET, Func<string, string> fixup = null)
         {
             options = dyn.exp(options);
-            options.data = JsonConvert.SerializeObject(data);
+            options.data = JsonConvert.SerializeObject(data, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
             return await request(url, options, method, "application/json");
         }
-        public async Task<object> postJson(string url, object data, dynamic options) => await json(url, data, options, Method.POST);
-        public async Task<object> putJson(string url, object data, dynamic options) => await json(url, data, options, Method.PUT);
-        public async Task<object> patchJson(string url, object data, dynamic options) => await json(url, data, options, Method.PATCH);
+        public async Task<object> postJson(string url, object data, dynamic options, Func<string, string> fixup = null) => await json(url, data, options, Method.POST, fixup);
+        public async Task<object> putJson(string url, object data, dynamic options, Func<string, string> fixup = null) => await json(url, data, options, Method.PUT, fixup);
+        public async Task<object> patchJson(string url, object data, dynamic options, Func<string, string> fixup = null) => await json(url, data, options, Method.PATCH, fixup);
 
         public static string GetQuery(string path, object s)
         {

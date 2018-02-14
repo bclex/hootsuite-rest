@@ -14,7 +14,7 @@ namespace Hootsuite.Api
         ConnectionOwly _connection;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Owly"/> class.
+        /// Initializes a new instance of the <see cref="Owly" /> class.
         /// </summary>
         /// <param name="hootsuite">The hootsuite.</param>
         /// <param name="connection">The connection.</param>
@@ -29,8 +29,11 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="longUrl">The long URL.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
+        /// <exception cref="ArgumentNullException">longUrl</exception>
         public Task<dynamic> ShortenUrl(string longUrl)
         {
+            if (longUrl == null)
+                throw new ArgumentNullException(nameof(longUrl));
             var path = util.createOwlyPath("url", "shorten");
             return _connection.get(path, new { longUrl });
         }
@@ -40,8 +43,11 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="shortUrl">The short URL.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
+        /// <exception cref="ArgumentNullException">shortUrl</exception>
         public Task<dynamic> ExpandUrl(string shortUrl)
         {
+            if (shortUrl == null)
+                throw new ArgumentNullException(nameof(shortUrl));
             var path = util.createPath("url", "expand");
             return _connection.get(path, new { shortUrl });
         }
@@ -51,8 +57,11 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="shortUrl">The short URL.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
+        /// <exception cref="ArgumentNullException">shortUrl</exception>
         public Task<dynamic> GetInfo(string shortUrl)
         {
+            if (shortUrl == null)
+                throw new ArgumentNullException(nameof(shortUrl));
             var path = util.createPath("url", "info");
             return _connection.get(path, new { shortUrl });
         }
@@ -64,8 +73,11 @@ namespace Hootsuite.Api
         /// <param name="from">From.</param>
         /// <param name="to">To.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
+        /// <exception cref="ArgumentNullException">shortUrl</exception>
         public Task<dynamic> GetClickStats(string shortUrl, DateTime? from, DateTime? to)
         {
+            if (shortUrl == null)
+                throw new ArgumentNullException(nameof(shortUrl));
             var path = util.createPath("url", "clickStats");
             return _connection.get(path, new { shortUrl, from, to });
         }
@@ -76,8 +88,15 @@ namespace Hootsuite.Api
         /// <param name="fileName">Name of the file.</param>
         /// <param name="uploaded_file">The uploaded file.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
+        /// <exception cref="ArgumentNullException">fileName
+        /// or
+        /// uploaded_file</exception>
         public Task<dynamic> UploadPhoto(string fileName, Stream uploaded_file)
         {
+            if (fileName == null)
+                throw new ArgumentNullException(nameof(fileName));
+            if (uploaded_file == null)
+                throw new ArgumentNullException(nameof(uploaded_file));
             var path = util.createPath("photo", "upload");
             return _connection.post(path, new { fileName, uploaded_file });
         }
@@ -88,8 +107,15 @@ namespace Hootsuite.Api
         /// <param name="fileName">Name of the file.</param>
         /// <param name="uploaded_file">The uploaded file.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
+        /// <exception cref="ArgumentNullException">fileName
+        /// or
+        /// uploaded_file</exception>
         public Task<dynamic> UploadDoc(string fileName, Stream uploaded_file)
         {
+            if (fileName == null)
+                throw new ArgumentNullException(nameof(fileName));
+            if (uploaded_file == null)
+                throw new ArgumentNullException(nameof(uploaded_file));
             var path = util.createPath("doc", "upload");
             return _connection.post(path, new { fileName, uploaded_file });
         }

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Threading.Tasks;
 
 namespace Hootsuite.Api
@@ -12,7 +13,7 @@ namespace Hootsuite.Api
         Connection _connection;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Teams"/> class.
+        /// Initializes a new instance of the <see cref="Teams" /> class.
         /// </summary>
         /// <param name="hootsuite">The hootsuite.</param>
         /// <param name="connection">The connection.</param>
@@ -28,8 +29,15 @@ namespace Hootsuite.Api
         /// <param name="organizationId">The organization identifier.</param>
         /// <param name="teamName">Name of the team.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
+        /// <exception cref="ArgumentNullException">organizationId
+        /// or
+        /// teamName</exception>
         public Task<dynamic> CreateTeam(string organizationId, string teamName)
         {
+            if (organizationId == null)
+                throw new ArgumentNullException(nameof(organizationId));
+            if (teamName == null)
+                throw new ArgumentNullException(nameof(teamName));
             var path = util.createPath("organizations", organizationId, "teams");
             var data = new
             {
@@ -45,8 +53,19 @@ namespace Hootsuite.Api
         /// <param name="teamId">The team identifier.</param>
         /// <param name="memberId">The member identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
+        /// <exception cref="ArgumentNullException">organizationId
+        /// or
+        /// teamId
+        /// or
+        /// memberId</exception>
         public Task<dynamic> AppendMemberById(string organizationId, string teamId, string memberId)
         {
+            if (organizationId == null)
+                throw new ArgumentNullException(nameof(organizationId));
+            if (teamId == null)
+                throw new ArgumentNullException(nameof(teamId));
+            if (memberId == null)
+                throw new ArgumentNullException(nameof(memberId));
             var path = util.createPath("organizations", organizationId, "teams", teamId, "members", memberId);
             return _connection.post(path);
         }
@@ -57,8 +76,15 @@ namespace Hootsuite.Api
         /// <param name="organizationId">The organization identifier.</param>
         /// <param name="teamId">The team identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
+        /// <exception cref="ArgumentNullException">organizationId
+        /// or
+        /// teamId</exception>
         public Task<dynamic> FindByIdMembers(string organizationId, string teamId)
         {
+            if (organizationId == null)
+                throw new ArgumentNullException(nameof(organizationId));
+            if (teamId == null)
+                throw new ArgumentNullException(nameof(teamId));
             var path = util.createPath("organizations", organizationId, "teams", teamId, "members");
             return _connection.get(path);
         }
@@ -70,8 +96,19 @@ namespace Hootsuite.Api
         /// <param name="teamId">The team identifier.</param>
         /// <param name="memberId">The member identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
+        /// <exception cref="ArgumentNullException">organizationId
+        /// or
+        /// teamId
+        /// or
+        /// memberId</exception>
         public Task<dynamic> FindMemberByIdPermissions(string organizationId, string teamId, string memberId)
         {
+            if (organizationId == null)
+                throw new ArgumentNullException(nameof(organizationId));
+            if (teamId == null)
+                throw new ArgumentNullException(nameof(teamId));
+            if (memberId == null)
+                throw new ArgumentNullException(nameof(memberId));
             var path = util.createPath("organizations", organizationId, "teams", teamId, "members", memberId, "permissions");
             return _connection.get(path);
         }
@@ -82,8 +119,15 @@ namespace Hootsuite.Api
         /// <param name="organizationId">The organization identifier.</param>
         /// <param name="teamId">The team identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
+        /// <exception cref="ArgumentNullException">organizationId
+        /// or
+        /// teamId</exception>
         public Task<dynamic> FindByIdSocialProfiles(string organizationId, string teamId)
         {
+            if (organizationId == null)
+                throw new ArgumentNullException(nameof(organizationId));
+            if (teamId == null)
+                throw new ArgumentNullException(nameof(teamId));
             var path = util.createPath("organizations", organizationId, "teams", teamId, "socialProfiles");
             return _connection.get(path);
         }

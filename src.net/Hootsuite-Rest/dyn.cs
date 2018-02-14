@@ -11,6 +11,7 @@ namespace Hootsuite
     {
         public static bool hasProp(object s, string name)
         {
+            if (s == null) return false;
             if (s is ExpandoObject) return ((IDictionary<string, object>)s).ContainsKey(name);
             if (s is ExpandedObject) return ((ExpandedObject)s).TryGetMember(name, out object result);
             return s.GetType().GetProperty(name) != null;
@@ -18,6 +19,7 @@ namespace Hootsuite
 
         public static T getProp<T>(object s, string name, T default_ = default(T))
         {
+            if (s == null) return default_;
             if (s is ExpandoObject)
             {
                 var dyno = (IDictionary<string, object>)s;

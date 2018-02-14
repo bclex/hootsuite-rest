@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Hootsuite.Api
 {
@@ -12,7 +11,7 @@ namespace Hootsuite.Api
         Connection _connection;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Me"/> class.
+        /// Initializes a new instance of the <see cref="Me" /> class.
         /// </summary>
         /// <param name="hootsuite">The hootsuite.</param>
         /// <param name="connection">The connection.</param>

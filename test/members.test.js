@@ -34,7 +34,7 @@ describe('Members', function () {
   describe('#findByIdOrgs', function () {
     it('Retrieves the organizations that the member is in', function (done) {
       hootsuite.members.findByIdOrgs('16494879').then(function (res) {
-        assert.equal(res.data.length, 1);
+        assert.equal(res.data.length > 0);
         assert.equal(res.data[0].id, '814984');
         assert(_.has(res.data[0], 'id'));
         done();

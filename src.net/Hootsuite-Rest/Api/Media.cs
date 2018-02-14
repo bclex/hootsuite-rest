@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Threading.Tasks;
 
 namespace Hootsuite.Api
@@ -12,7 +13,7 @@ namespace Hootsuite.Api
         Connection _connection;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Media"/> class.
+        /// Initializes a new instance of the <see cref="Media" /> class.
         /// </summary>
         /// <param name="hootsuite">The hootsuite.</param>
         /// <param name="connection">The connection.</param>
@@ -44,8 +45,11 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="mediaId">The media identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
+        /// <exception cref="ArgumentNullException">mediaId</exception>
         public Task<dynamic> StatusById(string mediaId)
         {
+            if (mediaId == null)
+                throw new ArgumentNullException(nameof(mediaId));
             var path = util.createPath("media", mediaId);
             return _connection.get(path);
         }
