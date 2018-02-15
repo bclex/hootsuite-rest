@@ -45,7 +45,7 @@ namespace Hootsuite.Api
                 targeting = dyn.getProp<string>(msg, "targeting"),
                 privacy = dyn.getProp<string>(msg, "privacy"),
                 location = dyn.getProp<string>(msg, "location"),
-                emailNotification = dyn.getProp<bool>(msg, "emailNotification"),
+                emailNotification = dyn.getProp<bool?>(msg, "emailNotification"),
                 mediaUrls = dyn.getProp<string>(msg, "mediaUrls"),
                 media = dyn.getProp<string>(msg, "media"),
             };

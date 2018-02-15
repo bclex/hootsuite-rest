@@ -36,16 +36,16 @@ namespace Hootsuite.Api
             var path = util.createScimPath("Users");
             var data = new
             {
-                schemas = dyn.getProp<string>(msg, "schemas"),
+                schemas = dyn.getProp<string[]>(msg, "schemas"),
                 userName = dyn.getProp<string>(msg, "userName"),
-                name = dyn.getProp<string>(msg, "name"),
-                emails = dyn.getProp<string>(msg, "emails"),
+                name = dyn.getProp<object>(msg, "name"),
+                emails = dyn.getProp<object[]>(msg, "emails"),
                 displayName = dyn.getProp<string>(msg, "displayName"),
                 timezone = dyn.getProp<string>(msg, "timezone"),
                 preferredLanguage = dyn.getProp<string>(msg, "preferredLanguage"),
-                groups = dyn.getProp<string>(msg, "groups"),
+                groups = dyn.getProp<object[]>(msg, "groups"),
                 active = dyn.getProp<bool>(msg, "active", true),
-                scim__User = dyn.getProp<string>(msg, "scim__User"),
+                scim__user = dyn.getProp<object>(msg, "scim__user"),
             };
             return _connection.postJson(path, data);
         }
@@ -115,7 +115,7 @@ namespace Hootsuite.Api
                 preferredLanguage = dyn.getProp<string>(msg, "preferredLanguage"),
                 groups = dyn.getProp<string>(msg, "groups"),
                 active = dyn.getProp<bool>(msg, "active", true),
-                scim__User = dyn.getProp<string>(msg, "scim__User"),
+                scim__user = dyn.getProp<string>(msg, "scim__user"),
             };
             return _connection.putJson(path, data);
         }
@@ -135,11 +135,10 @@ namespace Hootsuite.Api
             var path = util.createScimPath("Users", memberId);
             var options = new
             {
-                //headers = new { "content-type" = "application/json" },
                 data = new
                 {
-                    schemas = dyn.getProp<string>(msg, "schemas"),
-                    Operations = dyn.getProp<string>(msg, "Operations"),
+                    schemas = dyn.getProp<string[]>(msg, "schemas"),
+                    Operations = dyn.getProp<object[]>(msg, "Operations"),
                 },
             };
             return _connection.patch(path, options);

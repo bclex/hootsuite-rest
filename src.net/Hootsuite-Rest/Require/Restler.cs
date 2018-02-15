@@ -60,7 +60,7 @@ namespace Hootsuite.Require
                     throw new RestlerOperationException(res.StatusCode, r);
                 return r;
             }
-            catch (TaskCanceledException) { throw new RestlerOperationException(0, null) { Timedout = true }; }
+            catch (TaskCanceledException e) { throw new RestlerOperationException(0, null) { Timedout = true }; }
         }
 
         public async Task<object> get(string url, dynamic options) => await request(url, options, Method.GET);
@@ -71,11 +71,10 @@ namespace Hootsuite.Require
         public async Task<object> head(string url, dynamic options) => await request(url, options, Method.HEAD);
         public async Task<object> json(string url, object data, dynamic options, Method method = Method.GET, Func<string, string> fixup = null)
         {
+            var dataAsJson = JsonConvert.SerializeObject(data, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            if (fixup != null) dataAsJson = fixup(dataAsJson);
             options = dyn.exp(options);
-            options.data = JsonConvert.SerializeObject(data, new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore
-            });
+            options.data = dataAsJson;
             return await request(url, options, method, "application/json");
         }
         public async Task<object> postJson(string url, object data, dynamic options, Func<string, string> fixup = null) => await json(url, data, options, Method.POST, fixup);

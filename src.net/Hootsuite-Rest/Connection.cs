@@ -78,7 +78,7 @@ namespace Hootsuite
                     options.headers.Authorization = $"Bearer {token["access_token"]}";
                     try
                     {
-                        Func<string, string> fixup = y => y.Replace("scim__User", "urn:ietf:params:scim:schemas:extension:Hootsuite:2.0:User");
+                        Func<string, string> fixup = y => y.Replace("scim__user", "urn:ietf:params:scim:schemas:extension:Hootsuite:2.0:User");
                         var d = data == null ? (JObject)await _rest.request(url, options, method) : await _rest.json(url, data, options, method, fixup);
                         if (d["errors"] != null)
                         {
@@ -89,15 +89,18 @@ namespace Hootsuite
                     }
                     catch (RestlerOperationException res)
                     {
-                        var e = res.E;
+                        
                         var err = (JObject)res.Content;
                         if (err != null && err["errors"] != null) { _log($"Request failed: {err}"); throw; }
                         else
                         {
-                            var statusCode = Math.Floor((int)res.StatusCode / 100M);
-                            if (statusCode == 5) throw e;
-                            else if (statusCode == 4) throw e;
-                            else throw e;
+                            var e = res.E;
+                            if (e != null) throw e;
+                            else throw;
+                            //var statusCode = Math.Floor((int)res.StatusCode / 100M);
+                            //if (statusCode == 5) throw e;
+                            //else if (statusCode == 4) throw e;
+                            //else throw e;
                         }
                     }
                 }

@@ -15,7 +15,7 @@ namespace Hootsuite
 
         public static string createScimPath(params string[] args)
         {
-            var path = $"v2/scim/{string.Join("/", args)}";
+            var path = $"/scim/v2/{string.Join("/", args)}";
             return path;
         }
 

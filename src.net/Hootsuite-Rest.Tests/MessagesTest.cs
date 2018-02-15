@@ -60,6 +60,14 @@ namespace Hootsuite.Tests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(HootsuiteException), "Unable to find the message by id")]
+        public async Task Messages_FindById_Invalid()
+        {
+            // Retrieves a message. A message is always associated with a single social profile. Messages might be unavailable for a brief time during upload to social networks
+            var res = await hootsuite.Messages.FindById("1234");
+        }
+
+        [TestMethod]
         public async Task Messages_FindById()
         {
             // Retrieves a message. A message is always associated with a single social profile. Messages might be unavailable for a brief time during upload to social networks
@@ -68,6 +76,42 @@ namespace Hootsuite.Tests
             Assert.AreEqual("4950332802", (string)res.data[0].id);
             Assert.AreEqual("SENT", (string)res.data[0].state);
             Assert.IsNotNull((string)res.data[0].text);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(HootsuiteException), "Unable to find the message by id")]
+        public async Task Messages_DeleteId_Invalid()
+        {
+            // Deletes a message. A message is always associated with a single social profile
+            var res = await hootsuite.Messages.DeleteById("1234");
+            //Assert.IsTrue((int)res.data.Count == 1);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(HootsuiteException), "Message is not awaiting approval")]
+        public async Task Messages_ApproveById_Invalid()
+        {
+            // Approve a message
+            var res = await hootsuite.Messages.ApproveById("4950332802");
+            //Assert.IsTrue((int)res.data.Count == 1);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(HootsuiteException), "Message is not awaiting approval")]
+        public async Task Messages_RejectById_Invalid()
+        {
+            // Reject a message
+            var res = await hootsuite.Messages.RejectById("4950332802");
+            //Assert.IsTrue((int)res.data.Count == 1);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(HootsuiteException), "Message is not awaiting approval")]
+        public async Task Messages_FindByIdHistory_Invalid()
+        {
+            // Gets a message’s prescreening review history
+            var res = await hootsuite.Messages.FindByIdHistory("4950332802");
+            //Assert.IsTrue((int)res.data.Count == 1);
         }
     }
 }

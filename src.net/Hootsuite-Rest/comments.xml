@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>Hootsuite-Rest.Tests.NetCore</name>
+  </assembly>
+  <members>
+    <member name="" />
+    <member name="N:Hootsuite.Tests" />
+    <member name="M:Hootsuite.Tests.MessagesTest.#ctor" />
+  </members>
+</doc>

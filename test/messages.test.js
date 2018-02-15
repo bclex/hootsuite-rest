@@ -9,7 +9,7 @@ describe('Messages', function () {
         text: 'sent now',
         socialProfileIds: ['120732387'],
       }).then(function (res) {
-        assert.equal(res.data.length, 1);
+        assert.equal(res.data.length > 0);
         assert.equal(res.data[0].id, '4950332802');
         assert.equal(res.data[0].state, 'SENT');
         assert(_.has(res.data[0], 'text'));
@@ -22,7 +22,7 @@ describe('Messages', function () {
         socialProfileIds: ['120732387'],
         scheduledSendTime: '2020-01-01',
       }).then(function (res) {
-        assert.equal(res.data.length, 1);
+        assert.equal(res.data.length > 0);
         assert.equal(res.data[0].id, '4950336487');
         assert.equal(res.data[0].state, 'SCHEDULED');
         assert(_.has(res.data[0], 'text'));
@@ -33,7 +33,7 @@ describe('Messages', function () {
   describe('#find', function () {
     it('Retrieve outbound messages', function (done) {
       hootsuite.messages.find('2017-12-01', '2017-12-15').then(function (res) {
-        assert.equal(res.data.length, 1);
+        assert.equal(res.data.length > 0);
         assert.equal(res.data[0].id, '4950332802');
         assert.equal(res.data[0].state, 'SENT');
         assert(_.has(res.data[0], 'text'));
@@ -44,7 +44,7 @@ describe('Messages', function () {
   describe('#findById', function () {
     it('Retrieves a message. A message is always associated with a single social profile. Messages might be unavailable for a brief time during upload to social networks', function (done) {
       hootsuite.messages.findById('4950332802').then(function (res) {
-        assert.equal(res.data.length, 1);
+        assert.equal(res.data.length > 0);
         assert.equal(res.data[0].id, '4950332802');
         assert.equal(res.data[0].state, 'SENT');
         assert(_.has(res.data[0], 'text'));
@@ -57,9 +57,6 @@ describe('Messages', function () {
       hootsuite.messages.deleteById('1234').then(function (res) {
         console.log(res);
         // assert.equal(res.result.length, 1);
-        // assert.equal(res.result[0].id, 1001);
-        // assert(_.has(res.result[0], 'name'));
-        // assert(_.has(res.result[0], 'workspaceName'));
         done();
       }).catch(done);
     });
@@ -69,9 +66,6 @@ describe('Messages', function () {
       hootsuite.messages.approveById('4950332802').then(function (res) {
         console.log(res);
         // assert.equal(res.result.length, 1);
-        // assert.equal(res.result[0].id, 1001);
-        // assert(_.has(res.result[0], 'name'));
-        // assert(_.has(res.result[0], 'workspaceName'));
         done();
       }).catch(done);
     });
@@ -81,9 +75,6 @@ describe('Messages', function () {
       hootsuite.messages.rejectById('4950332802', 'reason').then(function (res) {
         console.log(res);
         // assert.equal(res.result.length, 1);
-        // assert.equal(res.result[0].id, 1001);
-        // assert(_.has(res.result[0], 'name'));
-        // assert(_.has(res.result[0], 'workspaceName'));
         done();
       }).catch(done);
     });
@@ -93,9 +84,6 @@ describe('Messages', function () {
       hootsuite.messages.findByIdHistory('4950332802').then(function (res) {
         console.log('3', res);
         // assert.equal(res.result.length, 1);
-        // assert.equal(res.result[0].id, 1001);
-        // assert(_.has(res.result[0], 'name'));
-        // assert(_.has(res.result[0], 'workspaceName'));
         done();
       }).catch(done);
     });
