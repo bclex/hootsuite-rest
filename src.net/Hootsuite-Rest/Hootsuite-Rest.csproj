@@ -50,6 +50,7 @@
     <Compile Include="Api\Scim.cs" />
     <Compile Include="Api\SocialProfiles.cs" />
     <Compile Include="Api\Teams.cs" />
+    <Compile Include="HootsuiteException.cs" />
     <Compile Include="Require\Backoff.cs" />
     <Compile Include="Require\config.cs" />
     <Compile Include="Require\Restler.cs" />
