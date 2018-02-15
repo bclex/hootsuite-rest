@@ -187,14 +187,13 @@ namespace Hootsuite
             {
                 var options = new
                 {
-                    data = ctx,
                     headers = new { Authorization = $"Bearer {tokenData.access_token}" },
                     timeout = dyn.getProp(_options, "timeout", 20000),
                 };
                 var baseUrl = dyn.getProp(_options, "url", config.api_url);
                 try
                 {
-                    var x = await _rest.postJson($"{baseUrl}/v1/tokens", options.data, options);
+                    var x = await _rest.postJson($"{baseUrl}/v1/tokens", ctx, options);
                     var data = (JObject)x;
                     _log($"Got token: {data}");
                     _tokenData = data;
