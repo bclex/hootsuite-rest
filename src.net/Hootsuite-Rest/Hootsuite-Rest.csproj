@@ -11,6 +11,21 @@
     <AssemblyName>Hootsuite-Rest</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,9 +48,6 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\HOOTPUB\src\HOOTPUB\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Net.Http" />
@@ -44,12 +56,23 @@
     <Compile Include="..\GlobalAssemblyVersion.cs">
       <Link>Properties\GlobalAssemblyVersion.cs</Link>
     </Compile>
+    <Compile Include="Api\InteractionHistory.cs" />
     <Compile Include="Api\Messages.cs" />
     <Compile Include="Api\Organizations.cs" />
     <Compile Include="Api\Owly.cs" />
     <Compile Include="Api\Scim.cs" />
     <Compile Include="Api\SocialProfiles.cs" />
     <Compile Include="Api\Teams.cs" />
+    <Compile Include="Domain\EventMessage.cs" />
+    <Compile Include="Domain\Location.cs" />
+    <Compile Include="Domain\Media.cs" />
+    <Compile Include="Domain\MediaUrl.cs" />
+    <Compile Include="Domain\Member.cs" />
+    <Compile Include="Domain\Message.cs" />
+    <Compile Include="Domain\MessageState.cs" />
+    <Compile Include="Domain\Organization.cs" />
+    <Compile Include="Domain\Reviewer.cs" />
+    <Compile Include="Domain\SocialProfile.cs" />
     <Compile Include="HootsuiteException.cs" />
     <Compile Include="Require\Backoff.cs" />
     <Compile Include="Require\config.cs" />
@@ -68,7 +91,14 @@
     <Compile Include="Connection.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="Hootsuite-Rest.project.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

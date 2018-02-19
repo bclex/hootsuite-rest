@@ -29,6 +29,7 @@ namespace Hootsuite
             SocialProfiles = new SocialProfiles(this, _connection);
             Teams = new Teams(this, _connection);
             Owly = new Owly(this, _connectionOwly);
+            InteractionHistory = new InteractionHistory(this, _connection);
         }
 
         /// <summary>
@@ -76,6 +77,11 @@ namespace Hootsuite
         /// </summary>
         /// <value>The owly.</value>
         public Owly Owly { get; private set; }
+        /// <summary>
+        /// Gets the interaction history.
+        /// </summary>
+        /// <value>The interaction history.</value>
+        public InteractionHistory InteractionHistory { get; private set; }
 
         /// <summary>
         /// Gets the access token.

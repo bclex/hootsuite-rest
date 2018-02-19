@@ -60,7 +60,7 @@ namespace Hootsuite.Api
         /// <param name="socialProfileIds">The social profile ids.</param>
         /// <param name="opts">The opts.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<dynamic> Find(DateTime startTime, DateTime endTime, string[] socialProfileIds = null, dynamic opts = null)
+        public Task<dynamic> FindAll(DateTime startTime, DateTime endTime, string[] socialProfileIds = null, dynamic opts = null)
         {
             var path = util.createPath("messages");
             var query = Restler.GetQuery(null, new

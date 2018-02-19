@@ -52,7 +52,7 @@ namespace Hootsuite.Tests
         public async Task Messages_Find()
         {
             // Retrieve outbound messages
-            var res = await hootsuite.Messages.Find(DateTime.Parse("2017-12-01"), DateTime.Parse("2017-12-15"));
+            var res = await hootsuite.Messages.FindAll(DateTime.Parse("2017-12-01"), DateTime.Parse("2017-12-15"));
             Assert.IsTrue((int)res.data.Count > 0);
             Assert.IsNotNull((string)res.data[0].id);
             Assert.AreEqual("SENT", (string)res.data[0].state);

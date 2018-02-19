@@ -23,7 +23,7 @@ namespace Hootsuite.Api
         }
 
         /// <summary>
-        /// Gets the specified social network type.
+        /// Finds all.
         /// </summary>
         /// <param name="socialNetworkType">Type of the social network.</param>
         /// <param name="socialNetworkId">The social network identifier.</param>
@@ -31,8 +31,12 @@ namespace Hootsuite.Api
         /// <param name="cursor">The cursor.</param>
         /// <param name="limit">The limit.</param>
         /// <returns>Task&lt;dynamic&gt;.</returns>
-        /// <exception cref="ArgumentNullException">socialNetworkType</exception>
-        public Task<dynamic> Get(string socialNetworkType, string socialNetworkId, string targetSocialNetworkId, string cursor = null, int? limit = null)
+        /// <exception cref="ArgumentNullException">socialNetworkType
+        /// or
+        /// socialNetworkId
+        /// or
+        /// targetSocialNetworkId</exception>
+        public Task<dynamic> FindAll(string socialNetworkType, string socialNetworkId, string targetSocialNetworkId, string cursor = null, int? limit = null)
         {
             if (socialNetworkType == null)
                 throw new ArgumentNullException(nameof(socialNetworkType));

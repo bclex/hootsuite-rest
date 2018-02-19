@@ -60,7 +60,7 @@ namespace Hootsuite.Require
                     throw new RestlerOperationException(res.StatusCode, r);
                 return r;
             }
-            catch (TaskCanceledException e) { throw new RestlerOperationException(0, null) { Timedout = true }; }
+            catch (TaskCanceledException) { throw new RestlerOperationException(0, null) { Timedout = true }; }
         }
 
         public async Task<object> get(string url, dynamic options) => await request(url, options, Method.GET);
