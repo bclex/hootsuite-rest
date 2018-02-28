@@ -10,8 +10,8 @@ namespace Hootsuite.Api
     /// </summary>
     public class Owly
     {
-        HootsuiteClient _hootsuite;
-        ConnectionOwly _connection;
+        readonly HootsuiteClient _hootsuite;
+        readonly ConnectionOwly _connection;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Owly" /> class.

@@ -16,13 +16,13 @@ namespace Hootsuite
             QUOTA_REACHED = 5000,
         };
 
-        static bool hasErrorCode(Exception err, int code)
+        static bool hasPlatformErrorCode(Exception err, int code)
         {
-            return isError(err, out JArray errors) &&
+            return isPlatformError(err, out JArray errors) &&
                 errors.FirstOrDefault(x => (int)x["code"] == code) != null;
         }
 
-        static bool isError(Exception err, out JArray errors)
+        static bool isPlatformError(Exception err, out JArray errors)
         {
             errors = null;
             JObject res;
@@ -54,12 +54,12 @@ namespace Hootsuite
 
         public static bool isExpiredToken(Exception err)
         {
-            return hasErrorCode(err, (int)errorCodes.TOKEN_ERROR);
+            return hasPlatformErrorCode(err, (int)errorCodes.TOKEN_ERROR);
         }
 
         public static bool isRateLimited(Exception err)
         {
-            return hasErrorCode(err, (int)errorCodes.RATE_LIMIT_REACHED);
+            return hasPlatformErrorCode(err, (int)errorCodes.RATE_LIMIT_REACHED);
         }
     }
 }

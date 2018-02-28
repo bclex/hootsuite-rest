@@ -34,12 +34,40 @@ namespace Hootsuite
             return prop != null ? (T)prop.GetValue(s) : default_;
         }
 
+        public static object clone(object options)
+        {
+            return getData(options).ToDictionary(x => x.Key, x => x.Value);
+        }
+
+        public static object pick(object options, string[] keys)
+        {
+            return keys.ToDictionary(x => x, x => getProp<object>(options, x));
+        }
+
         public static JObject ToJObject(object s)
         {
             return JObject.Parse(JsonConvert.SerializeObject(s));
         }
 
-        public static IEnumerable<KeyValuePair<string, string>> getData(object s)
+        public static IEnumerable<KeyValuePair<string, object>> getData(object s)
+        {
+            if (s is ExpandoObject)
+            {
+                var dyno = (IDictionary<string, object>)s;
+                return dyno.Select(x => new KeyValuePair<string, object>(x.Key, x.Value)).ToArray();
+            }
+            else if (s is ExpandedObject)
+            {
+                var dyno = (ExpandedObject)s;
+                return dyno.GetData();
+            }
+            return s.GetType().GetProperties()
+                .Where(x => x.CanRead && x.GetValue(s, null) != null)
+                .Select(x => new KeyValuePair<string, object>(x.Name, x.GetValue(s, null)))
+                .ToList();
+        }
+
+        public static IEnumerable<KeyValuePair<string, string>> getDataAsString(object s)
         {
             if (s is ExpandoObject)
             {
@@ -49,7 +77,7 @@ namespace Hootsuite
             else if (s is ExpandedObject)
             {
                 var dyno = (ExpandedObject)s;
-                return dyno.GetData();
+                return dyno.GetDataAsString();
             }
             return s.GetType().GetProperties()
                 .Where(x => x.CanRead && x.GetValue(s, null) != null)
@@ -84,7 +112,14 @@ namespace Hootsuite
                 return _object != null ? _object.GetType().GetProperties().FirstOrDefault(propertyInfo => propertyInfo.Name == propertyName) : null;
             }
 
-            public IEnumerable<KeyValuePair<string, string>> GetData()
+            public IEnumerable<KeyValuePair<string, object>> GetData()
+            {
+                var list = _customProperties.Select(x => new KeyValuePair<string, object>(x.Key, x.Value)).ToList();
+                if (_object != null) list.AddRange(_object.GetType().GetProperties().Select(x => new KeyValuePair<string, object>(x.Name, x.GetValue(_object))));
+                return list;
+            }
+
+            public IEnumerable<KeyValuePair<string, string>> GetDataAsString()
             {
                 var list = _customProperties.Select(x => new KeyValuePair<string, string>(x.Key, x.Value.ToString())).ToList();
                 if (_object != null) list.AddRange(_object.GetType().GetProperties().Select(x => new KeyValuePair<string, string>(x.Name, x.GetValue(_object).ToString())));

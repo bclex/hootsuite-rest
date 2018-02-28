@@ -9,8 +9,8 @@ namespace Hootsuite.Api
     /// </summary>
     public class Organizations
     {
-        HootsuiteClient _hootsuite;
-        Connection _connection;
+        readonly HootsuiteClient _hootsuite;
+        readonly Connection _connection;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Organizations" /> class.

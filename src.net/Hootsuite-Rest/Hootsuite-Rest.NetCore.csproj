@@ -1,22 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net45;netcoreapp2.0</TargetFrameworks>
-    <ApplicationIcon />
-    <OutputType>Exe</OutputType>
-    <StartupObject />
     <AssemblyName>Hootsuite-Rest</AssemblyName>
     <RootNamespace>Hootsuite</RootNamespace>
     <PackageId>Hootsuite-Rest</PackageId>
-    <Authors>BclEx</Authors>
+    <Authors>Various</Authors>
     <Company>BclEx</Company>
-    <Product>Hootsuite.Rest</Product>
+    <Product>Hootsuite-Rest</Product>
     <Description>A Hootsuite wrapper for direct interaction with their APIs.</Description>
     <Copyright>Copyright © 2017</Copyright>
     <PackageLicenseUrl>http://choosealicense.com/licenses/mit/</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/BclEx/hootsuite-rest</PackageProjectUrl>
     <RepositoryUrl>https://github.com/BclEx/hootsuite-rest</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <NeutralLanguage>en-US</NeutralLanguage>
     <VersionPrefix>0.0.3</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>

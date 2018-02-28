@@ -50,17 +50,17 @@ namespace Hootsuite
             set { _tokenData = dyn.hasProp(_options, "accessToken") ? dyn.ToJObject(new { access_token = value }) : null; }
         }
 
-        public Task<dynamic> get(string url, dynamic options = null) => _request(url, null, options, Restler.Method.GET);
-        public Task<dynamic> post(string url, dynamic options = null) => _request(url, null, options, Restler.Method.POST);
-        public Task<dynamic> put(string url, dynamic options = null) => _request(url, null, options, Restler.Method.PUT);
-        public Task<dynamic> del(string url, dynamic options = null) => _request(url, null, options, Restler.Method.DELETE);
-        public Task<dynamic> head(string url, dynamic options = null) => _request(url, null, options, Restler.Method.HEAD);
-        public Task<dynamic> patch(string url, dynamic options = null) => _request(url, null, options, Restler.Method.PATCH);
+        public Task<dynamic> get(string url, dynamic options = null, string contentType = null) => _request(url, null, options, Restler.Method.GET, contentType);
+        public Task<dynamic> post(string url, dynamic options = null, string contentType = null) => _request(url, null, options, Restler.Method.POST, contentType);
+        public Task<dynamic> put(string url, dynamic options = null, string contentType = null) => _request(url, null, options, Restler.Method.PUT, contentType);
+        public Task<dynamic> del(string url, dynamic options = null, string contentType = null) => _request(url, null, options, Restler.Method.DELETE, contentType);
+        public Task<dynamic> head(string url, dynamic options = null, string contentType = null) => _request(url, null, options, Restler.Method.HEAD, contentType);
+        public Task<dynamic> patch(string url, dynamic options = null, string contentType = null) => _request(url, null, options, Restler.Method.PATCH, contentType);
         public Task<dynamic> json(string url, object data, dynamic options = null) => _request(url, data, options, Restler.Method.GET);
         public Task<dynamic> postJson(string url, object data, dynamic options = null) => _request(url, data, options, Restler.Method.POST);
         public Task<dynamic> putJson(string url, object data, dynamic options = null) => _request(url, data, options, Restler.Method.PUT);
 
-        private async Task<dynamic> _request(string url, object data, dynamic options, Restler.Method method)
+        private async Task<dynamic> _request(string url, object data, dynamic options, Restler.Method method, string contentType = null)
         {
             options = dyn.exp(options, true);
             if (!HttpTestExp.IsMatch(url))
@@ -79,7 +79,7 @@ namespace Hootsuite
                     try
                     {
                         Func<string, string> fixup = y => y.Replace("scim__user", "urn:ietf:params:scim:schemas:extension:Hootsuite:2.0:User");
-                        var d = data == null ? (JObject)await _rest.request(url, options, method) : await _rest.json(url, data, options, method, fixup);
+                        var d = data == null ? (JObject)await _rest.request(url, options, method, contentType) : await _rest.json(url, data, options, method, fixup);
                         if (d["errors"] != null)
                         {
                             _log($"Request failed: {d}");
@@ -140,10 +140,10 @@ namespace Hootsuite
                         data = new
                         {
                             grant_type = dyn.getProp(_options, "grantType", loginCtx != null || frameCtx != null ? "client_credentials" : "password"),
-                            client_id = dyn.getProp(_options, "clientId", (string)null),
-                            client_secret = dyn.getProp(_options, "clientSecret", (string)null),
-                            username = dyn.getProp(_options, "username", (string)null),
-                            password = dyn.getProp(_options, "password", (string)null),
+                            client_id = dyn.getProp<string>(_options, "clientId"),
+                            client_secret = dyn.getProp<string>(_options, "clientSecret"),
+                            username = dyn.getProp<string>(_options, "username"),
+                            password = dyn.getProp<string>(_options, "password"),
                             // scope= dyn.getProp(_options, "scope", "oob"),
                         },
                         timeout = dyn.getProp(_options, "timeout", 20000),

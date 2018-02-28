@@ -39,12 +39,12 @@ namespace Hootsuite.Require
             if (dyn.hasProp(options, "data") && options.data != null)
                 content = options.data is string ?
                     (HttpContent)new StringContent(options.data, Encoding.UTF8, contentType) :
-                    new FormUrlEncodedContent(dyn.getData(options.data));
+                    new FormUrlEncodedContent(dyn.getDataAsString(options.data));
             // request
             var req = new HttpRequestMessage(new HttpMethod(method.ToString()), uri) { Content = content };
             // headers
             if (dyn.hasProp(options, "headers"))
-                foreach (KeyValuePair<string, string> header in dyn.getData(options.headers))
+                foreach (KeyValuePair<string, string> header in dyn.getDataAsString(options.headers))
                     req.Headers.Add(header.Key, header.Value);
             // timeout
             var timeout = dyn.getProp(options, "timeout", 5000);
@@ -83,7 +83,7 @@ namespace Hootsuite.Require
 
         public static string GetQuery(string path, object s)
         {
-            var parameters = dyn.getData(s).Select(a =>
+            var parameters = dyn.getDataAsString(s).Select(a =>
                 {
                     try { return string.Format("{0}={1}", Uri.EscapeDataString(a.Key), Uri.EscapeDataString(a.Value)); }
                     catch (Exception ex) { throw new InvalidOperationException(string.Format("Failed when processing '{0}'.", a), ex); }
