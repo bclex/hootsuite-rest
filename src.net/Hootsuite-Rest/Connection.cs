@@ -40,7 +40,7 @@ namespace Hootsuite
         public Connection(dynamic options)
         {
             _options = options ?? new { };
-            _tokenData = dyn.hasProp(_options, "accessToken") ? dyn.ToJObject(new { access_token = dyn.getProp<string>(_options, "accessToken") }) : null;
+            _tokenData = dyn.getProp<string>(_options, "accessToken") != null ? dyn.ToJObject(new { access_token = dyn.getProp<string>(_options, "accessToken") }) : null;
             _retry = new Retry(dyn.getProp(_options, "retry", new { }));
         }
 
@@ -49,6 +49,8 @@ namespace Hootsuite
             get { return _tokenData != null ? (string)_tokenData["access_token"] : null; }
             set { _tokenData = dyn.hasProp(_options, "accessToken") ? dyn.ToJObject(new { access_token = value }) : null; }
         }
+
+        public Action<Connection> OnAccessToken { get; set; }
 
         public Task<dynamic> get(string url, dynamic options = null, string contentType = null) => _request(url, null, options, Restler.Method.GET, contentType);
         public Task<dynamic> post(string url, dynamic options = null, string contentType = null) => _request(url, null, options, Restler.Method.POST, contentType);
@@ -163,6 +165,7 @@ namespace Hootsuite
                         {
                             _log($"Got token: {data}");
                             _tokenData = data;
+                            OnAccessToken?.Invoke(this);
                             return data;
                         }
                     }
@@ -200,6 +203,7 @@ namespace Hootsuite
                     var data = (JObject)x;
                     _log($"Got token: {data}");
                     _tokenData = data;
+                    OnAccessToken?.Invoke(this);
                     return data;
                 }
                 catch (Exception err) { _log($"GetOnBehalfAuthToken failed: {err}"); throw err; }

@@ -93,6 +93,12 @@ namespace Hootsuite
             set => _connection.AccessToken = value;
         }
 
+        public Action<Connection> OnAccessToken
+        {
+            get => _connection.OnAccessToken;
+            set => _connection.OnAccessToken = value;
+        }
+
         /// <summary>
         /// Gets the logger.
         /// </summary>
