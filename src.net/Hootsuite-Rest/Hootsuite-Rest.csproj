@@ -66,6 +66,7 @@
     <Compile Include="Api\Teams.cs" />
     <Compile Include="Domain\EventMessage.cs" />
     <Compile Include="Domain\Location.cs" />
+    <Compile Include="Domain\Interaction.cs" />
     <Compile Include="Domain\Media.cs" />
     <Compile Include="Domain\MediaUrl.cs" />
     <Compile Include="Domain\Member.cs" />
