@@ -14,6 +14,11 @@ namespace Hootsuite.Domain
         public string AvatarUrl { get; set; }
         public string Owner { get; set; }
 
+        public static T FromResults<T>(JObject result)
+        {
+            return JsonConvert.DeserializeObject<T>(result["data"].ToString(), HootsuiteClient.JsonSerializerSettings);
+        }
+
         internal class ArrayConverter : JsonConverter
         {
             public override bool CanConvert(Type objectType) { return false; }
