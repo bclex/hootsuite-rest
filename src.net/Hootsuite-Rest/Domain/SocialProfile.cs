@@ -14,10 +14,7 @@ namespace Hootsuite.Domain
         public string AvatarUrl { get; set; }
         public string Owner { get; set; }
 
-        public static T FromResults<T>(JObject result)
-        {
-            return JsonConvert.DeserializeObject<T>(result["data"].ToString(), HootsuiteClient.JsonSerializerSettings);
-        }
+        public static SocialProfile[] FromResults(JObject result) => result != null ? JsonConvert.DeserializeObject<SocialProfile[]>(result["data"].ToString(), HootsuiteClient.JsonSerializerSettings) : null;
 
         internal class ArrayConverter : JsonConverter
         {
