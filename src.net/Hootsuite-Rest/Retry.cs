@@ -56,7 +56,7 @@ namespace Hootsuite
                             new HootsuiteSecurityException(e.StatusCode, ((JObject)e.Content)["errors"]) :
                             new HootsuiteException(e.StatusCode, ((JObject)e.Content)["errors"]);
                     promise.SetException(err);
-                    throw err;
+                    //throw err;
                 }
             }
             return promise.Task;
