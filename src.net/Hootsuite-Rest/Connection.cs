@@ -1,9 +1,12 @@
 ﻿using Hootsuite.Require;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -15,11 +18,21 @@ namespace Hootsuite
     public class Connection
     {
         internal static readonly Regex HttpTestExp = new Regex(@"^https?://", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+        readonly ApiUsage _lastApiUsage = new ApiUsage();
         readonly Action<string> _log = util.logger;
         readonly Restler _rest = new Restler();
         readonly dynamic _options;
         readonly Retry _retry;
         JObject _tokenData;
+
+        public class ApiUsage
+        {
+            public string Quota { get; set; }
+            public int? QuotaUsed { get; set; }
+            public int? RateLimitRequestsRemaining { get; set; }
+        }
+
+        public ApiUsage LastApiUsage => _lastApiUsage;
 
         public class LoginContext
         {
@@ -51,6 +64,7 @@ namespace Hootsuite
         }
 
         public Action<Connection> OnAccessToken { get; set; }
+        public Action<Connection> OnResponse { get; set; }
 
         public Task<dynamic> get(string url, dynamic options = null, string contentType = null) => _request(url, null, options, Restler.Method.GET, contentType);
         public Task<dynamic> post(string url, dynamic options = null, string contentType = null) => _request(url, null, options, Restler.Method.POST, contentType);
@@ -81,7 +95,7 @@ namespace Hootsuite
                     try
                     {
                         Func<string, string> fixup = y => y.Replace("scim__user", "urn:ietf:params:scim:schemas:extension:Hootsuite:2.0:User");
-                        var d = data == null ? (JObject)await _rest.request(url, options, method, contentType) : await _rest.json(url, data, options, method, fixup);
+                        var d = data == null ? (JObject)await _rest.request(url, options, method, contentType, (Action<HttpResponseMessage, string>)onResponse) : await _rest.json(url, data, options, method, (Action<HttpResponseMessage, string>)onResponse, fixup: fixup);
                         if (d["errors"] != null)
                         {
                             _log($"Request failed: {d}");
@@ -91,7 +105,7 @@ namespace Hootsuite
                     }
                     catch (RestlerOperationException res)
                     {
-                        
+
                         var err = (JObject)res.Content;
                         if (err != null && err["errors"] != null) { _log($"Request failed: {err}"); throw; }
                         else
@@ -114,6 +128,15 @@ namespace Hootsuite
             };
             Func<bool, Task<JObject>> requestFn2 = async (forceOAuth) => await requestFn(GetOAuthToken(forceOAuth));
             return await _retry.start(requestFn2);
+
+            void onResponse(HttpResponseMessage res, string body)
+            {
+                var headers = res.Headers;
+                _lastApiUsage.Quota = headers.TryGetValues("X-Account-Quota", out IEnumerable<string> values) ? values.FirstOrDefault() : null;
+                _lastApiUsage.QuotaUsed = headers.TryGetValues("X-Account-Quota-Used", out values) ? (int?)int.Parse(values.FirstOrDefault()) : null;
+                _lastApiUsage.RateLimitRequestsRemaining = headers.TryGetValues("X-Account-Rate-Limit-Requests-Remaining", out values) ? (int?)int.Parse(values.FirstOrDefault()) : null;
+                OnResponse?.Invoke(this);
+            }
         }
 
         public string GetFrameAuthToken(string url)
@@ -210,5 +233,10 @@ namespace Hootsuite
             };
             return await _retry.start(requestFn);
         }
+
+        //private HootsuiteClient BuildRatelimit(HttpResponseHeaders headers)
+        //{
+
+        //}
     }
 }

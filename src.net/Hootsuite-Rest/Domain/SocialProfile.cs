@@ -8,7 +8,7 @@ namespace Hootsuite.Domain
     public class SocialProfile
     {
         public string Id { get; set; }
-        public string Type { get; set; }
+        public string SocialNetworkType { get; set; }
         public string SocialNetworkId { get; set; }
         public string SocialNetworkUsername { get; set; }
         public string AvatarUrl { get; set; }
