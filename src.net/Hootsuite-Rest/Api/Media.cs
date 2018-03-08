@@ -29,7 +29,7 @@ namespace Hootsuite.Api
         /// <param name="sizeBytes">The size bytes.</param>
         /// <param name="mimeType">Type of the MIME.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<dynamic> CreateUrl(int sizeBytes, string mimeType = "video/mp4")
+        public Task<dynamic> CreateUrl(int sizeBytes, string mimeType = "video/mp4", dynamic options = null)
         {
             var path = util.createPath("media");
             var data = new
@@ -37,7 +37,7 @@ namespace Hootsuite.Api
                 sizeBytes,
                 mimeType = mimeType ?? "video/mp4",
             };
-            return _connection.postJson(path, data);
+            return _connection.postJson(path, data, options);
         }
 
         /// <summary>
@@ -46,12 +46,12 @@ namespace Hootsuite.Api
         /// <param name="mediaId">The media identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">mediaId</exception>
-        public Task<dynamic> StatusById(string mediaId)
+        public Task<dynamic> StatusById(string mediaId, dynamic options = null)
         {
             if (mediaId == null)
                 throw new ArgumentNullException(nameof(mediaId));
             var path = util.createPath("media", mediaId);
-            return _connection.get(path);
+            return _connection.get(path, options);
         }
     }
 }

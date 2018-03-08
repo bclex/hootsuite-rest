@@ -32,7 +32,7 @@ namespace Hootsuite.Api
         /// <exception cref="ArgumentNullException">organizationId
         /// or
         /// teamName</exception>
-        public Task<dynamic> CreateTeam(string organizationId, string teamName)
+        public Task<dynamic> CreateTeam(string organizationId, string teamName, dynamic options = null)
         {
             if (organizationId == null)
                 throw new ArgumentNullException(nameof(organizationId));
@@ -43,7 +43,7 @@ namespace Hootsuite.Api
             {
                 teamName
             };
-            return _connection.postJson(path, data);
+            return _connection.postJson(path, data, options);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace Hootsuite.Api
         /// teamId
         /// or
         /// memberId</exception>
-        public Task<dynamic> AppendMemberById(string organizationId, string teamId, string memberId)
+        public Task<dynamic> AppendMemberById(string organizationId, string teamId, string memberId, dynamic options = null)
         {
             if (organizationId == null)
                 throw new ArgumentNullException(nameof(organizationId));
@@ -67,7 +67,7 @@ namespace Hootsuite.Api
             if (memberId == null)
                 throw new ArgumentNullException(nameof(memberId));
             var path = util.createPath("organizations", organizationId, "teams", teamId, "members", memberId);
-            return _connection.post(path);
+            return _connection.post(path, options);
         }
 
         /// <summary>
@@ -79,14 +79,14 @@ namespace Hootsuite.Api
         /// <exception cref="ArgumentNullException">organizationId
         /// or
         /// teamId</exception>
-        public Task<dynamic> FindByIdMembers(string organizationId, string teamId)
+        public Task<dynamic> FindByIdMembers(string organizationId, string teamId, dynamic options = null)
         {
             if (organizationId == null)
                 throw new ArgumentNullException(nameof(organizationId));
             if (teamId == null)
                 throw new ArgumentNullException(nameof(teamId));
             var path = util.createPath("organizations", organizationId, "teams", teamId, "members");
-            return _connection.get(path);
+            return _connection.get(path, options);
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace Hootsuite.Api
         /// teamId
         /// or
         /// memberId</exception>
-        public Task<dynamic> FindMemberByIdPermissions(string organizationId, string teamId, string memberId)
+        public Task<dynamic> FindMemberByIdPermissions(string organizationId, string teamId, string memberId, dynamic options = null)
         {
             if (organizationId == null)
                 throw new ArgumentNullException(nameof(organizationId));
@@ -110,7 +110,7 @@ namespace Hootsuite.Api
             if (memberId == null)
                 throw new ArgumentNullException(nameof(memberId));
             var path = util.createPath("organizations", organizationId, "teams", teamId, "members", memberId, "permissions");
-            return _connection.get(path);
+            return _connection.get(path, options);
         }
 
         /// <summary>
@@ -122,14 +122,14 @@ namespace Hootsuite.Api
         /// <exception cref="ArgumentNullException">organizationId
         /// or
         /// teamId</exception>
-        public Task<dynamic> FindByIdSocialProfiles(string organizationId, string teamId)
+        public Task<dynamic> FindByIdSocialProfiles(string organizationId, string teamId, dynamic options = null)
         {
             if (organizationId == null)
                 throw new ArgumentNullException(nameof(organizationId));
             if (teamId == null)
                 throw new ArgumentNullException(nameof(teamId));
             var path = util.createPath("organizations", organizationId, "teams", teamId, "socialProfiles");
-            return _connection.get(path);
+            return _connection.get(path, options);
         }
     }
 }

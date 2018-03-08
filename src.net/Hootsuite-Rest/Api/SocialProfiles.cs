@@ -26,10 +26,10 @@ namespace Hootsuite.Api
         /// Finds this instance.
         /// </summary>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<dynamic> Find()
+        public Task<dynamic> Find(dynamic options = null)
         {
             var path = util.createPath("socialProfiles");
-            return _connection.get(path);
+            return _connection.get(path, options);
         }
 
         /// <summary>
@@ -38,12 +38,12 @@ namespace Hootsuite.Api
         /// <param name="socialProfileId">The social profile identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">socialProfileId</exception>
-        public Task<dynamic> FindById(string socialProfileId)
+        public Task<dynamic> FindById(string socialProfileId, dynamic options = null)
         {
             if (socialProfileId == null)
                 throw new ArgumentNullException(nameof(socialProfileId));
             var path = util.createPath("socialProfiles", socialProfileId);
-            return _connection.get(path);
+            return _connection.get(path, options);
         }
 
         /// <summary>
@@ -52,12 +52,12 @@ namespace Hootsuite.Api
         /// <param name="socialProfileId">The social profile identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">socialProfileId</exception>
-        public Task<dynamic> FindByIdTeams(string socialProfileId)
+        public Task<dynamic> FindByIdTeams(string socialProfileId, dynamic options = null)
         {
             if (socialProfileId == null)
                 throw new ArgumentNullException(nameof(socialProfileId));
             var path = util.createPath("socialProfiles", socialProfileId, "teams");
-            return _connection.get(path);
+            return _connection.get(path, options);
         }
     }
 }

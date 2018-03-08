@@ -25,30 +25,30 @@ namespace Hootsuite.Api
         /// Gets this instance.
         /// </summary>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<dynamic> Get()
+        public Task<dynamic> Get(dynamic options = null)
         {
             var path = util.createPath("me");
-            return _connection.get(path);
+            return _connection.get(path, options);
         }
 
         /// <summary>
         /// Gets the organizations.
         /// </summary>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<dynamic> GetOrganizations()
+        public Task<dynamic> GetOrganizations(dynamic options = null)
         {
             var path = util.createPath("me", "organizations");
-            return _connection.get(path);
+            return _connection.get(path, options);
         }
 
         /// <summary>
         /// Gets the social profiles.
         /// </summary>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<dynamic> GetSocialProfiles()
+        public Task<dynamic> GetSocialProfiles(dynamic options = null)
         {
             var path = util.createPath("me", "socialProfiles");
-            return _connection.get(path);
+            return _connection.get(path, options);
         }
     }
 }

@@ -29,12 +29,12 @@ namespace Hootsuite.Api
         /// <param name="organizationId">The organization identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">organizationId</exception>
-        public Task<dynamic> FindMembers(string organizationId)
+        public Task<dynamic> FindMembers(string organizationId, dynamic options = null)
         {
             if (organizationId == null)
                 throw new ArgumentNullException(nameof(organizationId));
             var path = util.createPath("organizations", organizationId, "members");
-            return _connection.get(path);
+            return _connection.get(path, options);
         }
 
         /// <summary>
@@ -46,14 +46,14 @@ namespace Hootsuite.Api
         /// <exception cref="ArgumentNullException">organizationId
         /// or
         /// memberId</exception>
-        public Task<dynamic> RemoveMemberById(string organizationId, string memberId)
+        public Task<dynamic> RemoveMemberById(string organizationId, string memberId, dynamic options = null)
         {
             if (organizationId == null)
                 throw new ArgumentNullException(nameof(organizationId));
             if (memberId == null)
                 throw new ArgumentNullException(nameof(memberId));
             var path = util.createPath("organizations", organizationId, "members", memberId);
-            return _connection.del(path);
+            return _connection.del(path, options);
         }
 
         /// <summary>
@@ -65,14 +65,14 @@ namespace Hootsuite.Api
         /// <exception cref="ArgumentNullException">organizationId
         /// or
         /// memberId</exception>
-        public Task<dynamic> FindMemberByIdPermissions(string organizationId, string memberId)
+        public Task<dynamic> FindMemberByIdPermissions(string organizationId, string memberId, dynamic options = null)
         {
             if (organizationId == null)
                 throw new ArgumentNullException(nameof(organizationId));
             if (memberId == null)
                 throw new ArgumentNullException(nameof(memberId));
             var path = util.createPath("organizations", organizationId, "members", memberId, "permissions");
-            return _connection.get(path);
+            return _connection.get(path, options);
         }
 
         /// <summary>
@@ -84,14 +84,14 @@ namespace Hootsuite.Api
         /// <exception cref="ArgumentNullException">organizationId
         /// or
         /// memberId</exception>
-        public Task<dynamic> FindMemberByIdTeams(string organizationId, string memberId)
+        public Task<dynamic> FindMemberByIdTeams(string organizationId, string memberId, dynamic options = null)
         {
             if (organizationId == null)
                 throw new ArgumentNullException(nameof(organizationId));
             if (memberId == null)
                 throw new ArgumentNullException(nameof(memberId));
             var path = util.createPath("organizations", organizationId, "members", memberId, "teams");
-            return _connection.get(path);
+            return _connection.get(path, options);
         }
 
         /// <summary>
@@ -103,14 +103,14 @@ namespace Hootsuite.Api
         /// <exception cref="ArgumentNullException">organizationId
         /// or
         /// memberId</exception>
-        public Task<dynamic> FindMemberByIdSocialProfiles(string organizationId, string memberId)
+        public Task<dynamic> FindMemberByIdSocialProfiles(string organizationId, string memberId, dynamic options = null)
         {
             if (organizationId == null)
                 throw new ArgumentNullException(nameof(organizationId));
             if (memberId == null)
                 throw new ArgumentNullException(nameof(memberId));
             var path = util.createPath("organizations", organizationId, "members", memberId, "socialProfiles");
-            return _connection.get(path);
+            return _connection.get(path, options);
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace Hootsuite.Api
         /// memberId
         /// or
         /// socialProfileId</exception>
-        public Task<dynamic> FindSocialProfilesByIdPermissions(string organizationId, string memberId, string socialProfileId)
+        public Task<dynamic> FindSocialProfilesByIdPermissions(string organizationId, string memberId, string socialProfileId, dynamic options = null)
         {
             if (organizationId == null)
                 throw new ArgumentNullException(nameof(organizationId));
@@ -134,7 +134,7 @@ namespace Hootsuite.Api
             if (socialProfileId == null)
                 throw new ArgumentNullException(nameof(socialProfileId));
             var path = util.createPath("organizations", organizationId, "members", memberId, "socialProfiles", socialProfileId, "permissions");
-            return _connection.get(path);
+            return _connection.get(path, options);
         }
     }
 }

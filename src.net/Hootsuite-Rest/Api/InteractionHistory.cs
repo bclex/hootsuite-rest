@@ -36,7 +36,7 @@ namespace Hootsuite.Api
         /// socialNetworkId
         /// or
         /// targetSocialNetworkId</exception>
-        public Task<dynamic> FindAll(string socialNetworkType, string socialNetworkId, string targetSocialNetworkId, string cursor = null, int? limit = null)
+        public Task<dynamic> FindAll(string socialNetworkType, string socialNetworkId, string targetSocialNetworkId, string cursor = null, int? limit = null, dynamic options = null)
         {
             if (socialNetworkType == null)
                 throw new ArgumentNullException(nameof(socialNetworkType));
@@ -45,15 +45,13 @@ namespace Hootsuite.Api
             if (targetSocialNetworkId == null)
                 throw new ArgumentNullException(nameof(targetSocialNetworkId));
             var path = util.createPath("interactions", socialNetworkType);
-            var options = new
+            options = dyn.exp(options);
+            options.query = new
             {
-                query = new
-                {
-                    socialNetworkId,
-                    targetSocialNetworkId,
-                    cursor,
-                    limit,
-                }
+                socialNetworkId,
+                targetSocialNetworkId,
+                cursor,
+                limit,
             };
             return _connection.get(path, options);
         }

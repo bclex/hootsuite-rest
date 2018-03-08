@@ -30,7 +30,7 @@ namespace Hootsuite.Api
         /// <param name="msg">The MSG.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">msg</exception>
-        public Task<dynamic> Schedule(dynamic msg)
+        public Task<dynamic> Schedule(dynamic msg, dynamic options = null)
         {
             if (msg == null)
                 throw new ArgumentNullException(nameof(msg));
@@ -49,7 +49,7 @@ namespace Hootsuite.Api
                 mediaUrls = dyn.getProp<string>(msg, "mediaUrls"),
                 media = dyn.getProp<string>(msg, "media"),
             };
-            return _connection.postJson(path, data);
+            return _connection.postJson(path, data, options);
         }
 
         /// <summary>
@@ -58,25 +58,23 @@ namespace Hootsuite.Api
         /// <param name="startTime">The start time.</param>
         /// <param name="endTime">The end time.</param>
         /// <param name="socialProfileIds">The social profile ids.</param>
-        /// <param name="opts">The opts.</param>
+        /// <param name="options">The opts.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
-        public Task<dynamic> FindAll(DateTime startTime, DateTime endTime, string[] socialProfileIds = null, dynamic opts = null)
+        public Task<dynamic> FindAll(DateTime startTime, DateTime endTime, string[] socialProfileIds = null, dynamic options = null)
         {
             var path = util.createPath("messages");
+            options = dyn.exp(options);
             var query = Restler.GetQuery(null, new
             {
                 startTime = startTime.ToString("o"),
                 endTime = endTime.ToString("o"),
-                state = dyn.getProp<string>(opts, "state"),
-                limit = dyn.getProp<string>(opts, "limit"),
-                cursor = dyn.getProp<string>(opts, "cursor"),
+                state = dyn.getProp<string>(options, "state"),
+                limit = dyn.getProp<string>(options, "limit"),
+                cursor = dyn.getProp<string>(options, "cursor"),
             });
             if (socialProfileIds != null)
                 query += string.Join(string.Empty, socialProfileIds.Select(x => $"&socialProfileIds=${Uri.EscapeDataString(x)}").ToArray());
-            var options = new
-            {
-                query
-            };
+            options.query = query;
             return _connection.get(path, options);
         }
 
@@ -86,12 +84,12 @@ namespace Hootsuite.Api
         /// <param name="messageId">The message identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">messageId</exception>
-        public Task<dynamic> FindById(string messageId)
+        public Task<dynamic> FindById(string messageId, dynamic options = null)
         {
             if (messageId == null)
                 throw new ArgumentNullException(nameof(messageId));
             var path = util.createPath("messages", messageId);
-            return _connection.get(path);
+            return _connection.get(path, options);
         }
 
         /// <summary>
@@ -100,12 +98,12 @@ namespace Hootsuite.Api
         /// <param name="messageId">The message identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">messageId</exception>
-        public Task<dynamic> DeleteById(string messageId)
+        public Task<dynamic> DeleteById(string messageId, dynamic options = null)
         {
             if (messageId == null)
                 throw new ArgumentNullException(nameof(messageId));
             var path = util.createPath("messages", messageId);
-            return _connection.del(path);
+            return _connection.del(path, options);
         }
 
         /// <summary>
@@ -116,7 +114,7 @@ namespace Hootsuite.Api
         /// <param name="reviewerType">Type of the reviewer.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">messageId</exception>
-        public Task<dynamic> ApproveById(string messageId, int sequenceNumber = 0, string reviewerType = null)
+        public Task<dynamic> ApproveById(string messageId, int sequenceNumber = 0, string reviewerType = null, dynamic options = null)
         {
             if (messageId == null)
                 throw new ArgumentNullException(nameof(messageId));
@@ -126,7 +124,7 @@ namespace Hootsuite.Api
                 sequenceNumber,
                 reviewerType,
             };
-            return _connection.postJson(path, data);
+            return _connection.postJson(path, data, options);
         }
 
         /// <summary>
@@ -138,7 +136,7 @@ namespace Hootsuite.Api
         /// <param name="reviewerType">Type of the reviewer.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">messageId</exception>
-        public Task<dynamic> RejectById(string messageId, string reason = null, int sequenceNumber = 0, string reviewerType = null)
+        public Task<dynamic> RejectById(string messageId, string reason = null, int sequenceNumber = 0, string reviewerType = null, dynamic options = null)
         {
             if (messageId == null)
                 throw new ArgumentNullException(nameof(messageId));
@@ -149,7 +147,7 @@ namespace Hootsuite.Api
                 sequenceNumber,
                 reviewerType,
             };
-            return _connection.postJson(path, data);
+            return _connection.postJson(path, data, options);
         }
 
         /// <summary>
@@ -158,12 +156,12 @@ namespace Hootsuite.Api
         /// <param name="messageId">The message identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">messageId</exception>
-        public Task<dynamic> FindByIdHistory(string messageId)
+        public Task<dynamic> FindByIdHistory(string messageId, dynamic options = null)
         {
             if (messageId == null)
                 throw new ArgumentNullException(nameof(messageId));
             var path = util.createPath("messages", messageId, "history");
-            return _connection.get(path);
+            return _connection.get(path, options);
         }
     }
 }

@@ -28,12 +28,12 @@ namespace Hootsuite.Api
         /// <param name="memberId">The member identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">memberId</exception>
-        public Task<dynamic> FindById(string memberId)
+        public Task<dynamic> FindById(string memberId, dynamic options = null)
         {
             if (memberId == null)
                 throw new ArgumentNullException(nameof(memberId));
             var path = util.createPath("members", memberId);
-            return _connection.get(path);
+            return _connection.get(path, options);
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Hootsuite.Api
         /// <param name="msg">The MSG.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">msg</exception>
-        public Task<dynamic> Create(dynamic msg)
+        public Task<dynamic> Create(dynamic msg, dynamic options = null)
         {
             if (msg == null)
                 throw new ArgumentNullException(nameof(msg));
@@ -57,7 +57,7 @@ namespace Hootsuite.Api
                 timezone = dyn.getProp<string>(msg, "timezone"),
                 language = dyn.getProp<string>(msg, "language"),
             };
-            return _connection.postJson(path, data);
+            return _connection.postJson(path, data, options);
         }
 
         /// <summary>
@@ -66,12 +66,12 @@ namespace Hootsuite.Api
         /// <param name="memberId">The member identifier.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">memberId</exception>
-        public Task<dynamic> FindByIdOrgs(string memberId)
+        public Task<dynamic> FindByIdOrgs(string memberId, dynamic options = null)
         {
             if (memberId == null)
                 throw new ArgumentNullException(nameof(memberId));
             var path = util.createPath("members", memberId, "organizations");
-            return _connection.get(path);
+            return _connection.get(path, options);
         }
     }
 }
