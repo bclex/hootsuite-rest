@@ -35,6 +35,12 @@ namespace Hootsuite
         }
 
         /// <summary>
+        /// Gets the connection.
+        /// </summary>
+        /// <value>The connection.</value>
+        public Connection Connection => _connection;
+
+        /// <summary>
         /// Gets me.
         /// </summary>
         /// <value>Me.</value>
@@ -95,12 +101,20 @@ namespace Hootsuite
             set => _connection.AccessToken = value;
         }
 
+        /// <summary>
+        /// Gets or sets the on access token.
+        /// </summary>
+        /// <value>The on access token.</value>
         public Action<Connection> OnAccessToken
         {
             get => _connection.OnAccessToken;
             set => _connection.OnAccessToken = value;
         }
 
+        /// <summary>
+        /// Gets or sets the on response.
+        /// </summary>
+        /// <value>The on response.</value>
         public Action<Connection> OnResponse
         {
             get => _connection.OnResponse;
@@ -117,6 +131,9 @@ namespace Hootsuite
             set => util.logger = value;
         }
 
+        /// <summary>
+        /// The json serializer settings
+        /// </summary>
         internal static JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
         {
             MissingMemberHandling = MissingMemberHandling.Ignore,

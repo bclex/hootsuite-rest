@@ -51,12 +51,11 @@ namespace Hootsuite
                         return;
                     }
                     var e = (err as RestlerOperationException);
-                    if (e != null && e.Content != null && e.Content is JObject && ((JObject)e.Content)["errors"] != null)
+                    if (e != null && e.Content != null && e.Content is JObject && ((JObject)e.Content)["errors"] is JArray)
                         err = e.StatusCode == HttpStatusCode.Unauthorized || e.StatusCode == HttpStatusCode.Forbidden ?
-                            new HootsuiteSecurityException(e.StatusCode, ((JObject)e.Content)["errors"]) :
-                            new HootsuiteException(e.StatusCode, ((JObject)e.Content)["errors"]);
+                            new HootsuiteSecurityException(e.StatusCode, (JArray)((JObject)e.Content)["errors"]) :
+                            new HootsuiteException(e.StatusCode, (JArray)((JObject)e.Content)["errors"]);
                     promise.SetException(err);
-                    //throw err;
                 }
             }
             return promise.Task;
