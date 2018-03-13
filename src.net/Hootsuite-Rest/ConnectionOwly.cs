@@ -15,20 +15,87 @@ namespace Hootsuite
         readonly dynamic _options;
         readonly Retry _retry;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConnectionOwly"/> class.
+        /// </summary>
+        /// <param name="options">The options.</param>
         public ConnectionOwly(dynamic options)
         {
             _options = options ?? new { };
             _retry = new Retry(dyn.getProp(_options, "retry", new { }));
         }
 
+        /// <summary>
+        /// Gets the specified URL.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <param name="options">The options.</param>
+        /// <param name="contentType">Type of the content.</param>
+        /// <returns>Task&lt;dynamic&gt;.</returns>
         public Task<dynamic> get(string url, dynamic options = null, string contentType = null) => _request(url, null, options, Restler.Method.GET, contentType);
+        /// <summary>
+        /// Posts the specified URL.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <param name="options">The options.</param>
+        /// <param name="contentType">Type of the content.</param>
+        /// <returns>Task&lt;dynamic&gt;.</returns>
         public Task<dynamic> post(string url, dynamic options = null, string contentType = null) => _request(url, null, options, Restler.Method.POST, contentType);
+        /// <summary>
+        /// Puts the specified URL.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <param name="options">The options.</param>
+        /// <param name="contentType">Type of the content.</param>
+        /// <returns>Task&lt;dynamic&gt;.</returns>
         public Task<dynamic> put(string url, dynamic options = null, string contentType = null) => _request(url, null, options, Restler.Method.PUT, contentType);
+        /// <summary>
+        /// Deletes the specified URL.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <param name="options">The options.</param>
+        /// <param name="contentType">Type of the content.</param>
+        /// <returns>Task&lt;dynamic&gt;.</returns>
         public Task<dynamic> del(string url, dynamic options = null, string contentType = null) => _request(url, null, options, Restler.Method.DELETE, contentType);
+        /// <summary>
+        /// Heads the specified URL.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <param name="options">The options.</param>
+        /// <param name="contentType">Type of the content.</param>
+        /// <returns>Task&lt;dynamic&gt;.</returns>
         public Task<dynamic> head(string url, dynamic options = null, string contentType = null) => _request(url, null, options, Restler.Method.HEAD, contentType);
+        /// <summary>
+        /// Patches the specified URL.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <param name="options">The options.</param>
+        /// <param name="contentType">Type of the content.</param>
+        /// <returns>Task&lt;dynamic&gt;.</returns>
         public Task<dynamic> patch(string url, dynamic options = null, string contentType = null) => _request(url, null, options, Restler.Method.PATCH, contentType);
+        /// <summary>
+        /// Jsons the specified URL.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <param name="data">The data.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>Task&lt;dynamic&gt;.</returns>
         public Task<dynamic> json(string url, object data, dynamic options = null) => _request(url, data, options, Restler.Method.GET);
+        /// <summary>
+        /// Posts the json.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <param name="data">The data.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>Task&lt;dynamic&gt;.</returns>
         public Task<dynamic> postJson(string url, object data, dynamic options = null) => _request(url, data, options, Restler.Method.POST);
+        /// <summary>
+        /// Puts the json.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <param name="data">The data.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>Task&lt;dynamic&gt;.</returns>
         public Task<dynamic> putJson(string url, object data, dynamic options = null) => _request(url, data, options, Restler.Method.PUT);
 
         private async Task<dynamic> _request(string url, object data, dynamic options, Restler.Method method, string contentType = null)

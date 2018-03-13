@@ -25,6 +25,7 @@ namespace Hootsuite.Api
         /// <summary>
         /// Finds this instance.
         /// </summary>
+        /// <param name="options">The options.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         public Task<dynamic> Find(dynamic options = null)
         {
@@ -36,6 +37,7 @@ namespace Hootsuite.Api
         /// Finds the by identifier.
         /// </summary>
         /// <param name="socialProfileId">The social profile identifier.</param>
+        /// <param name="options">The options.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">socialProfileId</exception>
         public Task<dynamic> FindById(string socialProfileId, dynamic options = null)
@@ -50,6 +52,7 @@ namespace Hootsuite.Api
         /// Finds the by identifier teams.
         /// </summary>
         /// <param name="socialProfileId">The social profile identifier.</param>
+        /// <param name="options">The options.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">socialProfileId</exception>
         public Task<dynamic> FindByIdTeams(string socialProfileId, dynamic options = null)

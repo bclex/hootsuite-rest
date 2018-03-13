@@ -27,6 +27,7 @@ namespace Hootsuite.Api
         /// Finds the members.
         /// </summary>
         /// <param name="organizationId">The organization identifier.</param>
+        /// <param name="options">The options.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">organizationId</exception>
         public Task<dynamic> FindMembers(string organizationId, dynamic options = null)
@@ -42,6 +43,7 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="organizationId">The organization identifier.</param>
         /// <param name="memberId">The member identifier.</param>
+        /// <param name="options">The options.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">organizationId
         /// or
@@ -61,6 +63,7 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="organizationId">The organization identifier.</param>
         /// <param name="memberId">The member identifier.</param>
+        /// <param name="options">The options.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">organizationId
         /// or
@@ -80,6 +83,7 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="organizationId">The organization identifier.</param>
         /// <param name="memberId">The member identifier.</param>
+        /// <param name="options">The options.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">organizationId
         /// or
@@ -99,6 +103,7 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="organizationId">The organization identifier.</param>
         /// <param name="memberId">The member identifier.</param>
+        /// <param name="options">The options.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">organizationId
         /// or
@@ -119,6 +124,7 @@ namespace Hootsuite.Api
         /// <param name="organizationId">The organization identifier.</param>
         /// <param name="memberId">The member identifier.</param>
         /// <param name="socialProfileId">The social profile identifier.</param>
+        /// <param name="options">The options.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">organizationId
         /// or

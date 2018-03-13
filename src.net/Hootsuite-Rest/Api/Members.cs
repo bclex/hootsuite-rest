@@ -26,6 +26,7 @@ namespace Hootsuite.Api
         /// Finds the by identifier.
         /// </summary>
         /// <param name="memberId">The member identifier.</param>
+        /// <param name="options">The options.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">memberId</exception>
         public Task<dynamic> FindById(string memberId, dynamic options = null)
@@ -40,6 +41,7 @@ namespace Hootsuite.Api
         /// Creates the specified MSG.
         /// </summary>
         /// <param name="msg">The MSG.</param>
+        /// <param name="options">The options.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">msg</exception>
         public Task<dynamic> Create(dynamic msg, dynamic options = null)
@@ -64,6 +66,7 @@ namespace Hootsuite.Api
         /// Finds the by identifier orgs.
         /// </summary>
         /// <param name="memberId">The member identifier.</param>
+        /// <param name="options">The options.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">memberId</exception>
         public Task<dynamic> FindByIdOrgs(string memberId, dynamic options = null)

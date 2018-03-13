@@ -28,6 +28,7 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="organizationId">The organization identifier.</param>
         /// <param name="teamName">Name of the team.</param>
+        /// <param name="options">The options.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">organizationId
         /// or
@@ -52,6 +53,7 @@ namespace Hootsuite.Api
         /// <param name="organizationId">The organization identifier.</param>
         /// <param name="teamId">The team identifier.</param>
         /// <param name="memberId">The member identifier.</param>
+        /// <param name="options">The options.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">organizationId
         /// or
@@ -75,6 +77,7 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="organizationId">The organization identifier.</param>
         /// <param name="teamId">The team identifier.</param>
+        /// <param name="options">The options.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">organizationId
         /// or
@@ -95,6 +98,7 @@ namespace Hootsuite.Api
         /// <param name="organizationId">The organization identifier.</param>
         /// <param name="teamId">The team identifier.</param>
         /// <param name="memberId">The member identifier.</param>
+        /// <param name="options">The options.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">organizationId
         /// or
@@ -118,6 +122,7 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="organizationId">The organization identifier.</param>
         /// <param name="teamId">The team identifier.</param>
+        /// <param name="options">The options.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">organizationId
         /// or

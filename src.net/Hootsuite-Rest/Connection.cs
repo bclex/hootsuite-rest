@@ -18,7 +18,7 @@ namespace Hootsuite
     public class Connection
     {
         internal static readonly Regex HttpTestExp = new Regex(@"^https?://", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
-        readonly ApiUsage _lastApiUsage = new ApiUsage();
+        readonly LastResponseState _lastResponse = new LastResponseState();
         readonly Action<string> _log = util.logger;
         readonly Restler _rest = new Restler();
         readonly dynamic _options;
@@ -26,27 +26,47 @@ namespace Hootsuite
         JObject _tokenData;
 
         /// <summary>
-        /// Class ApiUsage.
+        /// Class LastResponseState.
         /// </summary>
-        public class ApiUsage
+        public class LastResponseState
         {
+            /// <summary>
+            /// Gets or sets the quota.
+            /// </summary>
+            /// <value>The quota.</value>
             public string Quota { get; set; }
+            /// <summary>
+            /// Gets or sets the quota used.
+            /// </summary>
+            /// <value>The quota used.</value>
             public int? QuotaUsed { get; set; }
+            /// <summary>
+            /// Gets or sets the rate limit requests remaining.
+            /// </summary>
+            /// <value>The rate limit requests remaining.</value>
             public int? RateLimitRequestsRemaining { get; set; }
         }
 
         /// <summary>
-        /// Gets the last API usage.
+        /// Gets the last response.
         /// </summary>
-        /// <value>The last API usage.</value>
-        public ApiUsage LastApiUsage => _lastApiUsage;
+        /// <value>The last response.</value>
+        public LastResponseState LastResponse => _lastResponse;
 
         /// <summary>
         /// Class LoginContext.
         /// </summary>
         public class LoginContext
         {
+            /// <summary>
+            /// Gets or sets the member identifier.
+            /// </summary>
+            /// <value>The member identifier.</value>
             public string memberId { get; set; }
+            /// <summary>
+            /// Gets or sets the organization identifier.
+            /// </summary>
+            /// <value>The organization identifier.</value>
             public string organizationId { get; set; }
         }
 
@@ -55,11 +75,35 @@ namespace Hootsuite
         /// </summary>
         public class FrameContext
         {
+            /// <summary>
+            /// Gets or sets the language.
+            /// </summary>
+            /// <value>The language.</value>
             public string lang { get; set; }
+            /// <summary>
+            /// Gets or sets the timezone.
+            /// </summary>
+            /// <value>The timezone.</value>
             public string timezone { get; set; }
+            /// <summary>
+            /// Gets or sets the pid.
+            /// </summary>
+            /// <value>The pid.</value>
             public string pid { get; set; }
+            /// <summary>
+            /// Gets or sets the uid.
+            /// </summary>
+            /// <value>The uid.</value>
             public string uid { get; set; }
+            /// <summary>
+            /// Gets or sets the ts.
+            /// </summary>
+            /// <value>The ts.</value>
             public string ts { get; set; }
+            /// <summary>
+            /// Gets or sets the token.
+            /// </summary>
+            /// <value>The token.</value>
             public string token { get; set; }
         }
 
@@ -240,9 +284,9 @@ namespace Hootsuite
             void onResponse(HttpResponseMessage res, string body)
             {
                 var headers = res.Headers;
-                _lastApiUsage.Quota = headers.TryGetValues("X-Account-Quota", out IEnumerable<string> values) ? values.FirstOrDefault() : null;
-                _lastApiUsage.QuotaUsed = headers.TryGetValues("X-Account-Quota-Used", out values) ? (int?)int.Parse(values.FirstOrDefault()) : null;
-                _lastApiUsage.RateLimitRequestsRemaining = headers.TryGetValues("X-Account-Rate-Limit-Requests-Remaining", out values) ? (int?)int.Parse(values.FirstOrDefault()) : null;
+                _lastResponse.Quota = headers.TryGetValues("X-Account-Quota", out IEnumerable<string> values) ? values.FirstOrDefault() : null;
+                _lastResponse.QuotaUsed = headers.TryGetValues("X-Account-Quota-Used", out values) ? (int?)int.Parse(values.FirstOrDefault()) : null;
+                _lastResponse.RateLimitRequestsRemaining = headers.TryGetValues("X-Account-Rate-Limit-Requests-Remaining", out values) ? (int?)int.Parse(values.FirstOrDefault()) : null;
                 OnResponse?.Invoke(this);
             }
         }

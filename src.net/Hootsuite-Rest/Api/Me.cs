@@ -24,6 +24,7 @@ namespace Hootsuite.Api
         /// <summary>
         /// Gets this instance.
         /// </summary>
+        /// <param name="options">The options.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         public Task<dynamic> Get(dynamic options = null)
         {
@@ -34,6 +35,7 @@ namespace Hootsuite.Api
         /// <summary>
         /// Gets the organizations.
         /// </summary>
+        /// <param name="options">The options.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         public Task<dynamic> GetOrganizations(dynamic options = null)
         {
@@ -44,6 +46,7 @@ namespace Hootsuite.Api
         /// <summary>
         /// Gets the social profiles.
         /// </summary>
+        /// <param name="options">The options.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         public Task<dynamic> GetSocialProfiles(dynamic options = null)
         {

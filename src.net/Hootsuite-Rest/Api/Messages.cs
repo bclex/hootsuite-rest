@@ -28,6 +28,7 @@ namespace Hootsuite.Api
         /// Schedules the specified MSG.
         /// </summary>
         /// <param name="msg">The MSG.</param>
+        /// <param name="options">The options.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">msg</exception>
         public Task<dynamic> Schedule(dynamic msg, dynamic options = null)
@@ -82,6 +83,7 @@ namespace Hootsuite.Api
         /// Finds the by identifier.
         /// </summary>
         /// <param name="messageId">The message identifier.</param>
+        /// <param name="options">The options.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">messageId</exception>
         public Task<dynamic> FindById(string messageId, dynamic options = null)
@@ -96,6 +98,7 @@ namespace Hootsuite.Api
         /// Deletes the by identifier.
         /// </summary>
         /// <param name="messageId">The message identifier.</param>
+        /// <param name="options">The options.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">messageId</exception>
         public Task<dynamic> DeleteById(string messageId, dynamic options = null)
@@ -112,6 +115,7 @@ namespace Hootsuite.Api
         /// <param name="messageId">The message identifier.</param>
         /// <param name="sequenceNumber">The sequence number.</param>
         /// <param name="reviewerType">Type of the reviewer.</param>
+        /// <param name="options">The options.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">messageId</exception>
         public Task<dynamic> ApproveById(string messageId, int sequenceNumber = 0, string reviewerType = null, dynamic options = null)
@@ -134,6 +138,7 @@ namespace Hootsuite.Api
         /// <param name="reason">The reason.</param>
         /// <param name="sequenceNumber">The sequence number.</param>
         /// <param name="reviewerType">Type of the reviewer.</param>
+        /// <param name="options">The options.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">messageId</exception>
         public Task<dynamic> RejectById(string messageId, string reason = null, int sequenceNumber = 0, string reviewerType = null, dynamic options = null)
@@ -154,6 +159,7 @@ namespace Hootsuite.Api
         /// Finds the by identifier history.
         /// </summary>
         /// <param name="messageId">The message identifier.</param>
+        /// <param name="options">The options.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">messageId</exception>
         public Task<dynamic> FindByIdHistory(string messageId, dynamic options = null)

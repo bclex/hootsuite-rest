@@ -5,15 +5,47 @@ using Newtonsoft.Json.Linq;
 
 namespace Hootsuite.Domain
 {
+    /// <summary>
+    /// Class SocialProfile.
+    /// </summary>
     public class SocialProfile
     {
+        /// <summary>
+        /// Gets or sets the identifier.
+        /// </summary>
+        /// <value>The identifier.</value>
         public string Id { get; set; }
+        /// <summary>
+        /// Gets or sets the type.
+        /// </summary>
+        /// <value>The type.</value>
         public string Type { get; set; }
+        /// <summary>
+        /// Gets or sets the social network identifier.
+        /// </summary>
+        /// <value>The social network identifier.</value>
         public string SocialNetworkId { get; set; }
+        /// <summary>
+        /// Gets or sets the social network username.
+        /// </summary>
+        /// <value>The social network username.</value>
         public string SocialNetworkUsername { get; set; }
+        /// <summary>
+        /// Gets or sets the avatar URL.
+        /// </summary>
+        /// <value>The avatar URL.</value>
         public string AvatarUrl { get; set; }
+        /// <summary>
+        /// Gets or sets the owner.
+        /// </summary>
+        /// <value>The owner.</value>
         public string Owner { get; set; }
 
+        /// <summary>
+        /// Froms the results.
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns>SocialProfile[].</returns>
         public static SocialProfile[] FromResults(JObject result) => result != null ? JsonConvert.DeserializeObject<SocialProfile[]>(result["data"].ToString(), HootsuiteClient.JsonSerializerSettings) : null;
 
         internal class ArrayConverter : JsonConverter

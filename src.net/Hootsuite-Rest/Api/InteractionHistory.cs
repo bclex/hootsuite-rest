@@ -12,7 +12,7 @@ namespace Hootsuite.Api
         readonly Connection _connection;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="InteractionHistory"/> class.
+        /// Initializes a new instance of the <see cref="InteractionHistory" /> class.
         /// </summary>
         /// <param name="hootsuite">The hootsuite.</param>
         /// <param name="connection">The connection.</param>
@@ -30,6 +30,7 @@ namespace Hootsuite.Api
         /// <param name="targetSocialNetworkId">The target social network identifier.</param>
         /// <param name="cursor">The cursor.</param>
         /// <param name="limit">The limit.</param>
+        /// <param name="options">The options.</param>
         /// <returns>Task&lt;dynamic&gt;.</returns>
         /// <exception cref="ArgumentNullException">socialNetworkType
         /// or

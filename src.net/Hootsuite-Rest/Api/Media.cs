@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace Hootsuite.Api
@@ -28,7 +27,8 @@ namespace Hootsuite.Api
         /// </summary>
         /// <param name="sizeBytes">The size bytes.</param>
         /// <param name="mimeType">Type of the MIME.</param>
-        /// <returns>Task&lt;JObject&gt;.</returns>
+        /// <param name="options">The options.</param>
+        /// <returns>Task&lt;dynamic&gt;.</returns>
         public Task<dynamic> CreateUrl(int sizeBytes, string mimeType = "video/mp4", dynamic options = null)
         {
             var path = util.createPath("media");
@@ -44,7 +44,8 @@ namespace Hootsuite.Api
         /// Statuses the by identifier.
         /// </summary>
         /// <param name="mediaId">The media identifier.</param>
-        /// <returns>Task&lt;JObject&gt;.</returns>
+        /// <param name="options">The options.</param>
+        /// <returns>Task&lt;dynamic&gt;.</returns>
         /// <exception cref="ArgumentNullException">mediaId</exception>
         public Task<dynamic> StatusById(string mediaId, dynamic options = null)
         {
