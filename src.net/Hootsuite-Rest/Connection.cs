@@ -53,7 +53,7 @@ namespace Hootsuite
         public Connection(dynamic options)
         {
             _options = options ?? new { };
-            _tokenData = dyn.getProp<string>(_options, "accessToken") != null ? dyn.ToJObject(new { access_token = dyn.getProp<string>(_options, "accessToken") }) : null;
+            _tokenData = !string.IsNullOrEmpty(dyn.getProp<string>(_options, "accessToken")) ? dyn.ToJObject(new { access_token = dyn.getProp<string>(_options, "accessToken") }) : null;
             _retry = new Retry(dyn.getProp(_options, "retry", new { }));
         }
 
