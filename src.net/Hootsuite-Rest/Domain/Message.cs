@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 
 namespace Hootsuite.Domain
 {
@@ -22,7 +24,7 @@ namespace Hootsuite.Domain
         /// Gets or sets the scheduled send time.
         /// </summary>
         /// <value>The scheduled send time.</value>
-        public DateTime ScheduledSendTime { get; set; }
+        public DateTime? ScheduledSendTime { get; set; }
         /// <summary>
         /// Gets or sets the text.
         /// </summary>
@@ -32,7 +34,7 @@ namespace Hootsuite.Domain
         /// Gets or sets a value indicating whether [email notification].
         /// </summary>
         /// <value><c>true</c> if [email notification]; otherwise, <c>false</c>.</value>
-        public bool EmailNotification { get; set; }
+        public bool? EmailNotification { get; set; }
         /// <summary>
         /// Gets or sets the social profile.
         /// </summary>
@@ -99,5 +101,36 @@ namespace Hootsuite.Domain
         /// </summary>
         /// <value>The created by member.</value>
         public Member CreatedByMember { get; set; }
+
+        /// <summary>
+        /// Froms the results.
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns>Message[].</returns>
+        public static Message[] FromResults(JObject result) => result != null ? JsonConvert.DeserializeObject<Message[]>(result["data"].ToString(), HootsuiteClient.JsonSerializerSettings) : null;
+
+        /// <summary>
+        /// Clones the by social profile.
+        /// </summary>
+        /// <returns>IEnumerable&lt;Message&gt;.</returns>
+        public IEnumerable<Message> CloneBySocialProfile()
+        {
+            foreach (var socialProfile in SocialProfile)
+            {
+                var msg = DeepClone();
+                msg.SocialProfile = new[] { socialProfile };
+                yield return msg;
+            }
+        }
+
+        /// <summary>
+        /// Deeps the clone.
+        /// </summary>
+        /// <returns>Message.</returns>
+        public Message DeepClone()
+        {
+            var serialized = JsonConvert.SerializeObject(this);
+            return JsonConvert.DeserializeObject<Message>(serialized);
+        }
     }
 }

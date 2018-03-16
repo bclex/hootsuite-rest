@@ -1,4 +1,5 @@
-﻿using Hootsuite.Require;
+﻿using Hootsuite.Domain;
+using Hootsuite.Require;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -49,6 +50,35 @@ namespace Hootsuite.Api
                 emailNotification = dyn.getProp<bool?>(msg, "emailNotification"),
                 mediaUrls = dyn.getProp<string>(msg, "mediaUrls"),
                 media = dyn.getProp<string>(msg, "media"),
+            };
+            return _connection.postJson(path, data, options);
+        }
+
+        /// <summary>
+        /// Schedules the specified MSG.
+        /// </summary>
+        /// <param name="msg">The MSG.</param>
+        /// <param name="options">The options.</param>
+        /// <returns>Task&lt;dynamic&gt;.</returns>
+        /// <exception cref="System.ArgumentNullException">msg</exception>
+        public Task<dynamic> Schedule(Message msg, dynamic options = null)
+        {
+            if (msg == null)
+                throw new ArgumentNullException(nameof(msg));
+            var path = util.createPath("messages");
+            var data = new
+            {
+                text = msg.Text,
+                socialProfileIds = msg.SocialProfile?.Select(x => x.Id).ToArray(),
+                scheduledSendTime = msg.ScheduledSendTime,
+                webhookUrls = msg.WebhookUrls,
+                tags = msg.Tags,
+                targeting = msg.Targeting,
+                privacy = msg.Privacy,
+                location = msg.Location,
+                emailNotification = msg.EmailNotification,
+                //mediaUrls = message.MediaUrls?.Select(x => x.Url).ToArray(),
+                media = msg.Media,
             };
             return _connection.postJson(path, data, options);
         }

@@ -68,7 +68,7 @@
     <Compile Include="Api\Scim.cs" />
     <Compile Include="Api\SocialProfiles.cs" />
     <Compile Include="Api\Teams.cs" />
-    <Compile Include="Domain\EventMessage.cs" />
+    <Compile Include="Domain\Event.cs" />
     <Compile Include="Domain\Location.cs" />
     <Compile Include="Domain\Interaction.cs" />
     <Compile Include="Domain\Media.cs" />
