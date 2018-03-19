@@ -13,7 +13,7 @@
     <PackageProjectUrl>https://github.com/BclEx/hootsuite-rest</PackageProjectUrl>
     <RepositoryUrl>https://github.com/BclEx/hootsuite-rest</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <VersionPrefix>0.0.3</VersionPrefix>
+    <VersionPrefix>0.0.4</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
