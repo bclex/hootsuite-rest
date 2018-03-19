@@ -10,7 +10,7 @@ var testProject = File("./src.net/Hootsuite-Rest.Tests/Hootsuite-Rest.Tests.NetC
 var projects = new[] { mainProject, testProject };
 var artifactsDirectory = Directory("./_artifacts");
 var revision = AppVeyor.IsRunningOnAppVeyor ? AppVeyor.Environment.Build.Number : 0;
-var version = AppVeyor.IsRunningOnAppVeyor ? new Version(AppVeyor.Environment.Build.Version.Split('-')[0]).ToString(3) : "0.0.3";
+var version = AppVeyor.IsRunningOnAppVeyor ? new Version(AppVeyor.Environment.Build.Version.Split('-')[0]).ToString(3) : "0.0.4";
 var globalAssemblyInfo = File("./src.net/GlobalAssemblyVersion.cs");
 
 var generatedVersion = "";
