@@ -27,7 +27,7 @@ namespace Hootsuite.Domain
         /// Gets or sets the external message identifier.
         /// </summary>
         /// <value>The external message identifier.</value>
-        public long ExternalMessageId { get; set; }
+        public string ExternalMessageId { get; set; }
         /// <summary>
         /// Gets or sets the type.
         /// </summary>
