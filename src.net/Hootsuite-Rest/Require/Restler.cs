@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Serialization;
 
 //https://github.com/danwrong/restler
 namespace Hootsuite.Require
@@ -158,7 +159,8 @@ namespace Hootsuite.Require
         /// <returns>Task&lt;System.Object&gt;.</returns>
         public async Task<object> json(string url, object data, dynamic options, Method method = Method.GET, Action<HttpResponseMessage, string> onResponse = null, Func<string, string> fixup = null)
         {
-            var dataAsJson = JsonConvert.SerializeObject(data, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            var dataAsJson = JsonConvert.SerializeObject(data, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore,
+                ContractResolver = new CamelCasePropertyNamesContractResolver { NamingStrategy = new CamelCaseNamingStrategy() } });
             if (fixup != null) dataAsJson = fixup(dataAsJson);
             options = dyn.exp(options);
             options.data = dataAsJson;

@@ -77,7 +77,7 @@ namespace Hootsuite.Api
                 privacy = msg.Privacy,
                 location = msg.Location,
                 emailNotification = msg.EmailNotification,
-                //mediaUrls = message.MediaUrls?.Select(x => x.Url).ToArray(),
+                mediaUrls = msg.MediaUrls,
                 media = msg.Media,
             };
             return _connection.postJson(path, data, options);
