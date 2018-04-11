@@ -60,7 +60,8 @@ namespace Hootsuite
 
         public static bool isExpiredToken(Exception err)
         {
-            return hasPlatformErrorCode(err, (int)errorCodes.TOKEN_ERROR);
+            return err.Message.Contains("Token expired") ||
+                hasPlatformErrorCode(err, (int)errorCodes.TOKEN_ERROR);
         }
 
         public static bool isRateLimited(Exception err)
