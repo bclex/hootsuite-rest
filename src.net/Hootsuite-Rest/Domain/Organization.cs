@@ -1,4 +1,7 @@
-﻿namespace Hootsuite.Domain
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
+namespace Hootsuite.Domain
 {
     /// <summary>
     /// Class Organization.
@@ -10,5 +13,12 @@
         /// </summary>
         /// <value>The identifier.</value>
         public long Id { get; set; }
+
+        /// <summary>
+        /// Froms the results.
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns>Organization[].</returns>
+        public static Organization[] FromResults(JObject result) => result != null ? JsonConvert.DeserializeObject<Organization[]>(result["data"].ToString(), HootsuiteClient.JsonSerializerSettings) : null;
     }
 }
