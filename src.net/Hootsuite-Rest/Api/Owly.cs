@@ -1,7 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.IO;
+﻿using System;
 using System.Threading.Tasks;
+using Hootsuite.Require;
 
 namespace Hootsuite.Api
 {
@@ -34,8 +33,14 @@ namespace Hootsuite.Api
         {
             if (longUrl == null)
                 throw new ArgumentNullException(nameof(longUrl));
+
             var path = util.createOwlyPath("url", "shorten");
-            return _connection.get(path, new { longUrl });
+            var query = Restler.GetQuery(null, new
+            {
+                apiKey = _connection.ApiKey,
+                longUrl
+            });
+            return _connection.get(path, new { query });
         }
 
         /// <summary>
@@ -48,12 +53,19 @@ namespace Hootsuite.Api
         {
             if (shortUrl == null)
                 throw new ArgumentNullException(nameof(shortUrl));
-            var path = util.createPath("url", "expand");
-            return _connection.get(path, new { shortUrl });
+
+            var path = util.createOwlyPath("url", "expand");
+            var query = Restler.GetQuery(null, new
+            {
+                apiKey = _connection.ApiKey,
+                shortUrl
+            });
+            return _connection.get(path, new { query });
         }
 
+
         /// <summary>
-        /// Gets the information.
+        /// Gets Info.
         /// </summary>
         /// <param name="shortUrl">The short URL.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
@@ -62,8 +74,13 @@ namespace Hootsuite.Api
         {
             if (shortUrl == null)
                 throw new ArgumentNullException(nameof(shortUrl));
-            var path = util.createPath("url", "info");
-            return _connection.get(path, new { shortUrl });
+            var path = util.createOwlyPath("url", "info");
+            var query = Restler.GetQuery(null, new
+            {
+                apiKey = _connection.ApiKey,
+                shortUrl
+            });
+            return _connection.get(path, new { query });
         }
 
         /// <summary>
@@ -78,46 +95,82 @@ namespace Hootsuite.Api
         {
             if (shortUrl == null)
                 throw new ArgumentNullException(nameof(shortUrl));
-            var path = util.createPath("url", "clickStats");
-            return _connection.get(path, new { shortUrl, from, to });
+            var path = util.createOwlyPath("url", "clickStats");
+            //YYYY-MM-DD HH:mm:SS
+            var query = Restler.GetQuery(null, new
+            {
+                apiKey = _connection.ApiKey,
+                shortUrl,
+                from = from?.ToString("yyyy-MM-dd HH:mm:ss"),
+                to = to?.ToString("yyyy-MM-dd HH:mm:ss")
+            });
+
+            return _connection.get(path, new { query });
         }
 
         /// <summary>
         /// Uploads the photo.
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
-        /// <param name="uploaded_file">The uploaded file.</param>
+        /// <param name="fileUrl">The file uri.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">fileName
         /// or
         /// uploaded_file</exception>
-        public Task<dynamic> UploadPhoto(string fileName, Stream uploaded_file)
+        public Task<dynamic> UploadPhoto(string fileUrl, string fileName = null)
         {
-            if (fileName == null)
-                throw new ArgumentNullException(nameof(fileName));
-            if (uploaded_file == null)
-                throw new ArgumentNullException(nameof(uploaded_file));
-            var path = util.createPath("photo", "upload");
-            return _connection.post(path, new { fileName, uploaded_file });
+            if (fileUrl == null)
+                throw new ArgumentNullException(nameof(fileUrl));
+
+            if (fileName == null) {
+                var uri = new Uri(fileUrl);
+                fileName = System.IO.Path.GetFileName(uri.LocalPath);
+            }
+
+            var path = util.createOwlyPath("photo", "upload");
+            dynamic options = new
+            {
+                upload = new
+                {
+                    apiKey = _connection.ApiKey,
+                    fileName,
+                    fileUrl
+                }
+            };
+            return _connection.post(path, options);
         }
 
         /// <summary>
         /// Uploads the document.
         /// </summary>
-        /// <param name="fileName">Name of the file.</param>
-        /// <param name="uploaded_file">The uploaded file.</param>
+        /// <param name="fileUrl">The file url.</param>
+        /// <param name="fileName">The file name.</param>
         /// <returns>Task&lt;JObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">fileName
         /// or
         /// uploaded_file</exception>
-        public Task<dynamic> UploadDoc(string fileName, Stream uploaded_file)
+        public Task<dynamic> UploadDoc(string fileUrl, string fileName = null)
         {
+            if (fileUrl == null)
+                throw new ArgumentNullException(nameof(fileUrl));
+
             if (fileName == null)
-                throw new ArgumentNullException(nameof(fileName));
-            if (uploaded_file == null)
-                throw new ArgumentNullException(nameof(uploaded_file));
-            var path = util.createPath("doc", "upload");
-            return _connection.post(path, new { fileName, uploaded_file });
+            {
+                var uri = new Uri(fileUrl);
+                fileName = System.IO.Path.GetFileName(uri.LocalPath);
+            }
+
+            var path = util.createOwlyPath("doc", "upload");
+            dynamic options = new
+            {
+                upload = new
+                {
+                    apiKey = _connection.ApiKey,
+                    fileName,
+                    fileUrl
+                }
+            };
+            return _connection.post(path, options);
         }
     }
 }

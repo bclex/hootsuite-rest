@@ -2,7 +2,9 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -77,6 +79,8 @@ namespace Hootsuite.Require
                 content = options.data is string ?
                     (HttpContent)new StringContent(options.data, Encoding.UTF8, contentType) :
                     new FormUrlEncodedContent(dyn.getDataAsString(options.data));
+            else if (dyn.hasProp(options, "content") && options.content != null)
+                content = dyn.getProp<HttpContent>(options, "content");
             // request
             var req = new HttpRequestMessage(new HttpMethod(method.ToString()), uri) { Content = content };
             // headers
@@ -159,8 +163,11 @@ namespace Hootsuite.Require
         /// <returns>Task&lt;System.Object&gt;.</returns>
         public async Task<object> json(string url, object data, dynamic options, Method method = Method.GET, Action<HttpResponseMessage, string> onResponse = null, Func<string, string> fixup = null)
         {
-            var dataAsJson = JsonConvert.SerializeObject(data, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = new CamelCasePropertyNamesContractResolver { NamingStrategy = new CamelCaseNamingStrategy() } });
+            var dataAsJson = JsonConvert.SerializeObject(data, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                ContractResolver = new CamelCasePropertyNamesContractResolver { NamingStrategy = new CamelCaseNamingStrategy() }
+            });
             if (fixup != null) dataAsJson = fixup(dataAsJson);
             options = dyn.exp(options);
             options.data = dataAsJson;
@@ -212,6 +219,87 @@ namespace Hootsuite.Require
             })
             .Aggregate((a, b) => (string.IsNullOrEmpty(a) ? b : string.Format("{0}&{1}", a, b)));
             return path != null ? string.Format("{0}?{1}", path, parameters) : parameters;
+        }
+
+        static MultipartFormDataContent GetMultipartFormData(Dictionary<string, object> postParameters, string boundary, string url)
+        {
+            var encoding = Encoding.UTF8;
+            Stream formDataStream = new System.IO.MemoryStream();
+            bool needsCLRF = false;
+
+            foreach (var param in postParameters)
+            {
+                // Thanks to feedback from commenters, add a CRLF to allow multiple parameters to be added.
+                // Skip it on the first parameter, add it to subsequent parameters.
+                if (needsCLRF)
+                    formDataStream.Write(encoding.GetBytes("\r\n"), 0, encoding.GetByteCount("\r\n"));
+
+                needsCLRF = true;
+
+                if (param.Value is FileParameter)
+                {
+                    FileParameter fileToUpload = (FileParameter)param.Value;
+
+                    // Add just the first part of this param, since we will write the file data directly to the Stream
+                    string header = string.Format("--{0}\r\nContent-Disposition: form-data; name=\"{1}\"; filename=\"{2}\"\r\nContent-Type: {3}\r\n\r\n",
+                        boundary,
+                        param.Key,
+                        fileToUpload.FileName ?? param.Key,
+                        fileToUpload.ContentType ?? "application/octet-stream");
+
+                    formDataStream.Write(encoding.GetBytes(header), 0, encoding.GetByteCount(header));
+
+                    // Write the file data directly to the Stream, rather than serializing it to a string.
+                    formDataStream.Write(fileToUpload.File, 0, fileToUpload.File.Length);
+                }
+                else
+                {
+                    string postData = string.Format("--{0}\r\nContent-Disposition: form-data; name=\"{1}\"\r\n\r\n{2}",
+                        boundary,
+                        param.Key,
+                        param.Value);
+                    formDataStream.Write(encoding.GetBytes(postData), 0, encoding.GetByteCount(postData));
+                }
+            }
+
+            // Add the end of the request.  Start with a newline
+            string footer = "\r\n--" + boundary + "--\r\n";
+            formDataStream.Write(encoding.GetBytes(footer), 0, encoding.GetByteCount(footer));
+
+            // Dump the Stream into a byte[]
+            formDataStream.Position = 0;
+            byte[] formData = new byte[formDataStream.Length];
+            formDataStream.Read(formData, 0, formData.Length);
+            formDataStream.Close();
+
+            var multiPartContent = new MultipartFormDataContent(boundary);
+            var byteArrayContent = new ByteArrayContent(formData);
+            multiPartContent.Add(byteArrayContent);
+
+            return multiPartContent;
+        }
+        internal byte[] DownloadFileBytes(string imageUrl, out string mimeType)
+        {
+            var buffer = new byte[4096];
+
+            HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(imageUrl);
+
+            using (WebResponse wr = webRequest.GetResponse()) {
+                mimeType = wr.ContentType;
+                using (Stream responseStream = wr.GetResponseStream())
+                {
+                    using (MemoryStream memoryStream = new MemoryStream())
+                    {
+                        int count = 0;
+                        do
+                        {
+                            count = responseStream.Read(buffer, 0, buffer.Length);
+                            memoryStream.Write(buffer, 0, count);
+                        } while (count != 0);
+                        return memoryStream.ToArray();
+                    }
+                }
+            }
         }
     }
 }
