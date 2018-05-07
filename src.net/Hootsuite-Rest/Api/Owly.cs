@@ -130,7 +130,7 @@ namespace Hootsuite.Api
             var path = util.createOwlyPath("photo", "upload");
             dynamic options = new
             {
-                timeout = 10000,
+                timeout = 20000,
                 upload = new
                 {
                     apiKey = _connection.ApiKey,

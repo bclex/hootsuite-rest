@@ -41,7 +41,7 @@ namespace Hootsuite.Domain
             /// Gets or sets the state.
             /// </summary>
             /// <value>The state.</value>
-            public MessageState State { get; set; }
+            public EventState State { get; set; }
             /// <summary>
             /// Gets or sets the organization.
             /// </summary>
@@ -57,6 +57,45 @@ namespace Hootsuite.Domain
             /// </summary>
             /// <value>The timestamp.</value>
             public DateTime Timestamp { get; set; }
+        }
+
+        /// <summary>
+        /// Enum EventState
+        /// </summary>
+        public enum EventState
+        {
+            /// <summary>
+            /// The scheduled
+            /// </summary>
+            SCHEDULED,
+            /// <summary>
+            /// The pending approval
+            /// </summary>
+            PENDING_APPROVAL,
+            /// <summary>
+            /// The approved
+            /// </summary>
+            APPROVED,
+            /// <summary>
+            /// The submitted
+            /// </summary>
+            SUBMITTED,
+            /// <summary>
+            /// The sent
+            /// </summary>
+            SENT,
+            /// <summary>
+            /// The send failed permanently
+            /// </summary>
+            SEND_FAILED_PERMANENTLY,
+            /// <summary>
+            /// The deleted
+            /// </summary>
+            DELETED,
+            /// <summary>
+            /// The rejected
+            /// </summary>
+            REJECTED
         }
     }
 }
