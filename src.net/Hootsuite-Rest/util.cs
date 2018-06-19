@@ -27,8 +27,8 @@ namespace Hootsuite
 
         public static Action<string> logger
         {
-            get { return _logger; }
-            set { _logger = value ?? throw new ArgumentNullException("value"); }
+            get => _logger;
+            set => _logger = value ?? throw new ArgumentNullException("value");
         }
     }
 }

@@ -124,8 +124,8 @@ namespace Hootsuite
         /// <value>The access token.</value>
         public string AccessToken
         {
-            get { return _tokenData != null ? (string)_tokenData["access_token"] : null; }
-            set { _tokenData = !string.IsNullOrEmpty(value) ? dyn.ToJObject(new { access_token = value }) : null; }
+            get => _tokenData != null ? (string)_tokenData["access_token"] : null;
+            set => _tokenData = !string.IsNullOrEmpty(value) ? dyn.ToJObject(new { access_token = value }) : null;
         }
 
         /// <summary>
@@ -229,7 +229,7 @@ namespace Hootsuite
         /// <returns>Task&lt;dynamic&gt;.</returns>
         public Task<dynamic> putJson(string url, object data, dynamic options = null) => _request(url, data, options, Restler.Method.PUT);
 
-        private async Task<dynamic> _request(string url, object data, dynamic options, Restler.Method method, string contentType = null)
+        async Task<dynamic> _request(string url, object data, dynamic options, Restler.Method method, string contentType = null)
         {
             options = dyn.exp(options, true);
             if (!HttpTestExp.IsMatch(url))
@@ -237,7 +237,7 @@ namespace Hootsuite
                 var baseUrl = dyn.getProp(_options, "url", config.api_url);
                 url = baseUrl + url;
             }
-            _log($"Request: {url}");
+            _log($"Request: {url}\n");
             Func<Task<JObject>, Task<JObject>> requestFn = async (x) =>
             {
                 if (!x.IsFaulted)
@@ -248,18 +248,30 @@ namespace Hootsuite
                     try
                     {
                         Func<string, string> fixup = y => y.Replace("scim__user", "urn:ietf:params:scim:schemas:extension:Hootsuite:2.0:User");
-                        var d = data == null ? (JObject)await _rest.request(url, options, method, contentType, (Action<HttpResponseMessage, string>)onResponse) : await _rest.json(url, data, options, method, (Action<HttpResponseMessage, string>)onResponse, fixup: fixup);
-                        if (d["errors"] != null)
+                        dynamic d;
+                        if (method == Restler.Method.DELETE)
                         {
-                            _log($"Request failed: {d}");
+                            d = await _rest.request(url, options, method, contentType, (Action<HttpResponseMessage, string>)onResponse);
+                            if (d is string)
+                                d = new JObject();
+                        }
+                        else
+                        {
+                            d = data == null
+                                   ? (JObject)await _rest.request(url, options, method, contentType, (Action<HttpResponseMessage, string>)onResponse)
+                                   : await _rest.json(url, data, options, method, (Action<HttpResponseMessage, string>)onResponse, fixup: fixup);
+                        }
+                        if (dyn.hasProp(d, "errors"))
+                        {
+                            _log($"Request failed: {d}\n");
                             throw new HootsuiteException(HttpStatusCode.OK, d["errors"]);
                         }
-                        return (dynamic)d;
+                        return d;
                     }
                     catch (RestlerOperationException res)
                     {
                         var err = (JObject)res.Content;
-                        if (err != null && err["errors"] != null) { _log($"Request failed: {err}"); throw; }
+                        if (err != null && err["error"] != null) { _log($"Request failed: {err}\n"); throw; }
                         else
                         {
                             var e = res.E;
@@ -275,7 +287,7 @@ namespace Hootsuite
                 else
                 {
                     var err = x.Exception;
-                    _log($"_request failed: {err}"); throw err;
+                    _log($"_request failed: {err}\n"); throw err;
                 }
             };
             Func<bool, Task<JObject>> requestFn2 = async (forceOAuth) => await requestFn(GetOAuthToken(forceOAuth));
@@ -291,7 +303,7 @@ namespace Hootsuite
             }
         }
 
-        private async Task<JObject> GetOAuthToken(bool force = false)
+        async Task<JObject> GetOAuthToken(bool force = false)
         {
             if (force || _tokenData == null)
             {
@@ -322,18 +334,18 @@ namespace Hootsuite
                     {
                         var x = await _rest.post($"{baseUrl}/oauth2/token", options);
                         var data = (JObject)x;
-                        _log($"Got token: {data}");
+                        _log($"Got token: {data}\n");
                         _tokenData = data;
                         OnAccessToken?.Invoke(this);
                         return data;
                     }
-                    catch (Exception err) { _log($"GetOAuthToken failed: {err}"); throw err; }
+                    catch (Exception err) { _log($"GetOAuthToken failed: {err}\n"); throw err; }
                 };
                 return await _retry.start(requestFn);
             }
             else
             {
-                _log($"Using existing token: {_tokenData}");
+                _log($"Using existing token: {_tokenData}\n");
                 return _tokenData;
             }
         }

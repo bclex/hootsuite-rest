@@ -19,14 +19,14 @@ namespace Hootsuite
         static bool hasPlatformErrorCode(Exception err, int code)
         {
             return isPlatformError(err, out JArray errors) &&
-                errors.FirstOrDefault(x => (int)x["code"] == code) != null;
+                   errors.FirstOrDefault(x => (int) x["code"] == code) != null;
         }
 
         static bool isPlatformError(Exception err, out JArray errors)
         {
             if (err is HootsuiteException)
             {
-                errors = ((HootsuiteException)err).Errors;
+                errors = new JArray(((HootsuiteException)err).Error);
                 return true;
             }
             // other error
@@ -61,7 +61,6 @@ namespace Hootsuite
         public static bool isExpiredToken(Exception err)
         {
             return err.Message.Contains("Token expired") ||
-                   err.Message.Contains("could not be authorized") ||
                 hasPlatformErrorCode(err, (int)errorCodes.TOKEN_ERROR);
         }
 

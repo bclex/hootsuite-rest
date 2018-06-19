@@ -1,6 +1,7 @@
 ﻿using Hootsuite.Require;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -21,9 +22,9 @@ namespace Hootsuite
             _newBackoff = NewBackoff();
         }
 
-        int NumRetries { get { return dyn.getProp(_options, "maxRetries", DefaultRetryCount); } }
-        int InitialDelay { get { return dyn.getProp(_options, "initialDelay", DefaultInitialDelay); } }
-        int MaxDelay { get { return dyn.getProp(_options, "maxDelay", DefaultMaxDelay); } }
+        int NumRetries => dyn.getProp(_options, "maxRetries", DefaultRetryCount);
+        int InitialDelay => dyn.getProp(_options, "initialDelay", DefaultInitialDelay);
+        int MaxDelay => dyn.getProp(_options, "maxDelay", DefaultMaxDelay);
 
         Exception _lastError;
         internal Task<JObject> start(Func<bool, Task<JObject>> fetchFn)
@@ -51,10 +52,16 @@ namespace Hootsuite
                         return;
                     }
                     var e = (err as RestlerOperationException);
+                    // Previous error structure
                     if (e != null && e.Content != null && e.Content is JObject && ((JObject)e.Content)["errors"] is JArray)
                         err = e.StatusCode == HttpStatusCode.Unauthorized || e.StatusCode == HttpStatusCode.Forbidden ?
-                            new HootsuiteSecurityException(e.StatusCode, (JArray)((JObject)e.Content)["errors"]) :
-                            new HootsuiteException(e.StatusCode, (JArray)((JObject)e.Content)["errors"]);
+                            new HootsuiteSecurityException(e.StatusCode, (JObject)((JObject)e.Content)["errors"].FirstOrDefault()) :
+                            new HootsuiteException(e.StatusCode, (JObject)((JObject)e.Content)["errors"].FirstOrDefault());
+                    // New error structure
+                    else if (e != null && e.Content != null && e.Content is JObject && ((JObject)e.Content)["error"] is JToken)
+                        err = e.StatusCode == HttpStatusCode.Unauthorized || e.StatusCode == HttpStatusCode.Forbidden ?
+                            new HootsuiteSecurityException(e.StatusCode, (JObject)e.Content) :
+                            new HootsuiteException(e.StatusCode, (JObject)e.Content);
                     promise.SetException(err);
                 }
             }

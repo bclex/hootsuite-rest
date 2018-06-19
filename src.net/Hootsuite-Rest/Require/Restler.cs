@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,7 +10,6 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Serialization;
 
 //https://github.com/danwrong/restler
 namespace Hootsuite.Require
@@ -71,7 +71,8 @@ namespace Hootsuite.Require
             if (dyn.hasProp(options, "query") && string.IsNullOrEmpty(uri.Query))
             {
                 var query = options.query is string ? options.query : GetQuery(null, options.query);
-                var b = new UriBuilder(uri); b.Query = query; uri = b.Uri;
+                var b = new UriBuilder(uri) { Query = query };
+                uri = b.Uri;
             }
             // data
             HttpContent content = null;
@@ -214,11 +215,11 @@ namespace Hootsuite.Require
         {
             var parameters = dyn.getDataAsString(s).Select(a =>
             {
-                try { return string.Format("{0}={1}", Uri.EscapeDataString(a.Key), Uri.EscapeDataString(a.Value)); }
-                catch (Exception ex) { throw new InvalidOperationException(string.Format("Failed when processing '{0}'.", a), ex); }
+                try { return $"{Uri.EscapeDataString(a.Key)}={Uri.EscapeDataString(a.Value)}"; }
+                catch (Exception ex) { throw new InvalidOperationException($"Failed when processing '{a}'.", ex); }
             })
-            .Aggregate((a, b) => (string.IsNullOrEmpty(a) ? b : string.Format("{0}&{1}", a, b)));
-            return path != null ? string.Format("{0}?{1}", path, parameters) : parameters;
+            .Aggregate((a, b) => (string.IsNullOrEmpty(a) ? b : $"{a}&{b}"));
+            return path != null ? $"{path}?{parameters}" : parameters;
         }
 
         static MultipartFormDataContent GetMultipartFormData(Dictionary<string, object> postParameters, string boundary, string url)
@@ -241,11 +242,8 @@ namespace Hootsuite.Require
                     FileParameter fileToUpload = (FileParameter)param.Value;
 
                     // Add just the first part of this param, since we will write the file data directly to the Stream
-                    string header = string.Format("--{0}\r\nContent-Disposition: form-data; name=\"{1}\"; filename=\"{2}\"\r\nContent-Type: {3}\r\n\r\n",
-                        boundary,
-                        param.Key,
-                        fileToUpload.FileName ?? param.Key,
-                        fileToUpload.ContentType ?? "application/octet-stream");
+                    var header =
+                        $"--{boundary}\r\nContent-Disposition: form-data; name=\"{param.Key}\"; filename=\"{fileToUpload.FileName ?? param.Key}\"\r\nContent-Type: {fileToUpload.ContentType ?? "application/octet-stream"}\r\n\r\n";
 
                     formDataStream.Write(encoding.GetBytes(header), 0, encoding.GetByteCount(header));
 
@@ -254,10 +252,7 @@ namespace Hootsuite.Require
                 }
                 else
                 {
-                    string postData = string.Format("--{0}\r\nContent-Disposition: form-data; name=\"{1}\"\r\n\r\n{2}",
-                        boundary,
-                        param.Key,
-                        param.Value);
+                    var postData = $"--{boundary}\r\nContent-Disposition: form-data; name=\"{param.Key}\"\r\n\r\n{param.Value}";
                     formDataStream.Write(encoding.GetBytes(postData), 0, encoding.GetByteCount(postData));
                 }
             }
@@ -284,11 +279,11 @@ namespace Hootsuite.Require
 
             HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(imageUrl);
 
-            using (WebResponse wr = webRequest.GetResponse()) {
+            using (var wr = webRequest.GetResponse()) {
                 mimeType = wr.ContentType;
-                using (Stream responseStream = wr.GetResponseStream())
+                using (var responseStream = wr.GetResponseStream())
                 {
-                    using (MemoryStream memoryStream = new MemoryStream())
+                    using (var memoryStream = new MemoryStream())
                     {
                         int count = 0;
                         do

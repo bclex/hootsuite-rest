@@ -70,7 +70,7 @@ namespace Hootsuite.Api
             {
                 text = msg.Text,
                 socialProfileIds = msg.SocialProfile?.Select(x => x.Id).ToArray(),
-                scheduledSendTime = msg.ScheduledSendTime != null ? msg.ScheduledSendTime.Value.ToString("o") : null,
+                scheduledSendTime = msg.ScheduledSendTime?.ToString("o"),
                 webhookUrls = msg.WebhookUrls,
                 tags = msg.Tags,
                 targeting = msg.Targeting,

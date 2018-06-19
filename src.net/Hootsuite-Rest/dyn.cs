@@ -164,7 +164,7 @@ namespace Hootsuite
                 _object = sealedObject;
             }
 
-            private PropertyInfo GetPropertyInfo(string propertyName)
+            PropertyInfo GetPropertyInfo(string propertyName)
             {
                 return _object != null ? _object.GetType().GetProperties().FirstOrDefault(propertyInfo => propertyInfo.Name == propertyName) : null;
             }
