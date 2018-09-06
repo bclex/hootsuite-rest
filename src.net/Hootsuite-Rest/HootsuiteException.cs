@@ -12,6 +12,8 @@ namespace Hootsuite
     {
         internal HootsuiteException(HttpStatusCode statusCode, dynamic error)
             : this(statusCode, GetErrorCode((object)(error.code ?? error.statusCode)), (string)(error.message ?? error.error_description), (string)error.id, (object)error.resource) { Error = error; }
+        internal HootsuiteException(HttpStatusCode statusCode, string message)
+            : this(statusCode, 0, message, null, null) { }
         internal HootsuiteException(HttpStatusCode statusCode, int code, string message, string id, object resource)
             : base(message)
         {
@@ -26,8 +28,9 @@ namespace Hootsuite
             if (obj == null)
                 return 0;
 
-            if (obj is int) {
-                return (int) obj;
+            if (obj is int)
+            {
+                return (int)obj;
             }
 
             return int.TryParse(obj.ToString(), out var i) ? i : 0;

@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 
 namespace Hootsuite.Domain
 {
@@ -39,6 +40,17 @@ namespace Hootsuite.Domain
         /// </summary>
         /// <param name="result">The result.</param>
         /// <returns>Interaction[].</returns>
-        public static Interaction[] FromResults(JObject result) => result != null ? JsonConvert.DeserializeObject<Interaction[]>(result["data"]["interactions"].ToString(), HootsuiteClient.JsonSerializerSettings) : null;
+        public static Interaction[] FromResults(JObject result)
+        {
+            if (result == null) return null;
+            var text = result["data"]["interactions"].ToString();
+            try { return JsonConvert.DeserializeObject<Interaction[]>(text, HootsuiteClient.JsonSerializerSettings); }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Console.WriteLine(text);
+                throw;
+            }
+        }
     }
 }

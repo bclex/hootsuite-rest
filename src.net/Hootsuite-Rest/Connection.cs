@@ -270,7 +270,15 @@ namespace Hootsuite
                     }
                     catch (RestlerOperationException res)
                     {
-                        var err = (JObject)res.Content;
+                        var errAsString = res.Content as string;
+                        if (errAsString != null)
+                        {
+                            if (errAsString.StartsWith("max rate reached:"))
+                                throw errors.MakeRateLimitedError();
+                            _log($"Request failed: {errAsString}\n");
+                            throw;
+                        }
+                        var err = res.Content as JObject;
                         if (err != null && err["error"] != null) { _log($"Request failed: {err}\n"); throw; }
                         else
                         {
