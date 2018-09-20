@@ -74,7 +74,9 @@
     <Compile Include="Domain\Event.cs" />
     <Compile Include="Domain\Location.cs" />
     <Compile Include="Domain\Interaction.cs" />
+    <Compile Include="Domain\MediaStatus.cs" />
     <Compile Include="Domain\Media.cs" />
+    <Compile Include="Domain\MediaUploadResult.cs" />
     <Compile Include="Domain\MediaUrl.cs" />
     <Compile Include="Domain\Member.cs" />
     <Compile Include="Domain\Message.cs" />
