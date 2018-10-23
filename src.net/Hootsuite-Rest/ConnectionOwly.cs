@@ -184,7 +184,7 @@ namespace Hootsuite
                 {
                     Console.WriteLine(res);
                     var err = (JObject)res.Content;
-                    if (err["errors"] != null) { _log($"Request failed: {err}"); throw; }
+                    if (err["errors"] != null || err["error"] != null) { _log($"Request failed: {err}"); throw; }
                     else
                     {
                         var statusCode = Math.Floor((int)res.StatusCode / 100M);
