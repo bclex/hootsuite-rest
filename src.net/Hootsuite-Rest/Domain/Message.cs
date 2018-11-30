@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Linq;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Hootsuite.Domain
 {
@@ -131,6 +133,34 @@ namespace Hootsuite.Domain
         {
             var serialized = JsonConvert.SerializeObject(this);
             return JsonConvert.DeserializeObject<Message>(serialized);
+        }
+
+        /// <summary>
+        /// Gets the time until send.
+        /// </summary>
+        /// <value>The time until send.</value>
+        public TimeSpan TimeUntilSend { get => (ScheduledSendTime ?? DateTime.UtcNow) - DateTime.UtcNow; }
+
+        /// <summary>
+        /// Gets the debug string.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public string ToDebugString()
+        {
+            var b = new StringBuilder();
+            b.Append($"Message ID[{Id}] ");
+            if (CreatedByMember != null)
+                b.Append($"Member[{CreatedByMember?.Id}] ");
+            if (SocialProfile != null)
+                b.Append($"SocialProfile[{SocialProfile?.FirstOrDefault()?.Id}] ");
+            b.Append($"State[{State}] ");
+            if (ScheduledSendTime.HasValue)
+            {
+                b.Append($"Schedule[{ScheduledSendTime:o}] ");
+                b.Append($"TimeUntilSend[{TimeUntilSend}] ");
+            }
+            b.Append($"Characters[{Text?.Length ?? 0}]\n");
+            return b.ToString();
         }
     }
 }

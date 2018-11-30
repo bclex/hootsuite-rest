@@ -1,5 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Hootsuite.Domain
 {
@@ -31,6 +33,23 @@ namespace Hootsuite.Domain
         /// <param name="results">The results.</param>
         /// <returns>Event[].</returns>
         public static Event[] FromResults(string results) => results != null ? JsonConvert.DeserializeObject<Event[]>(results, HootsuiteClient.JsonSerializerSettings) : null;
+
+        /// <summary>
+        /// Froms the results flattened.
+        /// </summary>
+        /// <param name="results">The results.</param>
+        /// <returns>Event[].</returns>
+        public static IEnumerable<Event[]> FromResultsMany(string results)
+        {
+            var events = FromResults(results);
+            if (events.Length == 1 && events.FirstOrDefault()?.Type.Contains("ping.event") == true)
+                return new[] { events };
+            return events.Where(x => x.Type?.Contains("messages.event") == true && x.Data.Organization != null)
+                .OrderBy(x => x.Data.Timestamp).ThenBy(x => x.SequenceNumber)
+                .GroupBy(x => x.Data.Organization.Id)
+                .SelectMany(x => x, (a, x) => new[] { x })
+                .ToArray();
+        }
 
         /// <summary>
         /// Class EventMessageData.
@@ -97,5 +116,11 @@ namespace Hootsuite.Domain
             /// </summary>
             REJECTED
         }
+
+        /// <summary>
+        /// Gets the debug string.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public string ToDebugString() => $"Event: Org[{Data.Organization.Id}] Sequence[{SequenceNumber}] State[{Data.State}] Message[{Data.Message.Id}]";
     }
 }
