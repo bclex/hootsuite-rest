@@ -114,7 +114,11 @@ namespace Hootsuite.Domain
             /// <summary>
             /// The rejected
             /// </summary>
-            REJECTED
+            REJECTED,
+            /// <summary>
+            /// The installed
+            /// </summary>
+            INSTALLED
         }
 
         /// <summary>
