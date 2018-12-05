@@ -39,15 +39,15 @@ namespace Hootsuite.Domain
         /// </summary>
         /// <param name="results">The results.</param>
         /// <returns>Event[].</returns>
-        public static IEnumerable<Event[]> FromResultsMany(string results)
+        public static IEnumerable<Event> FromResultsMany(string results)
         {
             var events = FromResults(results);
             if (events.Length == 1 && events.FirstOrDefault()?.Type.Contains("ping.event") == true)
-                return new[] { events };
+                return events;
             return events.Where(x => x.Type?.Contains("messages.event") == true && x.Data.Organization != null)
                 .OrderBy(x => x.Data.Timestamp).ThenBy(x => x.SequenceNumber)
                 .GroupBy(x => x.Data.Organization.Id)
-                .SelectMany(x => x, (a, x) => new[] { x })
+                .SelectMany(x => x, (a, x) => x)
                 .ToArray();
         }
 
