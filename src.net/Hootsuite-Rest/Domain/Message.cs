@@ -149,6 +149,7 @@ namespace Hootsuite.Domain
         {
             var b = new StringBuilder();
             b.Append($"Message ID[{Id}] ");
+            b.Append($"$Seq[{SequenceNumber}] ");
             if (CreatedByMember != null)
                 b.Append($"Member[{CreatedByMember?.Id}] ");
             if (SocialProfile != null)

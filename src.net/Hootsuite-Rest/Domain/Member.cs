@@ -61,6 +61,6 @@ namespace Hootsuite.Domain
         /// </summary>
         /// <param name="result">The result.</param>
         /// <returns>Member[].</returns>
-        public static Member[] FromResults(JObject result) => result != null ? JsonConvert.DeserializeObject<Member[]>(result["data"].ToString(), HootsuiteClient.JsonSerializerSettings) : null;
+        public static Member FromResults(JObject result) => result != null ? JsonConvert.DeserializeObject<Member>(result["data"].ToString(), HootsuiteClient.JsonSerializerSettings) : null;
     }
 }
