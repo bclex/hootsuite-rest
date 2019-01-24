@@ -48,6 +48,12 @@ namespace Hootsuite.Domain
         /// <returns>SocialProfile[].</returns>
         public static SocialProfile[] FromResults(JObject result) => result != null ? JsonConvert.DeserializeObject<SocialProfile[]>(result["data"].ToString(), HootsuiteClient.JsonSerializerSettings) : null;
 
+        /// <summary>
+        /// Froms the results single.
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns>SocialProfile.</returns>
+        public static SocialProfile FromResultsSingle(JObject result) => result != null ? JsonConvert.DeserializeObject<SocialProfile>(result["data"].ToString(), HootsuiteClient.JsonSerializerSettings) : null;
         internal class ArrayConverter : JsonConverter
         {
             public override bool CanConvert(Type objectType) { return false; }
