@@ -89,7 +89,7 @@ namespace Hootsuite.Require
                 foreach (KeyValuePair<string, string> header in dyn.getDataAsString(options.headers))
                     req.Headers.Add(header.Key, header.Value);
             // timeout
-            var timeout = dyn.getProp(options, "timeout", 5000);
+            var timeout = dyn.getProp(options, "timeout", 30000);
             // make request
             try
             {
