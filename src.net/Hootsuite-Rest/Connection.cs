@@ -45,6 +45,11 @@ namespace Hootsuite
             /// </summary>
             /// <value>The rate limit requests remaining.</value>
             public int? RateLimitRequestsRemaining { get; set; }
+            /// <summary>
+            /// Gets or sets the request id.
+            /// </summary>
+            /// <value>The request id.</value>
+            public string RequestId { get; set; }
         }
 
         /// <summary>
@@ -275,6 +280,7 @@ namespace Hootsuite
                         {
                             if (errAsString.StartsWith("max rate reached:"))
                                 throw errors.MakeRateLimitedError();
+
                             _log($"Request failed: {errAsString}\n");
                             throw;
                         }
@@ -307,6 +313,8 @@ namespace Hootsuite
                 _lastResponse.Quota = headers.TryGetValues("X-Account-Quota", out IEnumerable<string> values) ? values.FirstOrDefault() : null;
                 _lastResponse.QuotaUsed = headers.TryGetValues("X-Account-Quota-Used", out values) ? (int?)int.Parse(values.FirstOrDefault()) : null;
                 _lastResponse.RateLimitRequestsRemaining = headers.TryGetValues("X-Account-Rate-Limit-Requests-Remaining", out values) ? (int?)int.Parse(values.FirstOrDefault()) : null;
+                _lastResponse.RequestId = headers.TryGetValues("Request-Id", out IEnumerable<string> id) ? id.FirstOrDefault() : null;
+                _log($"Request-Id: {_lastResponse.RequestId}\n");
                 OnResponse?.Invoke(this);
             }
         }
@@ -342,7 +350,7 @@ namespace Hootsuite
                     {
                         var x = await _rest.post($"{baseUrl}/oauth2/token", options);
                         var data = (JObject)x;
-                        _log($"Got token: {data}\n");
+                        _log($"Got token: {data?.ToString().Replace("\r\n", "")}\n");
                         _tokenData = data;
                         OnAccessToken?.Invoke(this);
                         return data;
@@ -353,7 +361,7 @@ namespace Hootsuite
             }
             else
             {
-                _log($"Using existing token: {_tokenData}\n");
+                _log($"Using existing token\n");
                 return _tokenData;
             }
         }
