@@ -314,7 +314,8 @@ namespace Hootsuite
                 _lastResponse.QuotaUsed = headers.TryGetValues("X-Account-Quota-Used", out values) ? (int?)int.Parse(values.FirstOrDefault()) : null;
                 _lastResponse.RateLimitRequestsRemaining = headers.TryGetValues("X-Account-Rate-Limit-Requests-Remaining", out values) ? (int?)int.Parse(values.FirstOrDefault()) : null;
                 _lastResponse.RequestId = headers.TryGetValues("Request-Id", out IEnumerable<string> id) ? id.FirstOrDefault() : null;
-                _log($"Request-Id: {_lastResponse.RequestId}\n");
+                if(!string.IsNullOrEmpty(_lastResponse.RequestId))
+                    _log($"Request-Id: {_lastResponse.RequestId}\n");
                 OnResponse?.Invoke(this);
             }
         }
